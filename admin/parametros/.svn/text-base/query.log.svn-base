@@ -1,0 +1,294 @@
+1297-12:06:11 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+1297-12:06:11 Elapsed time: 0.0004 sec.
+1297-12:06:11 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+1297-12:06:11 Elapsed time: 0.0005 sec.
+1297-12:06:11 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+1297-12:06:11 Elapsed time: 0.0002 sec.
+5798-16:12:28 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+5798-16:12:28 Elapsed time: 0.0005 sec.
+5798-16:12:28 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+5798-16:12:28 Elapsed time: 0.0006 sec.
+5798-16:12:28 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+5798-16:12:28 Elapsed time: 0.0003 sec.
+10677-16:12:44 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10677-16:12:44 Elapsed time: 0.0004 sec.
+10677-16:12:44 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 10
+10677-16:12:44 Elapsed time: 0.0003 sec.
+10840-16:12:54 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10840-16:12:54 Elapsed time: 0.0004 sec.
+10840-16:12:54 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 20
+10840-16:12:54 Elapsed time: 0.0003 sec.
+10928-16:12:59 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10928-16:12:59 Elapsed time: 0.0004 sec.
+10928-16:12:59 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 30
+10928-16:12:59 Elapsed time: 0.0003 sec.
+11706-16:13:17 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11706-16:13:17 Elapsed time: 0.0005 sec.
+11706-16:13:17 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 40
+11706-16:13:17 Elapsed time: 0.0003 sec.
+11706-16:13:21 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11706-16:13:21 Elapsed time: 0.0004 sec.
+11706-16:13:21 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 30
+11706-16:13:21 Elapsed time: 0.0003 sec.
+11719-16:13:32 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11719-16:13:32 Elapsed time: 0.0005 sec.
+11719-16:13:32 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 20
+11719-16:13:32 Elapsed time: 0.0003 sec.
+11719-16:13:35 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11719-16:13:35 Elapsed time: 0.0004 sec.
+11719-16:13:35 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 10
+11719-16:13:35 Elapsed time: 0.0003 sec.
+11719-16:13:39 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11719-16:13:39 Elapsed time: 0.0004 sec.
+11719-16:13:39 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11719-16:13:39 Elapsed time: 0.0003 sec.
+11108-16:13:45 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11108-16:13:45 Elapsed time: 0.0004 sec.
+11108-16:13:45 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+11108-16:13:45 Elapsed time: 0.0002 sec.
+11108-16:13:45 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11108-16:13:45 Elapsed time: 0.0004 sec.
+11108-16:13:45 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11108-16:13:45 Elapsed time: 0.0002 sec.
+10677-16:13:56 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10677-16:13:56 Elapsed time: 0.0003 sec.
+10677-16:13:56 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+10677-16:13:56 Elapsed time: 0.0004 sec.
+10677-16:13:56 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+10677-16:13:56 Elapsed time: 0.0002 sec.
+11706-16:13:56 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11706-16:13:56 Elapsed time: 0.0003 sec.
+11706-16:13:56 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11706-16:13:56 Elapsed time: 0.0004 sec.
+11706-16:13:56 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11706-16:13:56 Elapsed time: 0.0003 sec.
+11700-16:14:01 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11700-16:14:01 Elapsed time: 0.0005 sec.
+11700-16:14:01 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+11700-16:14:01 Elapsed time: 0.0002 sec.
+11700-16:14:01 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11700-16:14:01 Elapsed time: 0.0004 sec.
+11700-16:14:01 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11700-16:14:01 Elapsed time: 0.0002 sec.
+11695-16:14:09 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11695-16:14:09 Elapsed time: 0.0003 sec.
+11695-16:14:09 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11695-16:14:09 Elapsed time: 0.0004 sec.
+11695-16:14:09 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11695-16:14:09 Elapsed time: 0.0002 sec.
+11723-16:14:09 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11723-16:14:09 Elapsed time: 0.0005 sec.
+11723-16:14:09 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11723-16:14:09 Elapsed time: 0.0004 sec.
+11723-16:14:09 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11723-16:14:09 Elapsed time: 0.0002 sec.
+11706-16:14:15 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11706-16:14:15 Elapsed time: 0.0004 sec.
+11706-16:14:15 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+11706-16:14:15 Elapsed time: 0.0002 sec.
+11706-16:14:15 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11706-16:14:15 Elapsed time: 0.0004 sec.
+11706-16:14:15 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11706-16:14:15 Elapsed time: 0.0002 sec.
+11453-16:14:21 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11453-16:14:21 Elapsed time: 0.0003 sec.
+11453-16:14:21 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11453-16:14:21 Elapsed time: 0.0004 sec.
+11453-16:14:21 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11453-16:14:21 Elapsed time: 0.0002 sec.
+11700-16:14:21 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11700-16:14:21 Elapsed time: 0.0003 sec.
+11700-16:14:21 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11700-16:14:21 Elapsed time: 0.0004 sec.
+11700-16:14:21 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11700-16:14:21 Elapsed time: 0.0002 sec.
+11700-16:14:23 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11700-16:14:23 Elapsed time: 0.0004 sec.
+11700-16:14:23 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+11700-16:14:23 Elapsed time: 0.0002 sec.
+11700-16:14:23 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11700-16:14:23 Elapsed time: 0.0004 sec.
+11700-16:14:23 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11700-16:14:23 Elapsed time: 0.0002 sec.
+11700-16:14:27 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11700-16:14:27 Elapsed time: 0.0003 sec.
+11700-16:14:27 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11700-16:14:27 Elapsed time: 0.0004 sec.
+11700-16:14:27 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11700-16:14:27 Elapsed time: 0.0002 sec.
+10677-16:14:27 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10677-16:14:27 Elapsed time: 0.0004 sec.
+10677-16:14:27 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+10677-16:14:27 Elapsed time: 0.0004 sec.
+10677-16:14:27 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+10677-16:14:27 Elapsed time: 0.0003 sec.
+10840-16:14:34 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10840-16:14:34 Elapsed time: 0.0004 sec.
+10840-16:14:34 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+10840-16:14:34 Elapsed time: 0.0002 sec.
+10840-16:14:34 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+10840-16:14:34 Elapsed time: 0.0004 sec.
+10840-16:14:34 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+10840-16:14:34 Elapsed time: 0.0002 sec.
+11749-16:14:39 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11749-16:14:39 Elapsed time: 0.0004 sec.
+11749-16:14:39 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11749-16:14:39 Elapsed time: 0.0004 sec.
+11749-16:14:39 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11749-16:14:39 Elapsed time: 0.0002 sec.
+10677-16:14:39 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10677-16:14:39 Elapsed time: 0.0003 sec.
+10677-16:14:39 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+10677-16:14:39 Elapsed time: 0.0004 sec.
+10677-16:14:39 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+10677-16:14:39 Elapsed time: 0.0002 sec.
+11706-16:14:45 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11706-16:14:45 Elapsed time: 0.0003 sec.
+11706-16:14:45 
+CONSULTAR> select * from parametro_regionbmw where pr_id=5
+11706-16:14:45 Elapsed time: 0.0001 sec.
+11706-16:14:45 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11706-16:14:45 Elapsed time: 0.0004 sec.
+11706-16:14:45 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11706-16:14:45 Elapsed time: 0.0002 sec.
+10677-16:14:50 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+10677-16:14:50 Elapsed time: 0.0003 sec.
+10677-16:14:50 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+10677-16:14:50 Elapsed time: 0.0004 sec.
+10677-16:14:50 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+10677-16:14:50 Elapsed time: 0.0002 sec.
+11759-16:14:50 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11759-16:14:50 Elapsed time: 0.0005 sec.
+11759-16:14:50 
+CONSULTAR> select count(*) as total from (SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id) as la1;
+11759-16:14:50 Elapsed time: 0.0004 sec.
+11759-16:14:50 
+CONSULTAR> SELECT pr.pr_id, p.p_nombre, r.re_nombre, FORMAT(round(pr.pr_cantidad),2), d.div_nombre
+            FROM parametro_regionbmw pr INNER JOIN parametrosbmw p ON pr.p_id = p.p_id LEFT JOIN cat_regionesbmw r ON pr.re_id= r.re_id LEFT JOIN divisa d ON pr.div_id= d.div_id  limit 10 offset 0
+11759-16:14:50 Elapsed time: 0.0002 sec.

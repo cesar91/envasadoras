@@ -1,0 +1,3027 @@
+<?PHP 
+/********************************************************
+*      		   T&E Vista Comprobaci�n  		            *
+* Creado por:	  Jorge Usigli Huerta 16-Feb-2010		*
+ * 
+ *
+* Modificado por: Jorge Usigli Huerta 16-Feb-2010		*
+* PHP, jQuery, JavaScript, CSS                          *
+*********************************************************/
+require_once("$RUTA_A/flujos/comprobaciones/services/func_comprobacion.php");
+require_once("../../lib/php/constantes.php");
+require_once "../../Connections/fwk_db.php";
+require_once("$RUTA_A/functions/utils.php");
+require_once("$RUTA_A/functions/Comprobacion.php");
+require_once("$RUTA_A/lib/php/mobile_device_detect.php");
+
+    $empleado		= $_SESSION["idusuario"];
+    $idusuario      = $_SESSION["idusuario"];
+    $tipoUsuario    = $_SESSION["perfil"];
+	//$tipoUsuario = 6;
+    $cnn			= new conexion();
+    $aux= array();
+    $ruta_nueva=0;
+    $t_sigAprobador="";
+
+	
+    //Nota: Este php se utilizara para 3 tipos de pantalla
+    //II.L Autorizacion comprobacion Director/Gerente de area
+    //II.M Autorizacion de S.V controlling 
+    //Las 2 pantallas anteriores su estructura cmo tal ya esta solo falta la funcion de la ruta de aprobacion en el boton autorizar)
+    //II.N Autorizacion de S.V finanzas 
+//--------------------------------Datos necesarios
+    $query="SELECT t_id,DATE_FORMAT(t_fecha_registro,'%d/%m/%Y') as t_fecha_registro,t_etiqueta,t_iniciador,t_dueno,t_ruta_autorizacion,t_etapa_actual,DATE_FORMAT(co_fecha_inicial_gasolina,'%d/%m/%Y') as co_fecha_inicial_gasolina,t_etapa_actual,
+    u_nombre,u_paterno,u_materno,nombre,idfwk_usuario,idcentrocosto,cc_nombre,cc_centrocostos, co_motivo_gasolina,
+    sv_viaje,sv_id,svi_origen,svi_destino, (SELECT MIN(DATE_FORMAT(svi_fecha_salida,'%d/%m/%Y')) FROM sv_itinerario WHERE svi_solicitud = sv_id) as svi_fecha_salida,
+	(SELECT MAX(DATE_FORMAT(svi_fecha_llegada,'%d/%m/%Y')) FROM sv_itinerario WHERE svi_solicitud = sv_id) as svi_fecha_llegada,et_etapa_nombre,DATE_FORMAT(co_fecha_final_gasolina,'%d/%m/%Y') as  co_fecha_final_gasolina,
+    co_total, co_cc_clave, t_delegado 
+    FROM tramites
+    INNER JOIN usuario ON tramites.t_iniciador=usuario.u_id
+    INNER JOIN empleado ON tramites.t_iniciador=empleado.idfwk_usuario
+	INNER JOIN comprobaciones ON comprobaciones.co_mi_tramite = tramites.t_id
+    INNER JOIN cat_cecos ON co_cc_clave=cat_cecos.cc_id
+    LEFT JOIN solicitud_viaje ON comprobaciones.co_tramite=solicitud_viaje.sv_tramite
+    LEFT JOIN sv_itinerario ON sv_itinerario.svi_solicitud=solicitud_viaje.sv_id
+    INNER JOIN etapas ON etapas.et_etapa_id = tramites.t_etapa_actual AND tramites.t_flujo = etapas.et_flujo_id
+    WHERE t_id = ".$_GET['id']."
+    AND tramites.t_flujo=".FLUJO_COMPROBACION;
+    //error_log($query);
+    $rst = $cnn->consultar($query);
+    while($row = mysql_fetch_assoc($rst)){
+    	$t_etapa = $row["t_etapa_actual"];
+    	$t_id = $row["t_id"];
+    	$t_fechaRegistro = $row["t_fecha_registro"];
+    	if($row['sv_id'] > 0){
+    		$t_etiqueta = $row["t_etiqueta"];
+    	}else{
+    		$t_etiqueta = $row["co_motivo_gasolina"];
+    		$fecha_inicial = $row["co_fecha_inicial_gasolina"];
+    		$fecha_final = $row["co_fecha_final_gasolina"];
+    	}
+    	$t_iniciador = $row["t_iniciador"];
+    	$t_dueno = $row["t_dueno"];
+    	$t_rutaAutorizacion = $row["t_ruta_autorizacion"];
+    	$comprobacion_etapa= $row["t_etapa_actual"];
+    	$usuarioNombre = $row["u_nombre"];
+    	$usuarioApp = $row["u_paterno"];
+    	$usuarioApm = $row["u_materno"];
+    	$nombreEmpleado = $row["nombre"];
+    	$idfwk_usuario = $row["idfwk_usuario"];
+    	$idcentrocosto = $row["idcentrocosto"];
+    	$cc_nombre = $row["cc_nombre"];
+    	$cc_centrocostos = $row["cc_centrocostos"];
+    	$co_total= $row["co_total"];
+    	$sv_viaje = $row["sv_viaje"];
+    	$sv_id = $row["sv_id"];
+    	$svi_origen = $row["svi_origen"];
+    	$svi_destino = $row["svi_destino"];
+    	//$svi_fecha_salida = $row["svi_fecha_salida"];
+    	//$svi_fecha_llegada = $row["svi_fecha_llegada"];
+    	$et_etapa_nombre = $row["et_etapa_nombre"];
+    	$co_ceco = $row["co_cc_clave"];
+    	$t_delegado = $row['t_delegado'];
+    	
+    }
+	
+    if($sv_id != 0){
+    	//Query de fechas (Similar a Sol. de viajes.)
+    	$aux = array();
+    	$query = "SELECT svi_id,
+    	svi_tipo_viaje,
+    	sv.sv_viaje,
+    	svi_origen,
+    	svi_destino,
+    	svi_dias_viaje,
+    	svi_horario,
+    	svi_monto_vuelo_cotizacion,
+    	DATE_FORMAT(svi_fecha_salida,'%d/%m/%Y') AS fecha_salida,
+    	svi_horario_llegada,
+    	DATE_FORMAT(svi_fecha_llegada,'%d/%m/%Y') AS fecha_llegada,
+    	svi.svi_medio,
+    	svi_hotel_agencia,
+    	svi_renta_auto
+    	FROM sv_itinerario AS svi
+    	INNER JOIN solicitud_viaje AS sv
+    	ON sv.sv_id = svi.svi_solicitud
+    	WHERE svi.svi_solicitud = {$sv_id}";
+    	$rst = $cnn->consultar($query);
+    	//error_log("Fecha en sol.".$query);
+    	while($datos=mysql_fetch_assoc($rst)){
+    	array_push($aux,$datos);
+    	}
+    	
+    	if($sv_viaje == "Redondo"){
+    	$fecha_total = mysql_result($rst,0,"fecha_salida")."|".mysql_result($rst,0,"fecha_llegada");
+    	}else if($sv_viaje == "Sencillo"){
+    	$fecha_total = mysql_result($rst,0,"fecha_salida");
+    	}else if($sv_viaje == "Multidestinos"){
+    	$fecha_total = $aux[0]["fecha_salida"]." | ".$aux[sizeof($aux)-1]["fecha_salida"];
+    	}	
+    }
+//--------------------------------AUTORIZA/RECHAZA $tipoUsuario = 5 (Controlling)------------------------------------------------
+	//Se obtienen los ids de Controlling y de Finanzas
+	$agrup_usu = new AgrupacionUsuarios();
+	$agrup_usu->Load_Grupo_de_Usuario_By_Nombre("Controlling");
+	$idControlling = $agrup_usu->Get_dato("au_id");
+	$agrup_usu->Load_Grupo_de_Usuario_By_Nombre("Finanzas");
+	$idFinanzas = $agrup_usu->Get_dato("au_id");
+	
+	// Detecta si es un dispositivo movil (IPhone, Android, Blackberry)
+	$mobile_type = null;
+	$mobile = mobile_device_detect(true,true,true,true,true,true,false,false,&$mobile_type);
+	//$mobile = false;
+			
+	//$_POST['gerenteFinanzas']!=0  || $_POST['supervisorFinanzas']!=0 
+    if(isset($_POST['autorizar']) && $_POST['aux'] == 1){
+    	//Se obtiene el id del  tramite en cuestion
+    	$idTramite=$_GET['id'];
+    	$delegado = $_POST['delegado'];
+    	$delegadoNombre = $_POST['delegadoNombre'];
+    	$rutaAuto=new RutaAutorizacion();
+    	$t_dueno=$rutaAuto->getDueno($idTramite);
+    	//================================== OBSERVACIONES
+    	//Recibimos los cambios de Observaciones 
+    	$observacionesViejas="";
+		$ObservacionesNuevas=$_POST['campo_observaciones'];
+			
+		if($ObservacionesNuevas != ""){
+			$query = sprintf("SELECT co_observaciones FROM comprobaciones WHERE co_mi_tramite='%s'",$idTramite);
+			$rst = $cnn->consultar($query);
+			$fila = mysql_fetch_assoc($rst);
+			$HObser = $fila['co_observaciones'];
+			
+			$notificacion = new Notificacion();
+			$observaciones = $notificacion->anotaObservacion($t_dueno, $HObser, $ObservacionesNuevas, FLUJO_COMPROBACION, COMPROBACION_ETAPA_EN_APROBACION);
+			
+			$queryInsertaObs=sprintf("UPDATE comprobaciones SET co_observaciones='%s' WHERE co_mi_tramite='%s'",$observaciones,$idTramite);
+			$cnn->ejecutar($queryInsertaObs);
+			
+		}//=================================================		
+		
+		$tramite=new Tramite();
+		$tramite->Load_Tramite($idTramite);
+    	$t_ruta_autorizacion = $tramite->Get_dato("t_ruta_autorizacion");
+    	$t_delegado = $tramite->Get_dato("t_delegado");
+		
+    	//Si es controlling se guarda el nuevo centro de costos y las observaciones si es que fueron cambiado
+    	switch ($tipoUsuario) {
+    		case 1:  // Aprobador Normal
+    			error_log("Aqu�, aprobador normal.....");
+    			//$aprobador=$rutaAuto->agregarAutorizacion($t_dueno);
+    			$duenoActual = new Usuario();
+    			$duenoActual->Load_Usuario_By_ID($t_dueno);
+    			$siguienteAprobador=new Usuario();
+    			
+    			if($delegado != 0){
+    				$duenoActual_delegado = new Usuario();
+    				$duenoActual_delegado->Load_Usuario_By_ID($_SESSION["idusuario"]);
+    				$delegado_act_nombre = $duenoActual_delegado->Get_dato('nombre');
+    				$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%05s</strong> en nombre de: <strong>%05s</strong>.",$idTramite,$delegado_act_nombre,$duenoActual->Get_dato('nombre'));
+    			}else{
+    				$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%05s</strong>.",$idTramite,$duenoActual->Get_dato('nombre'));
+    			}
+    			
+    			$remitente = $t_dueno;//por este momento es controlling o puede ser GA/DA
+    			$destinatario = $tramite->Get_dato("t_iniciador");
+    			$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+    			
+    			$aprobador=$rutaAuto->agregarAutorizacionSV($t_dueno,$idTramite);
+    			error_log("aprobador..........".$aprobador);
+    			$iniciador=new Usuario();
+    			$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+    			$nombreIniciador = $iniciador->Get_dato('nombre');
+    			$destinatario = $aprobador;
+    			
+    			$autorizaciones=$tramite->Get_dato("t_autorizaciones");
+    			if($autorizaciones = ""){
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>CREADA</strong> por el usuario: <strong>%s</strong> en nombre de: <strong>%s</strong> y ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $duenoActual->Get_dato('nombre'));
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>CREADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.", $idTramite, $nombreIniciador);
+    				}
+    			}else{
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre de: <strong>%s</strong> y ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $duenoActual->Get_dato('nombre'));
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.", $idTramite, $nombreIniciador, $duenoActual->Get_dato('nombre'));
+    				}
+    			}
+    			
+    			if($delegado != 0){
+    				$duenoActual_delegado = new Usuario();
+    				$duenoActual_delegado->Load_Usuario_By_ID($_SESSION["idusuario"]);
+    				$delegado_act_nombre = $duenoActual_delegado->Get_dato('nombre');
+    				
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> en nombre de: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $delegado_act_nombre, $duenoActual->Get_dato('nombre'));
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> en nombre de: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $delegado_act_nombre, $duenoActual->Get_dato('nombre'));
+    				}    				
+    				
+    				$usuario_delegado = $_POST['iu'];
+    				$t_ruta_autorizacion = agregarDelegadoRuta($delegado, $usuario_delegado, $t_ruta_autorizacion);
+    				error_log("---------->>>>>>>>>>Nueva ruta: ".$t_ruta_autorizacion."<<<<<<<<<<<----------");
+    			}else{
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $duenoActual->Get_dato('nombre'));
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $duenoActual->Get_dato('nombre'));
+    				}    				
+    			}
+    			
+    			if($aprobador != 1000 || $aprobador != '1000'){
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $idusuario, $aprobador, "1", ""); //enviara e-mail
+    			}else{
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $idusuario, $aprobador, "0", ""); //enviara e-mail
+    			}
+    			
+    			$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION, FLUJO_COMPROBACION, $aprobador, $t_ruta_autorizacion);
+    			// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+    			$_SESSION['delegado'] = $delegadoNombre;
+    			
+    			if($mobile){
+					echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut'>";
+				}else{
+					echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut';</script>");
+				}
+				break; 
+	    		   		
+    		case 5:  // Aprobador Grupo Controlling
+    			error_log("Aqu�, Grupo Controlling.....");
+    			if($_POST['centro_de_costos_new'] != $_POST['centro_de_costos_old']){
+    				error_log("El CECO cambio......");
+    				$t_sigAprobador=$rutaAuto->AutorizarControlling($idTramite, $_POST['centro_de_costos_new'], 1);
+    				
+    				// Actualizar el CECO de la comprobaci�n
+    				$query = sprintf("UPDATE comprobaciones SET co_cc_clave = '%s' WHERE co_mi_tramite = '%s'", $_POST['centro_de_costos_new'], $idTramite);
+    				$cnn = new conexion();
+    				$cnn->ejecutar($query);
+    					
+    				$agrup_usu = new AgrupacionUsuarios();
+    				$agrup_usu->Load_Grupo_de_Usuario_By_ID($t_dueno);
+    				$controlling = $agrup_usu->Get_dato("au_nombre");
+    			
+    				$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>MODIFICADA</strong> por <strong>%05s</strong>",$idTramite,$controlling);
+    				$remitente = $t_dueno;//por este momento es controlling o puede ser GA/DA
+    				$destinatario = $tramite->Get_dato("t_iniciador");
+    				// Notificaci�n para el iniciador/empleado
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+    					
+    				$iniciador=new Usuario();
+    				$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+    				$nombreIniciador = $iniciador->Get_dato('nombre');
+    				$destinatario = $t_sigAprobador;
+    				
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $controlling);
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $controlling);
+    				}
+    				// Notificaci�n para el Autorizador
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "1", ""); //"0" para no enviar email y "1" para enviarlo
+    				$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION, FLUJO_COMPROBACION, $t_sigAprobador, "");
+    				// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+    				$_SESSION['delegado'] = $delegadoNombre;
+    				
+    				if($mobile){
+						echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut'>";
+					}else{
+						echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut';</script>");
+					}
+    			}else{
+    				error_log("El CECO no cambio......");
+    				$t_sigAprobador=$rutaAuto->AutorizarControlling($idTramite,"", 0);
+    			
+    				$agrup_usu = new AgrupacionUsuarios();
+    				$agrup_usu->Load_Grupo_de_Usuario_By_ID($t_dueno);
+    				$controlling = $agrup_usu->Get_dato("au_nombre");
+    			
+    				$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>AUTORIZADA</strong> por <strong>%05s</strong>",$idTramite,$controlling);
+    				$remitente = $t_dueno;//por este momento es controlling o puede ser GA/DA
+    				$destinatario = $tramite->Get_dato("t_iniciador");
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+    			
+    				$iniciador=new Usuario();
+    				$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+    				$nombreIniciador = $iniciador->Get_dato('nombre');
+    				$destinatario = $t_sigAprobador;
+    				
+    				if($t_delegado != 0){
+    					$iniciador->Load_Usuario_By_ID($t_delegado);
+    					$nombreDelegado = $iniciador->Get_dato('nombre');
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $controlling);
+    				}else{
+    					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $controlling);
+    				}
+    				
+    				$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+    				$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION, FLUJO_COMPROBACION, $t_sigAprobador, "");
+    				// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+    				$_SESSION['delegado'] = $delegadoNombre;
+    				
+    				if($mobile){
+						echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut'>";
+					}else{
+						echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut';</script>");
+					}
+    			}
+	    		break;
+	    		    		
+    		case 6:  // Aprobador Grupo Finanzas
+    			error_log("Aqu�, Grupo Finanzas.....");
+    			if($_POST['centro_de_costos_new'] != $_POST['centro_de_costos_old']){
+    				error_log("El CECO cambio......");
+					$fin_de_ruta=false;
+					$t_sigAprobador=$rutaAuto->AutorizarFinanzas($idTramite, $_POST['centro_de_costos_new'], 1);
+					
+					// Actualizar el CECO de la comprobaci�n
+    				$query = sprintf("UPDATE comprobaciones SET co_cc_clave = '%s' WHERE co_mi_tramite = '%s'", $_POST['centro_de_costos_new'], $idTramite);
+					$cnn = new conexion();
+    				$cnn->ejecutar($query);
+					
+					if($t_sigAprobador==""){
+						$fin_de_ruta=true;
+						$t_sigAprobador=$tramite->Get_dato("t_iniciador");
+					}
+						
+					$agrup_usu = new AgrupacionUsuarios();
+					$agrup_usu->Load_Grupo_de_Usuario_By_ID($t_dueno);
+					$finanzas = $agrup_usu->Get_dato("au_nombre");
+				
+					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>MODIFICADA</strong> por <strong>%05s</strong>",$idTramite,$finanzas);
+					$remitente = $t_dueno;//por este momento es controlling o puede ser GA/DA
+					$destinatario = $tramite->Get_dato("t_iniciador");
+					// Notificaci�n para el iniciador/empleado
+					$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+
+					if($fin_de_ruta==false){
+						$iniciador=new Usuario();
+						$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+						$nombreIniciador = $iniciador->Get_dato('nombre');
+						$destinatario = $t_sigAprobador;
+						
+						if($t_delegado != 0){
+							$iniciador->Load_Usuario_By_ID($t_delegado);
+							$nombreDelegado = $iniciador->Get_dato('nombre');
+							$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $finanzas);
+						}else{
+							$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $finanzas);
+						}
+						// Notificaci�n para el Autorizador
+						$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "1", ""); //"0" para no enviar email y "1" para enviarlo
+						$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION, FLUJO_COMPROBACION, $t_sigAprobador, "");
+					}else{
+						$iniciador=new Usuario();
+						$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+						$nombreIniciador = $iniciador->Get_dato('nombre');
+						$destinatario = $t_sigAprobador;
+						
+						$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>APROBADA</strong> por completo.",$idTramite);
+						$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_APROBADA, FLUJO_COMPROBACION, $t_sigAprobador, "");
+						$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "1", "", 0); //"0" para no enviar email y "1" para enviarlo, el �ltimo argumento indicar� si se coloca el link de ingreso a la aplicaci�n (1) y (0) si no es requerido.
+						$tramite->setCierreFecha($idTramite);
+					}
+					// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+					$_SESSION['delegado'] = $delegadoNombre;
+    				
+    				if($mobile){
+						echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut'>";
+					}else{
+						echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut';</script>");
+					}
+						
+				}else{
+					error_log("El CECO no cambio......");
+					$fin_de_ruta=false;
+					$t_sigAprobador=$rutaAuto->AutorizarFinanzas($idTramite,"", 0);
+					if($t_sigAprobador==""){
+						$fin_de_ruta=true;
+						$t_sigAprobador=$tramite->Get_dato("t_iniciador");
+					}
+					
+					$agrup_usu = new AgrupacionUsuarios();
+					$agrup_usu->Load_Grupo_de_Usuario_By_ID($t_dueno);
+					$finanzas = $agrup_usu->Get_dato("au_nombre");
+				
+					$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>AUTORIZADA</strong> por <strong>%s</strong>.",$idTramite,$finanzas);
+					$remitente = $t_dueno;
+					$destinatario = $tramite->Get_dato("t_iniciador");
+					$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+					if($fin_de_ruta==false){
+						$iniciador=new Usuario();
+						$iniciador->Load_Usuario_By_ID($tramite->Get_dato("t_iniciador"));
+						$nombreIniciador = $iniciador->Get_dato('nombre');
+						$destinatario = $t_sigAprobador;
+						
+						if($t_delegado != 0){
+							$iniciador->Load_Usuario_By_ID($t_delegado);
+							$nombreDelegado = $iniciador->Get_dato('nombre');
+							$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> en nombre: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreDelegado, $nombreIniciador, $finanzas);
+						}else{
+							$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> creada por el usuario: <strong>%s</strong> ha sido <strong>AUTORIZADA</strong> por: <strong>%s</strong> y requiere de su autorizaci&oacute;n.",$idTramite, $nombreIniciador, $finanzas);
+						}
+												
+						$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+						$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION, FLUJO_COMPROBACION, $t_sigAprobador, "");						
+					}else{
+						$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>APROBADA</strong> por completo.",$idTramite);
+						$tramite->Modifica_Etapa($idTramite, COMPROBACION_ETAPA_APROBADA, FLUJO_COMPROBACION, $t_sigAprobador, "");
+						$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "1", "", 0); //"0" para no enviar email y "1" para enviarlo, el �ltimo argumento indicar� si se coloca el link de ingreso a la aplicaci�n (1) y (0) si no es requerido.
+						$tramite->setCierreFecha($idTramite);
+					}
+					//realizar el t_comprobado
+					$tramite->set_t_comprobado($idTramite,1);
+					// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+					$_SESSION['delegado'] = $delegadoNombre;
+					
+					if($mobile){
+						echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut'>";
+					}else{
+						echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?okAut';</script>");
+					}
+				}
+	    		break;
+    	}
+    	
+    }//END boton autorizar
+	
+    if(isset($_POST['rechazar'])){
+    	//obtiene el due�o del tramite
+		$tramite=new Tramite();
+		$tramite->Load_Tramite($_GET['id']);
+		$t_dueno = $tramite->Get_dato("t_dueno");
+		$delegado = $_POST['delegado'];	
+		$delegadoNombre = $_POST['delegadoNombre'];
+		$agrup_usu = new AgrupacionUsuarios();
+		
+		//tomara el usuario que rechazo, si de controlling o finanzas y si es un gerente/director de area
+	    $duenoActual = new Usuario();
+		if($duenoActual->Load_Usuario_By_ID($t_dueno)){
+			$dueno_act_nombre = $duenoActual->Get_dato('nombre');
+		}else{
+			$agrup_usu->Load_Grupo_de_Usuario_By_ID($t_dueno);
+			$dueno_act_nombre = $agrup_usu->Get_dato("au_nombre");
+		}
+		
+		if($delegado != 0){
+			$duenoActual_delegado = new Usuario();
+			$duenoActual_delegado->Load_Usuario_By_ID($_POST['iu']);
+			$delegado_act_nombre = $duenoActual_delegado->Get_dato('nombre');
+			$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>RECHAZADA</strong> por: <strong>%s</strong> en nombre de: <strong>%s</strong>.",$_GET['id'],$delegado_act_nombre,$dueno_act_nombre);
+		}else{
+			$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> ha sido <strong>RECHAZADA</strong> por <strong>%05s</strong>.",$_GET['id'],$dueno_act_nombre);
+		}
+		
+		//=============== OBSERVACIONES ==================
+		$ObservacionesNuevas=$_POST['campo_observaciones'];
+		
+		if($ObservacionesNuevas != ""){			
+			$query = sprintf("SELECT co_observaciones FROM comprobaciones WHERE co_mi_tramite='%s'",$_GET['id']);			
+			$rst = $cnn->consultar($query);
+			$fila = mysql_fetch_assoc($rst);
+			$HObser = $fila['co_observaciones'];				
+			$notificacion = new Notificacion();
+			$observaciones = $notificacion->anotaObservacion($t_dueno, $HObser, $ObservacionesNuevas, FLUJO_COMPROBACION, COMPROBACION_ETAPA_EN_APROBACION);				
+			$queryInsertaObs=sprintf("UPDATE comprobaciones SET co_observaciones='%s' WHERE co_mi_tramite='%s'",$observaciones,$_GET['id']);
+			$cnn->ejecutar($queryInsertaObs);
+				
+		}//=================================================
+		
+		$remitente = $t_dueno;
+		//enviar la notificacion al empleado ----> t_iniciador
+		$destinatario = $tramite->Get_dato("t_iniciador");		
+		//Notificacion del sistema
+		$tramite->EnviaNotificacion($_GET['id'], $mensaje, $remitente, $destinatario, "0", ""); //"0" para no enviar email y "1" para enviarlo
+		//limpio el campo t_autorizaciones
+		$tramite->limpiarAutorizaciones($_GET['id']);		
+		//cambio de etapa 
+		$tramite->Modifica_Dueno($_GET['id'], COMPROBACION_ETAPA_RECHAZADA, FLUJO_COMPROBACION, $t_dueno, $destinatario);
+		//$tramite->Modifica_Etapa($_GET['id'],COMPROBACION_ETAPA_RECHAZADA,FLUJO_COMPROBACION, $destinatario,"");
+		// Asigno el valor que trae del campo de texto, debido a que en el index, la variable de sesi�n, se convertia en un entero(ID del usuario delegado).
+		$sql = "UPDATE tramites SET t_ruta_autorizacion = '', t_autorizaciones = '' WHERE t_id = ".$_GET['id'];		
+		mysql_query($sql);
+		
+		$_SESSION['delegado'] = $delegadoNombre;
+		
+		if($mobile){
+			echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?action=rechazar'>";
+		}else{
+			echo ("<script language='Javascript'> location.href='http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?action=rechazar';</script>");
+		}
+    }
+    
+    // Enviar comprobaci�n a Supervisor/Gerente de Finanzas
+    if(isset($_POST['enviarSupervisor']) && isset($_POST['idT']) && $_POST['idT']!=""){
+    	$cnn = new conexion();
+    	$tramite = new Tramite();
+    	$comprobacion = new Comprobacion();
+    	$concepto = new Concepto();
+    	$usuario = new Usuario();
+    	
+    	$montoToleranciaSupervisorFnanzas = ULT_APROBACION;
+    	$conceptoPersonal = 31;
+    	
+    	$idTramite = $_POST['idT']; // Tramite
+    	$HObser = $_POST['campo_historial']; // Historial de Observaciones
+    	$sObser = $_POST['campo_observaciones']; // Observaciones del Finanzas
+    	$num_filas = $_POST['total_rows']; // Cantidad de registros cargados/ingresados por Finanzas
+    	
+    	$totalComprobacion = $_POST['total_pesos']; // Monto total en Pesos de la Comprobaci�n
+    	$anticipoComprobadoAutorizadoBMW = $_POST['anticipo_comprobado_autorizado_BMW2']; // Anticipo comprobado autorizado X BMW
+    	$personalaDescontar = $_POST['personal_descontar2']; // Personal descuento
+    	$amexComprobadoAutorizadoBMW = $_POST['amex_comprobado_autorizado_BMW2']; // Amex comprobado autorizado X BMW
+    	$efectivoComprobadoBMW = $_POST['efectivo_comprobado_autorizado_BMW2']; // Efectivo comprobado XBMW
+    	$montoaDescontar = $_POST['monto_a_descontar2']; // Monto a descontar
+    	$montoaReembolsar = $_POST['monto_a_reembolsar2']; // Monto a reembolsar
+    	$amexExterno = $_POST["amex_externo2"];// amex_externo
+    	
+    	// Limpiamos las cantidades calculadas
+    	$totalComprobacion = str_replace(',', '', $totalComprobacion);
+    	$anticipoComprobadoAutorizadoBMW = str_replace(',', '', $anticipoComprobadoAutorizadoBMW);
+    	$personalaDescontar = str_replace(',', '', $personalaDescontar);
+    	$amexComprobadoAutorizadoBMW = str_replace(',', '', $amexComprobadoAutorizadoBMW);
+    	$efectivoComprobadoBMW = str_replace(',', '', $efectivoComprobadoBMW);
+    	$montoaDescontar = str_replace(',', '', $montoaDescontar);
+    	$montoaReembolsar = str_replace(',', '', $montoaReembolsar);
+    	$amexExterno = str_replace(',', '', $amexExterno);
+    	
+    	// Instancias de clases
+    	$tramite->Load_Tramite($idTramite);
+    	$t_dueno = $tramite->Get_dato("t_dueno");
+    	
+    	$comprobacion->Load_Comprobacion_By_co_mi_tramite($idTramite);
+    	
+    	// Obtenemos el ID de la Comprobaci�n
+    	$idComp = $comprobacion->Get_dato("co_id");
+    	
+    	// Obtener tasa de la comprobaci�n introducida por Finanzas
+    	$tasaComprobacionUSD = $comprobacion->Get_dato("co_tasa_USD");
+    	$tasaComprobacionEUR = $comprobacion->Get_dato("co_tasa_EUR");
+    	
+    	if($totalComprobacion <= $montoToleranciaSupervisorFnanzas){
+    		$supervisorFinanzas = $usuario->getGerenteSFinanzas(SUPERVISOR_FINANZAS);
+    		$t_sig_dueno = (int)$supervisorFinanzas;
+    		$destinatario = (int)$supervisorFinanzas;
+    	}else{
+    		$gerenteFinanzas = $usuario->getGerenteSFinanzas(GERENTE_FINANZAS);
+    		$t_sig_dueno = (int)$gerenteFinanzas;
+    		$destinatario = (int)$gerenteFinanzas;
+    	}
+    	
+    	// Guardamos las observaciones
+    	if($sObser != ""){
+    		$notificacion = new Notificacion();
+    		$observaciones = $notificacion->anotaObservacion($t_dueno, $HObser, $sObser, FLUJO_COMPROBACION, COMPROBACION_ETAPA_EN_APROBACION);
+    		$queryInsertaObs = sprintf("UPDATE comprobaciones SET co_observaciones = '%s' WHERE co_mi_tramite = '%s'", $observaciones, $idTramite);
+    		error_log("Insertar observaciones: ".$queryInsertaObs);
+    		$cnn->ejecutar($queryInsertaObs);
+    	}
+    	
+    	// Actualizamos los montos aprobados por BMW
+    	$comprobacion->ActualizarResumenFinanzas($idTramite, $anticipoComprobadoAutorizadoBMW, $personalaDescontar, $amexComprobadoAutorizadoBMW, $efectivoComprobadoBMW, $montoaDescontar, $montoaReembolsar, $amexExterno ,$totalComprobacion);
+    	
+    	// Borramos todos los Registros Personales de la Comprobaci�n 
+    	$query = sprintf("DELETE FROM detalle_comprobacion WHERE dc_comprobacion = '%s' AND dc_concepto = '%s'", $idComp, $conceptoPersonal);
+    	error_log("Borrar registros personales: ".$query);
+    	$cnn->ejecutar($query);
+    	
+    	// Actualiza los montos del detalle de la comprobaci�n
+    	error_log("--------------------->>>>>>>>>>>>>>>>>>>>>Numero maximo de filas: ".$num_filas);
+		for($i = 1; $i <= $num_filas; $i++){
+			$conceptoSeleccionado = $_POST['concepto'.$i];
+			$datoMonto = $_POST['dc_monto_aux'.$i];
+			$datoIva = $_POST['dc_iva_aux'.$i];
+			$datoPropina = $_POST['dc_propinas_aux'.$i];
+			$datoImphospedaje = $_POST['dc_hospedajeImpuesto_aux'.$i];
+			$dc_id = $_POST['dc_id'.$i];
+			$total = $_POST['total'.$i];
+			$cinsertadoenBD = $_POST['cinsertado'.$i];
+			$conceptoOld = $_POST['conceptoOld'.$i];
+			error_log("Impuesto Hospedaje sin limpiar: ".$datoImphospedaje." fila: ".$i);
+			
+			// Limpiar cantidades
+			$datoMonto = str_replace(',', '', $datoMonto);
+			$datoIva = str_replace(',', '', $datoIva);
+			$datoPropina = str_replace(',', '', $datoPropina);
+			$datoImphospedaje = str_replace(',', '', $datoImphospedaje);
+			$total = str_replace(',', '', $total);
+			
+			// Obtenemos el ID del concepto seg�n su nombre
+// 			error_log("conceptoSeleccionado: ".$conceptoSeleccionado);
+// 			error_log("conceptoSeleccionado UTF8_decode: ".utf8_decode($conceptoSeleccionado));
+// 			error_log("conceptoSeleccionado UTF8_encode: ".utf8_encode($conceptoSeleccionado));
+			error_log("Monto: ".$datoMonto);
+			error_log("IVA: ".$datoIva);
+			error_log("Propina: ".$datoPropina);
+			error_log("Impuesto Hospedaje: ".$datoImphospedaje);
+			
+			$concepto->Load_Concepto_By_Nombre($conceptoSeleccionado);
+			$conceptNew = $concepto->Get_Dato("dc_id");
+			error_log("---->>>>>>>>>Id del concepto: ".$conceptNew."<<<<<<<<<<<----------"." insertado en BD: ".$cinsertadoenBD);
+			
+			// Concepto Viejo
+			$concepto->Load_Concepto_By_Nombre($conceptoOld);
+			$concept_old = $concepto->Get_Dato("dc_id");
+			
+			if($conceptNew != $conceptoPersonal){
+				$query = sprintf("UPDATE detalle_comprobacion SET dc_concepto = '%s', dc_monto = '%s', dc_iva = '%s', dc_propinas = '%s', dc_imp_hospedaje = '%s', dc_total = '%s' WHERE dc_id = '%s'", $conceptNew, $datoMonto, $datoIva, $datoPropina, $datoImphospedaje, $total, $dc_id);
+				error_log($query);
+				$cnn->ejecutar($query);
+			}else if($conceptNew == $conceptoPersonal && $cinsertadoenBD == 1){
+				if($conceptNew == $concept_old){
+					// Se trata de los conceptos Personales, el empleado
+					$tipoComp = $_POST['tipo'.$i];
+					$fechaComp = $_POST['dc_fecha'.$i];
+					$comentario = $_POST['comentarioT'.$i];
+					$transaccion = $_POST['notransaccion'.$i];
+					$divisa = $_POST['divisa'.$i];
+					$detalleOrigen = $_POST['detalleOrigen'.$i];
+					$idCargoAMEX = $_POST['idCargoAMEX'.$i];
+					
+					$comentario = utf8_decode($comentario);
+					
+					switch($divisa){
+						case "MXN":
+							$divisa = 1;
+							break;
+						case "USD":
+							$divisa = 2;
+							break;
+						case "EUR":
+							$divisa = 3;
+							break;
+					}
+					
+					// Insertamos los registros personales
+					$comprobacion->ActualizarCamposAprobados($idTramite, $tipoComp, $transaccion, $fechaComp, $comentario, $datoMonto, $datoPropina, $datoIva, $datoImphospedaje, $total, $divisa, $conceptNew, $detalleOrigen, $idCargoAMEX);
+				}else{
+					$query = sprintf("UPDATE detalle_comprobacion SET dc_concepto = '%s', dc_monto = '%s', dc_iva = '%s', dc_propinas = '%s', dc_imp_hospedaje = '%s', dc_total = '%s' WHERE dc_id = '%s'", $conceptNew, $datoMonto, $datoIva, $datoPropina, $datoImphospedaje, $total, $dc_id);
+					error_log($query);
+					$cnn->ejecutar($query);
+				}
+			}else{
+				// Se trata de los conceptos Personales, generados por Finanzas
+				$tipoComp = $_POST['tipo'.$i];
+				$fechaComp = $_POST['dc_fecha'.$i];
+				$comentario = $_POST['comentario'.$i];
+				$transaccion = $_POST['notransaccion'.$i];
+				$divisa = $_POST['divisa'.$i];
+				$detalleOrigen = $_POST['detalleOrigen'.$i];
+				$idCargoAMEX = $_POST['idCargoAMEX'.$i];
+				
+				$comentario = utf8_decode($comentario);
+				
+				switch($divisa){
+					case "MXN":
+						$divisa = 1;
+						break;
+					case "USD":
+						$divisa = 2;
+						break;
+					case "EUR":
+						$divisa = 3;
+						break;
+				}
+				
+				// Insertamos los registros personales
+				$comprobacion->ActualizarCamposAprobados($idTramite, $tipoComp, $transaccion, $fechaComp, $comentario, $datoMonto, $datoPropina, $datoIva, $datoImphospedaje, $total, $divisa, $conceptNew, $detalleOrigen, $idCargoAMEX);
+			}
+		}
+    	
+    	// Asignamos al due�o la Comprobaci�n y modificamos su Etapa
+    	$tramite->Modifica_Dueno_Etapa($idTramite, COMPROBACION_ETAPA_EN_APROBACION_POR_SF, FLUJO_COMPROBACION, $t_sig_dueno);
+    	
+    	//Envia notificacion al Supervisor/Gerente de Finanzas de la solicitud de invitaci�n ----------------------------------
+    	$mensaje = sprintf("La Comprobaci&oacute;n de Viaje <strong>%05s</strong> te ha sido <strong>ASIGNADA</strong> para su Aprobaci&oacute;n.", $idTramite);
+    	$remitente = $t_dueno;
+    	$tramite->EnviaNotificacion($idTramite, $mensaje, $remitente, $destinatario, "0", ""); //false para no enviar email
+    	
+    	if($mobile){
+    		echo "<meta http-equiv='Refresh' content='0; URL=http://".$SERVER.$RUTA_R."flujos/comprobaciones/index.php?docs=docs&type=1&action=envia'>";
+    	}else{
+    		// Regresa a la pagina de solicitudes de invitacion
+			echo("<script language='javascript' type='text/javascript'> 
+				if(confirm('�Desea imprimir la comprobaci�n actual?')){ 
+					window.open('generador_pdf.php?id=".$idTramite."', 'imprimir');
+					location.href='./index.php?docs=docs&type=1&action=envia';
+				}else{
+					location.href='./index.php?docs=docs&type=1&action=envia';
+				}
+				</script>");
+    	}
+    }
+
+	//Cargar dato del co_mi_tramite
+	$query = "SELECT co_mi_tramite FROM comprobaciones WHERE co_mi_tramite ={$_GET['id']}";
+	$rst = $cnn->consultar($query);
+    $fila = mysql_fetch_assoc($rst);
+    $co_mi_tramite = $fila['co_mi_tramite'];
+
+	// Carga datos de autorizadores
+    $tramite = new Tramite();
+	$tramite->Load_Tramite($t_id);
+    $ruta_autorizadores = $tramite->Get_dato("t_ruta_autorizacion");
+    $autorizaciones     = $tramite->Get_dato("t_autorizaciones");
+
+    //Traer� la ruta de autorizaci�n de la solicitud correspondiente
+    $rutaAutorizacion = new RutaAutorizacion();
+    $autorizadores = $rutaAutorizacion->getNombreAutorizadores($t_id);
+    	
+	//Homologacion de usuarios para saber que tipo de usuaro esta en cuestion
+	//Se checa si el usuario pertenece a Controlling o Finanzas
+		$parametros = "";
+		$agrup_usu = new AgrupacionUsuarios();
+		if($agrup_usu->Load_Homologacion_Dueno_By_u_ID($_SESSION["idusuario"])){
+			$idAgrupacion = $agrup_usu->Get_dato("hd_au_id");
+			if($idAgrupacion != ""){
+				$parametros = ", ".$idAgrupacion;
+			}
+		}
+
+	// Verificamos si la solicitud fue realizada por un delegado; de ser as� imprimiremos el nombre de los involucrados
+	if($t_delegado != 0){
+		$duenoActual = new Usuario();
+		$duenoActual->Load_Usuario_By_ID($t_delegado);
+		$nombredelegado = $duenoActual->Get_dato('nombre');
+		$nombreEmpleado = "<font color='#0000CA'>".$nombredelegado."</font>".strtoupper(" en nombre de: ").$nombreEmpleado;
+	}
+	
+	// Extracci�n de las Divisas
+	if($comprobacion_etapa == COMPROBACION_ETAPA_EN_APROBACION){
+		//Obtener Divisa Euro
+		$_divisas = new Divisa();
+		$_divisas->Load_data(3); //busca Id de divisa
+		$divisaEUR = $_divisas->Get_dato("div_tasa");
+		$divisaEUR = number_format((floatVal($divisaEUR)),2,".",",");
+		//Obtener Divisa D�lar
+		$_divisas->Load_data(2);
+		$divisaUSD = $_divisas->Get_dato("div_tasa");
+		$divisaUSD = number_format((floatVal($divisaUSD)),2,".",",");
+	}else{
+		//Obtener Divisa Euro
+		$comprobaciones = new Comprobacion();
+		$comprobaciones->Load_Comprobacion_By_co_mi_tramite($t_id);
+		$divisaEUR = $comprobaciones->Get_dato("co_tasa_EUR");
+		$divisaEUR = number_format((floatVal($divisaEUR)),2,".",",");
+		//Obtener Divisa D�lar
+		$divisaUSD = $comprobaciones->Get_dato("co_tasa_USD");
+		$divisaUSD = number_format((floatVal($divisaUSD)),2,".",",");
+	}
+?>
+<script language="JavaScript" src="../../lib/js/jquery/jquery-1.3.2.js" type="text/javascript"></script>
+        <script language="JavaScript" src="../../lib/js/jquery/jquery.date_input.js" type="text/javascript"></script>       
+        <script language="JavaScript" src="../../lib/js/jquery/jquery.autocomplete.js" type="text/javascript"></script>
+        <script language="JavaScript" src="../../lib/js/jquery/jquery.bgiframe.js" type="text/javascript"></script>
+        <script language="JavaScript" src="../../lib/js/formatNumber.js" type="text/javascript"></script>
+		<script language="JavaScript" src="../../lib/js/dom-drag.js" type="text/javascript"></script>
+		<script language="JavaScript" src="../../lib/js/jqueryui/jquery-ui.min.js"></script>
+        <script language="JavaScript" src="../../lib/js/jquery/jquery.blockUI.js" type="text/javascript"></script> 
+        <script language="JavaScript" src="../solicitudes/js/solicitud_viaje.js" type="text/javascript"></script> 
+        <script language="JavaScript" src="js/utilities.js" type="text/javascript"></script>
+        <script language="JavaScript" src="js/backspaceGeneral.js" type="text/javascript"></script>
+		<script language="JavaScript" src="js/communication_ajax.js" type="text/javascript"></script>
+        <script language="JavaScript" src="../../lib/js/withoutReloading.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="../../css/date_input.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/table_style.css"/>
+<script language="JavaScript" type="text/javascript">	
+	var doc;
+	var cc_centrocostos;
+	var cc_codigo_new=0;
+	var valConcepto="";
+	var registrosOriginales=0;
+	//variables editables
+	var montoOriginal=0;
+	var ivaOriginal=0;
+	var propinaOriginal=0;
+	var imphospedajeOriginal=0;
+	var totalOriginal=0;
+	// variable para agregar nuevas filas
+	var i=0;
+	//variables para el calculo del resumen
+	var personal_amex =0;
+	var personal_anticipo=0;
+	//variables para la actualizacion de datos necesarios (Pediente redaccion)
+	var cont=0;
+	//total
+	var dc_total=0;
+	doc = $(document);
+	doc.ready(inicializarEventos);
+	var frm = document.comp_inv;
+	//direccionar a la pagina principal (Comprobaciones)
+	//Esta function se llama al inicio
+	function inicializarEventos(){
+		// Para poder mover las ventanas
+		$("#ventanaDivisa").draggable({containment : "#Interfaz", scroll: false});
+
+		var tipoUsuario = "<?PHP echo $tipoUsuario;?>";
+		var etapaComprobacion = "<?PHP echo $comprobacion_etapa;?>";
+		
+		if(tipoUsuario == 6 && etapaComprobacion != 7){
+			/* Si el usuario es Finanzas y la Etapa es diferente de Aprobada por Supervisor de Finanzas, 
+			 * permitir� modificar las Tasas de las Divisas.
+			 */
+			flotanteActive(1);
+		}
+		
+		//creamos la tabla temporal de montos
+		//montosTabla();
+		//creamos la tabla temporal que permitira registrar los conceptos
+		//conceptosTabla();
+		//ocultamos los botones (Eliminar /recalcular)	
+		desactivarBoton();
+		//obtendremos el valor de los registros originales que existan al principio
+		registrosOriginales = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		//alert("Inicio de aplicacion (registros)"+ registrosOriginales);
+		
+		//toma el valor del centro de costos para el combo
+		var id_centro_de_costos = <?PHP echo $co_ceco; ?>;
+		seleccionar(id_centro_de_costos);
+		//Seleccionar el concepto
+		//var id_concepto =  //echo $dci_concepto;;
+		//seleccionar_concepto(id_concepto);*/
+		$("#autorizar").click(function(){
+			$("#aux").val(1);
+		});
+
+		$("#tasaUSDeditable, #tasaEUReditable").bind("keydown", function(e){
+			if(!isNumeric(e)) return false;
+		});
+
+		$("#tasaUSDeditable, #tasaEUReditable").bind('change', function(){
+			aplicaFormato();
+		});
+
+		/* 
+		 * Impedimos que salga de la pantalla al teclear el backspace en alg�n bot�n
+		 */
+
+		// Ventana de Captura de Divisa
+		$('#aceptarDivisa').focus(function() {
+			confirmaRegreso('aceptarDivisa');
+		});
+
+		// Botones de Acci�n
+		$('#autorizar').focus(function() {
+			confirmaRegreso('autorizar');
+		});
+		
+		$('#enviarSupervisor').focus(function() {
+			confirmaRegreso('enviarSupervisor');
+		});
+
+		$('#Volver').focus(function() {
+			confirmaRegreso('Volver');
+		});
+
+		$('#rechazar').focus(function() {
+			confirmaRegreso('rechazar');
+		});
+
+		$('#devolverObservaciones').focus(function() {
+			confirmaRegreso('devolverObservaciones');
+		});
+		
+		var no_partidas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		for(var i = 1; i <= no_partidas; i++){
+			$("#monto"+i).bind("keydown", function(e){
+				if(!isNumeric(e)) return false;
+			});
+
+			$("#iva"+i).bind("keydown", function(e){
+				if(!isNumeric(e)) return false;
+			});
+
+			$("#propina"+i).bind("keydown", function(e){
+				if(!isNumeric(e)) return false;
+			});
+
+			$("#imphospedaje"+i).bind("keydown", function(e){
+				if(!isNumeric(e)) return false;
+			});
+		}
+		//recalculaCF();
+		
+		// Ocultar botones para evitar que el usuario de doble click en alguno de estos
+		$("#autorizar").click(function(e){
+			$(this).fadeOut("slow");
+			$("#enviarSupervisor").fadeOut("slow");
+			$("#Volver").fadeOut("slow");
+			$("#rechazar").fadeOut("slow");
+			$("#devolverObservaciones").fadeOut("slow");
+		});
+
+		$("#enviarSupervisor").click(function(e){
+			$(this).fadeOut("slow");
+			$("#autorizar").fadeOut("slow");
+			$("#Volver").fadeOut("slow");
+			$("#rechazar").fadeOut("slow");
+			$("#devolverObservaciones").fadeOut("slow");
+		});
+
+		$("#Volver").click(function(e){
+			$(this).fadeOut("slow");
+			$("#autorizar").fadeOut("slow");
+			$("#enviarSupervisor").fadeOut("slow");
+			$("#rechazar").fadeOut("slow");
+			$("#devolverObservaciones").fadeOut("slow");
+		});
+
+		$("#rechazar").click(function(e){
+			$(this).fadeOut("slow");
+			$("#autorizar").fadeOut("slow");
+			$("#enviarSupervisor").fadeOut("slow");
+			$("#Volver").fadeOut("slow");
+			$("#devolverObservaciones").fadeOut("slow");
+		});
+		
+	}//fin de inicializacion 
+	
+	<?PHP if(isset($_GET['view_travel'])){?>
+	function Location(){
+		location.href='index.php';
+	}
+	<?PHP }?>
+	
+	function flotanteActive(valor){
+    	// Deshabilitar Bot�n de Aceptar
+		$("#aceptarDivisa").attr("disabled", "disabled");
+		
+		var tramite = "<?PHP echo $t_id;?>";
+		var mensaje = "Por favor introduzca un monto v\u00e1lido.";
+		
+		if(valor == 1){
+			// Habilitar Bot�n de Aceptar
+			$("#aceptarDivisa").removeAttr("disabled");
+			
+			bloquearcamposPantalla(1);
+			document.getElementById('ventanaDivisa').style.visibility = 'visible';
+			document.getElementById('ventanaDivisa').style.display = 'block';
+			
+        }else{
+            if($("#tasaUSDeditable").val() == 0.00 || $("#tasaUSDeditable").val() == "0.00" || $("#tasaUSDeditable").val() >= 100){
+                alert(mensaje);
+            	$("#tasaUSDeditable").focus();
+            	
+            	// Habilitar Bot�n de Aceptar
+    			$("#aceptarDivisa").removeAttr("disabled");
+    			
+            	return false;
+            }else if($("#tasaEUReditable").val() == 0.00 || $("#tasaEUReditable").val() == "0.00" || $("#tasaUSDeditable").val() >= 100){
+            	alert(mensaje);
+            	$("#tasaEUReditable").focus();
+            	
+            	// Habilitar Bot�n de Aceptar
+    			$("#aceptarDivisa").removeAttr("disabled");
+    			
+            	return false;
+            }else{        		
+    			document.getElementById('ventanaDivisa').style.visibility = 'hidden';
+    			document.getElementById('ventanaDivisa').style.display = 'none';
+    			
+            	// Bloquear pantalla en tanto realiza las operaciones correspondientes. 
+    			$.blockUI({
+    				message: '<h1>Espere un momento...</h1>',
+    				css:{
+    					border: 'none', 
+    					padding: '15px', 
+    					backgroundColor: '#000', 
+    					'-webkit-border-radius': '10px', 
+    					'-moz-border-radius': '10px', 
+    					opacity: .5, 
+    					color: '#fff'
+    				}
+    			});
+    			
+        		guardarTasas(tramite);
+            }
+		}
+    }
+
+	//Seleccionar elemento del combo de cat_cecos_cargado
+	function seleccionar(elemento){
+		$("#centro_de_costos_new option[value="+elemento+"]").attr("selected","selected");
+	  /* var form = document.comp_inv;
+	   var combo = form.centro_de_costos_new;   
+	   var cantidad = $('#centro_de_costos_new').length;
+	   for (i = 0; i < cantidad; i++) {
+		  var toks=combo[i].text.split(" ");
+		  alert(toks[0]);		  
+		  if (toks[0] == elemento) {
+			  alert(i);
+			  alert(elemento);
+			  //$("#centro_de_costos_new option[value="++"]").attr("selected","selected");
+			 //combo[i].selected = true;
+			 break;
+		  }
+	   }*/
+	}
+
+	// Funci�n para bloquear todos los campos de la Pantalla	
+	function bloquearcamposPantalla(accion){
+		var tramite = "<?PHP echo $t_id;?>";
+		var etapaComprobacion = "<?PHP echo $comprobacion_etapa;?>";
+		
+		if(accion){
+			// Deshabilitar Lista de Centro de Costos
+			$("#centro_de_costos_new").attr("disabled", "disabled");
+						
+			// Deshabilitar campos de la tabla de Gastos Comprobados
+			var no_partidas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+			for(var i = 1; i <= no_partidas; i++){
+				$("#comentarioT"+i).attr("disabled", "disabled");
+				$("#monto"+i).attr("disabled", "disabled");
+				$("#iva"+i).attr("disabled", "disabled");
+				$("#propina"+i).attr("disabled", "disabled");
+				$("#imphospedaje"+i).attr("disabled", "disabled");
+				$("#exmensajeT"+i).attr("disabled", "disabled");
+				$("#concepto_new"+i).attr("disabled", "disabled");
+				
+				if(etapaComprobacion == 8){
+					$("#"+i+"del").attr("disabled", "disabled");
+				}
+			}
+
+			// Deshabilitar Historial de Observaciones
+			$("#campo_historial").attr("disabled", "disabled");
+
+			// Deshabilitar Observaciones
+			$("#campo_observaciones").attr("disabled", "disabled");
+
+			// Deshabilitar Botones
+			$("#enviarSupervisor").attr("disabled", "disabled");
+			$("#Volver").attr("disabled", "disabled");
+			$("#rechazar").attr("disabled", "disabled");
+			$("#devolverObservaciones").attr("disabled", "disabled");
+			
+		}else{
+			// Habilitar Lista de Centro de Costos
+			$("#centro_de_costos_new").removeAttr("disabled");
+			
+			// Habilitar campos de la tabla de Gastos Comprobados
+			var no_partidas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+			for(var i = 1; i <= no_partidas; i++){
+				verificaConcepto($("#dc_id"+i).val(), i);
+				
+				$("#comentarioT"+i).removeAttr("disabled");
+
+				if($("#aux"+i).val() != 1){
+					// Si el concepto cuenta con un Personal recalculado, no debe habilitar los campos
+					$("#monto"+i).removeAttr("disabled");
+					$("#iva"+i).removeAttr("disabled");
+					$("#propina"+i).removeAttr("disabled");
+					$("#imphospedaje"+i).removeAttr("disabled");
+				}else{
+					// Elinimar el concepto de Personal
+					$("#concepto_new"+i+" option[value=31]").remove();
+				}
+				
+				$("#exmensajeT"+i).removeAttr("disabled");
+				$("#concepto_new"+i).removeAttr("disabled");
+
+				if(etapaComprobacion == 8){
+					$("#"+i+"del").removeAttr("disabled");
+				}
+			}
+
+			// Deshabilitar Historial de Observaciones
+			$("#campo_historial").removeAttr("disabled");
+
+			// Deshabilitar Observaciones
+			$("#campo_observaciones").removeAttr("disabled");
+
+			// Habilitar Botones
+			$("#enviarSupervisor").removeAttr("disabled");
+			$("#Volver").removeAttr("disabled");
+			$("#rechazar").removeAttr("disabled");
+			$("#devolverObservaciones").removeAttr("disabled");
+
+			// Se desbloquear� la pantalla
+			$.unblockUI();
+		}
+	}
+	
+	//Validaci�n campos numericos
+	function validaNum(valor){
+		cTecla=(document.all)?valor.keyCode:valor.which;
+		if(cTecla==8) return true;
+		patron=/^([0-9.]{1,2})?$/;
+		cTecla= String.fromCharCode(cTecla);
+		return patron.test(cTecla);
+	}
+	
+	//funcion que permitira desactival los botones (Eliminar/recalculo)	
+	function desactivarBoton(){
+		var filas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		for(var i=1;i<=filas;i++){
+			$("#recalculo"+i).css("display", "none");
+			$("#eliminar"+i).css("display", "none");
+		}
+	}
+	
+	function valida_campo_observaciones(){
+		if ($("#impuesto").val()==""){
+			alert("El campo de observaciones es obligatorio favor de llenar dato faltante.");
+			$("#impuesto").focus();
+			return false;
+		}
+	}
+	
+	function valoresOriginales(id){
+		//tomamos los valores originales de la BD
+		 var totalOriginal=$("#total"+id).val();
+		 $.ajax({
+				type: "POST",
+				url: "services/Ajax_comprobacion.php",
+				data: "total="+totalOriginal+"&idtramite="+idTramite,
+				success: function(json){			
+				}
+			});	
+	}
+
+	//funcion que nos eliminara la tabla temporal total_temp creada
+	function EliminaTotalTemp(){
+		var elimina ="elimina";
+		$.ajax({
+			type: "POST",
+			url: "services/Ajax_comprobacion.php",
+			data: "elimina="+elimina,
+			success: function(json){					
+			}
+		});
+	}   
+
+//===================================================== Funciones principales de la pantalla Finanzas (Comprobacion de viaje) ================	
+
+	//Funcion de Actualizacion y la insercion de datos del recalculo realizado
+	function registrosPersonales(idTramite){
+		//alert("Entrara para la actualizacion");
+		//pendiente actualizar la etapa interviene el tdueno
+	
+		//-------------- Actualizacion (RESUMEN / CECO / observaciones) 
+		
+		if($("#centro_de_costos_new").val() == $("#centro_de_costos_old").val()){
+			var ceco=  $("#centro_de_costos_old").val();
+		}else{
+			var ceco=  $("#centro_de_costos_new").val();
+		}
+				
+		//valor de las observaciones
+		var observacionesNew=$("#campo_observaciones").val();
+		var observacionesNuevas="";
+		if(observacionesNew != ""){
+			observacionesNuevas=observacionesNew;
+		}		
+				
+		//Anticipo comprobado autorizado X BMW
+		var anticipoCABMW=$("#anticipo_comprobado_autorizado_BMW2").val();		
+		anticipoCABMW=parseFloat(anticipoCABMW.replace(',',''));
+		
+		//personal descuento
+		var personalDescuento=$("#personal_descontar2").val();
+		personalDescuento=parseFloat(personalDescuento.replace(',',''));		
+		
+		//Amex comprobado autorizado X BMW
+		var amexCABMW=$("#amex_comprobado_autorizado_BMW2").val();
+		amexCABMW=parseFloat(amexCABMW.replace(',',''));		
+		
+		//Efectivo comprobado XBMW
+		var efectivoCXBMW=$("#efectivo_comprobado_autorizado_BMW2").val();
+		efectivoCXBMW=parseFloat(efectivoCXBMW.replace(',',''));
+		
+		//monto a descontar	
+		var montoDescontar=$("#monto_a_descontar2").val();
+		montoDescontar=parseFloat(montoDescontar.replace(',',''));
+		
+		//monto a reembolsar
+		var montoReembolsar=$("#monto_a_reembolsar2").val();
+		montoReembolsar=parseFloat(montoReembolsar.replace(',',''));
+		
+		$.ajax({
+			type: "POST",
+			url: "services/Ajax_comprobacion.php",
+			data: "compTramite="+<?PHP echo $_GET['id'];?>+"&centroCosto="+ceco+"&observaciones="+observacionesNuevas+"&anticipoCABMW="+anticipoCABMW+"&personalDescuento="+personalDescuento+"&amexCABMW="+amexCABMW+"&efectivoCXBMW="+efectivoCXBMW+"&montoDescontar="+montoDescontar+"&montoReembolsar="+montoReembolsar+"&idUsuario="+<?PHP echo $idusuario;?>,
+			success: function(json){			
+			}
+		});
+
+		// Boraremos los detalles de personal, en caso de que el usuario haya decidido alterar sus montos
+		$.ajax({
+			type: "POST",
+			url: "services/Ajax_comprobacion.php",
+			data: "tramitePersonales="+<?PHP echo $_GET['id'];?>,
+			success: function(json){}
+		});
+		
+		//------------ END Actualizacion (RESUMEN / CECO / observaciones)	
+		
+		//------------ Actualizacion de montos originales
+		var partidasRecalculadas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		
+		//(cinsertado es un indicador para saber cuales son los datos originales que son mostrados en la pantalla de finanzas).
+		for(var i=1;i<=partidasRecalculadas;i++){
+			if($("#concepto"+i).val() != "Personal"){
+				// Habilitaremos los campos
+				$("#monto"+i).removeAttr('disabled', 'disabled');
+				$("#iva"+i).removeAttr('disabled', 'disabled');
+				$("#propina"+i).removeAttr('disabled', 'disabled');
+				$("#imphospedaje"+i).removeAttr('disabled', 'disabled');
+						
+				$.ajax({
+					type: "POST",
+					url: "services/Ajax_comprobacion.php",
+					data: "datoMonto="+parseFloat($("#dc_monto_aux"+i).val().replace(',',''))+"&datoIva="+parseFloat($("#dc_iva_aux"+i).val().replace(',',''))+"&datoPropina="+parseFloat($("#dc_propinas_aux"+i).val().replace(',',''))+
+					"&datoImphospedaje="+parseFloat($("#dc_imphospedaje_aux"+i).val().replace(',',''))+"&datoTotal="+parseFloat($("#total"+i).val().replace(',',''))+
+					"&montoOriginal="+parseFloat($("#dc_monto"+i).val().replace(',',''))+"&ivaOriginal="+parseFloat($("#dc_iva"+i).val().replace(',',''))+"&propinaOriginal="+parseFloat($("#dc_propinas"+i).val().replace(',',''))+
+					"&imphosOriginal="+parseFloat($("#dc_imphospedaje"+i).val().replace(',',''))+
+					"&conceptoOriginal="+$("#conceptoOld"+i).val()+"&conceptoSelec="+$("#concepto"+i).val()+"&dc_id="+$("#dc_id"+i).val(),
+					success: function(json){			
+					}
+				});
+			}		
+		}
+
+		//------------ Inserccion de conceptos recalculados ( Personal)
+		for(var i=1;i<=partidasRecalculadas;i++){
+			if($("#concepto"+i).val() == "Personal"){		
+				$.ajax({
+					type: "POST",
+					url: "services/Ajax_comprobacion.php",
+					data: "idtramitefin="+<?PHP echo $_GET['id'];?>+"&tipoAnticipo="+$("#tipo"+i).val()+"&fecha="+$("#dc_fecha"+i).val()+"&conceptoPersonal="+$("#concepto"+i).val()+
+							"&comentario="+$("#comentario"+i).val()+"&monto="+parseFloat($("#monto"+i).val().replace(',',''))+"&iva="+parseFloat($("#iva"+i).val().replace(',',''))+"&propina="+parseFloat($("#propina"+i).val().replace(',',''))+
+							"&imphospedaje="+parseFloat($("#imphospedaje"+i).val().replace(',',''))+"&total="+parseFloat($("#total"+i).val().replace(',',''))+"&notransaccion="+$("#notransaccion"+i).val()+
+							"&divisaMXN="+$("#divisa"+i).val()+"&detallePersonal="+$("#detalleOrigen"+i).val()+"&idcargoAmex="+$("#idCargoAMEX"+i).val(),
+					success: function(json){			
+					}
+				});
+			}
+		}
+	//------------------------------------------------------------		
+	}//END Actualizacion y la insercion de datos del recalculo realizado
+
+	//Funcion que permite realizar el recalculo del total al insertar/ eliminar  un concepto personal
+	//Este aplicara solo cuando sea de tipo Anticipo, Amex y Amex Externo
+	function recalcularTotal_CV(){
+		//alert("Entra a su recalculo");		
+		//se realiza la suma de las filas que se hayan ingresado
+		var id = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		//alert("longitud para el recalculo"+id);
+		//totalComprobado=0;
+		//var i=0;
+		
+		/*for(var i=1;i<=id;i++){
+			//alert($("#total"+i).val());
+			var TotalCalculado=$("#total"+i).val();
+			TotalCalculado=TotalCalculado.indexOf(",");
+			if(TotalCalculado == -1){
+			var TotalCalculado=parseFloat($("#total"+i).val());
+			}else{
+				var TotalCalculado=$("#total"+i).val().replace(',','');			
+			}
+			totalComprobado=totalComprobado+parseFloat(TotalCalculado);					
+			//alert("TOTAL CALCULADO"+totalComprobado);				 
+			}	
+		//alert("total a calcular"+totalComprobado);
+		$("#total_pesos").html(number_format(totalComprobado,2,".",","));*/
+		$("#total_rows").val(id);
+	
+		//recalculo del resumen	
+		recalculaCF();
+	} // END Recalculo del total al insertar/ eliminar  un concepto personal
+
+	//funcion que permitira realizar la eliminacion del concepto registrado
+	function eliminaConcepto(id, detalleConcepto){
+		var tramite = 0;
+		tramite = $("#idT").val();
+		var t_etapa = $("#t_etapa_actual").val();
+		var totalRows = parseInt($("#total_rows").val()) - 1;
+		//var diferencia = $("#total"+ parseInt(id)).val();
+		//alert("id"+id);
+		//alert("parseo"+parseInt(id));
+		if(confirm("�Esta seguro de que desea eliminar el registro? Se recalcular� al monto original.")){
+			if(t_etapa == 8){ // Etapa rechazada por supervisor de Finanzas.
+				var idOriginal = obtenerFiladeDetalle("descrip_comprobacion_table", detalleConcepto);
+				
+				if(isNaN(idOriginal)){
+					idOriginal = 1;
+				}
+				
+				$.ajax({
+					type: "POST",
+					url: "services/Ajax_comprobacion.php",
+					data: "id_next="+idOriginal+"&tramite="+tramite+"&comp=1"+"&detalleConcepto="+detalleConcepto, 
+					dataType: "json", 
+					success: function(json){
+						// Se le asigna el valor al monto original
+						$("#monto"+idOriginal).val(number_format(json[0].monto,2,".",","));
+						// Se le asigna el valor al iva original
+						$("#iva"+idOriginal).val(number_format(json[0].iva,2,".",","));
+						// Se le asigna el valor a la propina original
+						$("#propina"+idOriginal).val(number_format(json[0].propinas,2,".",","));
+						// Se le asigna el valor al hospedaje original
+						$("#imphospedaje"+idOriginal).val(number_format(json[0].hospedaje,2,".",","));
+						// Se le asigna el valor a el total
+						$("#total"+idOriginal).val(number_format(json[0].total,2,".",","));
+						$("#tota"+idOriginal).html(number_format(json[0].total,2,".",","));
+						
+						$("#dc_monto"+idOriginal).val(json[0].monto);
+						$("#dc_iva"+idOriginal).val(json[0].iva);
+						$("#dc_propinas"+idOriginal).val(json[0].propinas);
+						$("#dc_imphospedaje"+idOriginal).val(json[0].hospedaje);
+						$("#total"+idOriginal).val(number_format(json[0].total,2,".",",").replace(/,/g,""));
+
+						// Campos auxiliares
+						$("#dc_monto_aux"+idOriginal).val(json[0].monto);
+						$("#dc_iva_aux"+idOriginal).val(json[0].iva);
+						$("#dc_propinas_aux"+idOriginal).val(json[0].propinas);
+						$("#dc_hospedajeImpuesto_aux"+idOriginal).val(json[0].hospedaje);
+
+						// Habilitamos el bot�n
+						$("#recalculo"+idOriginal).removeAttr('disabled');
+						$("#recalculo"+idOriginal).attr("style", "");
+						$("#recalculo"+idOriginal).attr("style", "width: 30px; height:30px; background:url(../../images/fwk/action_reorder.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;");
+						$("#recalculo"+idOriginal).css("display", "none");
+
+						$("#recall"+idOriginal).css("display", "block");
+						
+						//quitamos el renglon que fue recalculado								
+						borrarRenglon4(id,"descrip_comprobacion_table","rowCount","rowDel","renglonS","edit","del","");	
+						//realizamos el recalculo del total correspondiente								
+						recalculaCF();
+						$("#total_rows").val(totalRows);
+
+						// Habilitaremos los campos para que el usuario pueda ingresar nuevas cantidades
+						$("#monto"+idOriginal).removeAttr('disabled', 'disabled');
+						$("#iva"+idOriginal).removeAttr('disabled', 'disabled');
+						$("#propina"+idOriginal).removeAttr('disabled', 'disabled');
+						$("#imphospedaje"+idOriginal).removeAttr('disabled', 'disabled');
+						
+						//Se agregara la opcion "Personal" al combo
+						$('#concepto_new'+idOriginal).append('<option value="31">Personal</option>');
+					}
+				});				
+			}else{
+				//tomaremos	los valores insertados en la tabla temporal y sumaremos los calculos virtuales		
+				//tomamos el valor oculto del campo proveedor 
+				//=============================
+				var idOriginal=$("#row"+parseInt(id)).val();
+				//alert("idOrginal"+idOriginal);
+				//alert("IDORIGINAL"+idOriginal);
+				//=============================
+				
+				var partidasRecalculadas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+				
+				for(var i=1;i<=partidasRecalculadas;i++){
+					//concepto de tipo personal
+					if($("#cinsertado"+i).val() == "0"){
+						if(idOriginal == $("#idNext"+i).val()){
+							//alert("valor original monto"+parseFloat($("#montoR"+i).val()));
+							//alert("valor original monto"+parseFloat($("#ivaR"+i).val()));
+							//alert("iva original monto"+parseFloat($("#propinaR"+i).val()));
+							//alert("impuesto original monto"+parseFloat($("#impuhospedajeR"+i).val()));
+							
+							var idVerdadero=parseInt($("#idOrig"+i).val());
+							
+							
+							var sumaCompleta = parseFloat($("#montoR"+i).val())+parseFloat($("#ivaR"+i).val())+parseFloat($("#propinaR"+i).val())+parseFloat($("#impuhospedajeR"+i).val());
+							//alert("SUMA"+sumaCompleta);					
+							
+							
+							// Se le asigna el valor al monto original
+							$("#monto"+idVerdadero).val(number_format($("#montoR"+i).val(),2,".",","));
+							// Se le asigna el valor al iva original
+							$("#iva"+idVerdadero).val(number_format($("#ivaR"+i).val(),2,".",","));
+							// Se le asigna el valor a la propina original
+							$("#propina"+idVerdadero).val(number_format($("#propinaR"+i).val(),2,".",","));
+							// Se le asigna el valor al impuesto hospedaje original
+							$("#imphospedaje"+idVerdadero).val(number_format($("#impuhospedajeR"+i).val(),2,".",","));
+
+							// Se le asigna el valor al monto original
+							$("#dc_monto_aux"+idVerdadero).val(number_format($("#montoR"+i).val(),2,".",","));
+							// Se le asigna el valor al iva original
+							$("#dc_iva_aux"+idVerdadero).val(number_format($("#ivaR"+i).val(),2,".",","));
+							// Se le asigna el valor a la propina original
+							$("#dc_propinas_aux"+idVerdadero).val(number_format($("#propinaR"+i).val(),2,".",","));
+							// Se le asigna el valor al impuesto hospedaje original
+							$("#dc_hospedajeImpuesto_aux"+idVerdadero).val(number_format($("#impuhospedajeR"+i).val(),2,".",","));
+
+							// Se le asigna el valor a el total
+							$("#total"+idVerdadero).val(number_format(sumaCompleta,2,".",","));
+							$("#tota"+idVerdadero).html(number_format(sumaCompleta,2,".",","));
+
+							// Habilitamos el bot�n
+							$("#recalculo"+idVerdadero).removeAttr('disabled');
+							$("#recalculo"+idVerdadero).attr("style", "");
+							$("#recalculo"+idVerdadero).attr("style", "width: 30px; height:30px; background:url(../../images/fwk/action_reorder.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;");
+							$("#recalculo"+idVerdadero).css("display", "none");
+
+							$("#recall"+idVerdadero).css("display", "block");							
+						}						
+					}
+				}				
+				//quitamos el renglon que fue recalculado								
+				borrarRenglon4(id,"descrip_comprobacion_table","rowCount","rowDel","renglonS","edit","del","");	
+				//realizamos el recalculo del total correspondiente								
+				recalculaCF();
+				$("#total_rows").val(totalRows);
+
+				// Habilitaremos los campos para que el usuario pueda ingresar nuevas cantidades
+				$("#monto"+idVerdadero).removeAttr('disabled', 'disabled');
+				$("#iva"+idVerdadero).removeAttr('disabled', 'disabled');
+				$("#propina"+idVerdadero).removeAttr('disabled', 'disabled');
+				$("#imphospedaje"+idVerdadero).removeAttr('disabled', 'disabled');
+
+				//Se agregara la opcion "Personal" al combo
+				$('#concepto_new'+idVerdadero).append('<option value="31">Personal</option>');
+			}
+		}else{
+			return false;
+		}		
+	}
+	
+	// Ocultar bot�n de Recalcular 
+	function ocultaRecalculo(id){
+		// Habilitamos el bot�n
+		$("#recalculo"+id).removeAttr('disabled');
+		$("#recalculo"+id).attr("style", "");
+		$("#recalculo"+id).attr("style", "width: 30px; height:30px; background:url(../../images/fwk/action_reorder.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;");
+		$("#recalculo"+id).css("display", "none");
+		$("#recall"+id).css("display", "block");
+
+		// Apagamos la bandera del bot�n del recalculo
+		$('#recalculo_aux'+id).val(0);
+	} 
+
+	// Asignamos el valor de los montos recalculados a campos ocultos
+	function limpiaComas(id){
+		var montosComa = 0;
+		var ivasComa = 0;
+		var propinasComa = 0;
+		var hospedajeComa = 0;
+		
+		montosComa = $("#monto"+id).val().replace(/,/g,"");
+		$("#dc_monto_aux"+id).val(montosComa);
+		
+		ivasComa = $("#iva"+id).val().replace(/,/g,"");
+		$("#dc_iva_aux"+id).val(ivasComa);
+		
+		propinasComa = $("#propina"+id).val().replace(/,/g,"");
+		$("#dc_propinas_aux"+id).val(propinasComa);
+
+		hospedajeComa = $("#imphospedaje"+id).val().replace(/,/g,"");
+		$("#dc_hospedajeImpuesto_aux"+id).val(hospedajeComa);
+	}
+
+ 	function agregaRegistro(id, detalleComprobacion){
+ 		//checara si se elimina los registros de la tabla temporal para el calculo virtual
+		//=================================================
+		var registros=parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		//alert("TOTAL DE REGISTROS ACTUALES: "+registros);		
+		
+		//variables que nos permitiran insertar los datos para el calculo	
+		var montoOriginal=0;
+		var idOriginal=0;
+		var idNext=0;
+		var diferenciaVirtual=0;
+		var ivaOriginal=0;
+		var propinaOriginal =0;
+		var imphospedajeOriginal =0;
+		var tramite = 0;
+		var idAmexCargo = 0;
+		
+		var frm = document.comp_inv;
+		id=parseInt(id);
+		// ValoresOriginales(id);
+		// Tomamos el valor que el usuario ingreso en los campos editables		
+		dc_total=$("#total"+id).val();
+		tramite = $("#idT").val();
+		dc_id = $("#dc_id"+id).val();
+		idAmexCargo = $("#idCargoAMEX"+id).val();
+		
+		// Cambiamos el formato de la cantidad total que hemos obtenido
+		var compruebaTotal = dc_total.indexOf(",");
+		if(compruebaTotal == -1){
+			// La busqueda de aquel caracter fallo
+			//alert("No se transformara");
+			dc_total=parseFloat($("#total"+id).val());
+		}else{
+			//alert("Se transformara la cifra.");
+			dc_total= dc_total.replace(',','');
+			dc_total=parseFloat(dc_total);
+		}
+		
+		//alert("TOTAL: "+dc_total);	
+		var monto=parseFloat(($("#monto"+id).val()).replace(/,/g,""));
+		var monto_old =parseFloat($("#dc_monto"+id).val().replace(/,/g,"")); 
+		monto=number_format(monto,2,".",",").replace(/,/g,"");
+		monto_old=number_format(monto_old,2,".",",").replace(/,/g,"");
+		
+		if(monto != monto_old){
+			if(monto == 0.00){
+				monto = monto_old;
+			}else{
+				monto = monto;
+			}
+		}else{
+			monto = 0.00;
+		}		
+		//alert("MONTO: "+monto);
+		
+		var iva=parseFloat($("#iva"+id).val().replace(/,/g,""));
+		var iva_old =parseFloat($("#dc_iva"+id).val().replace(/,/g,""));
+		iva=number_format(iva,2,".",",").replace(/,/g,"");	
+		iva_old=number_format(iva_old,2,".",",").replace(/,/g,"");
+	
+		if(iva != iva_old){
+			if(iva == 0.00){
+				iva = iva_old;
+			}else{
+				iva = iva;
+			}
+		}else{
+			iva = 0.00;
+		}
+		
+		
+		var propina=parseFloat($("#propina"+id).val().replace(/,/g,""));
+		var propina_old =parseFloat($("#dc_propinas"+id).val().replace(/,/g,"")); 
+		propina=number_format(propina,2,".",",").replace(/,/g,"");	
+		propina_old=number_format(propina_old,2,".",",").replace(/,/g,"");	
+		
+		
+		if(propina != propina_old){
+			if(propina == 0.00){
+				propina = propina_old;
+			}else{
+				propina = propina;
+			}
+		}else{
+			propina = 0.00;
+		}
+		
+		var imphosp=parseFloat($("#imphospedaje"+id).val().replace(/,/g,""));
+		var imphosp_old =parseFloat($("#dc_imphospedaje"+id).val().replace(/,/g,"")); 
+		imphosp=number_format(imphosp,2,".",",").replace(/,/g,"");
+		imphosp_old=number_format(imphosp_old,2,".",",").replace(/,/g,"");
+		
+		if(imphosp != imphosp_old){
+			if(imphosp == 0.00){
+				imphosp = imphosp_old;
+			}else{
+				imphosp = imphosp;
+			}
+		}else{
+			imphosp = 0.00;
+		}
+		
+		//alert("PROPINA: "+propina);
+//		var imphospedaje=$("#imphospedaje"+id).val();
+//		alert("IMPUESTO: "+imphospedaje);
+		
+		// Tomamos valores de la comprobacion en cuestion
+		var dc_divisa=$("#dc_divisa"+id).val();
+//		var ex_mensaje=$("#ex_mensaje"+id).val();
+		var dc_tipo=$("#tipo"+id).val();
+		var notransaccion=$("#notransaccion"+id).val();
+		var dc_fecha=$("#dc_factura"+id).val();
+		
+		// Pasamos a entero el valor que fue ingresado y el total para poder saber si es menor o mayor
+		//alert("montito"+monto);
+		monto = parseFloat(monto);
+		monto_old = parseFloat(monto_old);
+		
+		iva = parseFloat(iva);
+		iva_old = parseFloat(iva_old);
+		
+		propina = parseFloat(propina);
+		propina_old = parseFloat(propina_old);
+		
+		imphosp = parseFloat(imphosp);
+		imphosp_old = parseFloat(imphosp_old);
+	
+		if(monto > monto_old){
+			alert("No puede ingresar un monto mayor al original.");
+			restaurarMontosOriginales(id);
+			ocultaRecalculo(id);
+			$("#monto"+id).focus();
+		}else if(iva > iva_old){
+			alert("No puede ingresar un monto de IVA mayor al original.");
+			restaurarMontosOriginales(id);
+			ocultaRecalculo(id);
+			$("#iva"+id).focus();
+		}else if(propina > propina_old){
+			alert("No puede ingresar un monto de Propina mayor al original.");
+			restaurarMontosOriginales(id);
+			ocultaRecalculo(id);
+			$("#propina"+id).focus();
+		}else if(imphosp > imphosp_old){
+			alert("No puede ingresar un impuesto hospedaje mayor al original.");
+			restaurarMontosOriginales(id);
+			ocultaRecalculo(id);
+			$("#imphospedaje"+id).focus();
+		}else{
+			var diferencia = 0.00;
+			var diferencia_iva = 0.00;
+			var diferencia_propina = 0.00;
+			var diferencia_imphosp = 0.00;
+			
+			if(monto != 0.00){
+				diferencia = monto_old - monto;
+				diferencia=number_format(diferencia,2,".",",").replace(/,/g,"");
+				
+				if(diferencia == 0.00){
+					diferencia = monto_old;
+				}
+			}else{
+				diferencia = 0;
+			}
+			
+			if(iva != 0.00){
+				diferencia_iva = iva_old - iva;
+				diferencia_iva=number_format(diferencia_iva,2,".",",").replace(/,/g,"");
+				if(diferencia_iva == 0.00){
+					diferencia_iva = iva_old;
+				}
+			}else{
+				diferencia_iva = 0;
+			}
+			
+			if(propina != 0.00){
+				diferencia_propina = parseFloat(propina_old) - propina;
+				if(diferencia_propina == 0.00){
+					diferencia_propina = propina_old;
+				}
+			}else{
+				diferencia_propina = 0;
+			}
+			
+			if(imphosp != 0.00){
+				diferencia_imphosp = parseFloat(imphosp_old) - imphosp;
+				if(diferencia_imphosp == 0.00){
+					diferencia_imphosp = imphosp_old;
+				}
+			}else{
+				diferencia_imphosp = 0;
+			}
+			
+			//realizamos la diferencia del monto ingresado por finanzas y el monto original
+			var sumaCalculada = parseFloat(diferencia)+parseFloat(diferencia_iva)+parseFloat(diferencia_propina)+parseFloat(diferencia_imphosp);
+			var sumaCalculada2 = parseFloat(($("#monto"+id).val()).replace(/,/g,""))+parseFloat(($("#iva"+id).val()).replace(/,/g,""))+parseFloat(($("#propina"+id).val()).replace(/,/g,""))+parseFloat(($("#imphospedaje"+id).val()).replace(/,/g,""));
+		
+			//alert("diferencia XD"+diferencia);
+			
+			//tomamos los vaores para el calculo virtual
+			//------------------- valores para calculo virtual
+			montoOriginal=monto;
+			ivaOriginal=iva;
+			propinaOriginal=propina;
+			imphospedajeOriginal=0;
+			idOriginal=id;
+			diferenciaVirtual=diferencia;
+			//--------------------------------------------------
+			
+			
+			$("#tota"+id).html(number_format(sumaCalculada2,2,".",","));
+			$("#total"+id).val(number_format(sumaCalculada2,2,".",","));
+			
+			//realizamos la operacion para poder tener el total con los valores que fueron ingresados por elusuario
+			//var totalCalculadoFinanzas=diferencia+parseFloat(iva)+parseFloat(propina)+parseFloat(imphospedaje);
+			
+			//se validara el concepto que fue seleccionado
+			
+			
+			if(($("#concepto_new"+id+" option:selected").val() == -1) || ($("#conceptoOld"+id).val() == $("#concepto_new_txt"+id).val()) || ($("#concepto_new_txt"+id).val() == "Personal")){
+				var concepto = $("#concepto_old"+id).val();
+				var conceptoTxt = "N/A";
+			}else{
+				var concepto = $("#concepto_new"+id+" option:selected").val();
+				var conceptoTxt = $("#concepto_new_txt"+id).val();
+			}
+			//se tomara el valor del concepto para realizar la actualizacion
+			var conceptoOriginal=$("#conceptoOld"+id).val();
+
+			// Se tomar� el valor del concepto AMEX para el personal 
+			var conceptoAMEXOriginal=$("#conceptoAMEX"+id).val();
+			
+			//Busca el ultimo ID de las partidas y le sumamos uno para el siguiente
+			id = parseInt($("#descrip_comprobacion_table>tbody >tr").length);		
+			//alert("numero de filas actuales"+id);
+			
+			if(isNaN(id)){
+				
+				id=1;
+			}else{
+				
+				id+=parseInt(1);
+			}
+			
+			 var lastRow = parseInt($("#descrip_comprobacion_table").find("tr:last").find("td").eq(0).html()); 
+		
+				var nuevaFila="<tr>";
+				nuevaFila+="<td align='center' valign='middle'>"+"<div id='renglonS"+id+"'>"+id+"</div>"+"<input type='hidden' name='row"+id+"' id='row"+id+"' value='"+id+"' readonly='readonly' /></td>";
+		        nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='dc_id"+id+"' id='dc_id"+id+"' value='"+dc_id+"' readonly='readonly' /><input type='hidden' name='tipo"+id+"'id='tipo"+id+"' value='"+dc_tipo+"'readonly='readonly' />"+dc_tipo+"</td>";
+				nuevaFila+="<td align='center'><input type='hidden' name='notransaccion"+id+"'id='notransaccion"+id+"' value='"+notransaccion+"'readonly='readonly' />"+notransaccion+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='dc_fecha"+id+"'id='dc_fecha"+id+"' value='"+dc_fecha+"'readonly='readonly' />"+dc_fecha+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='conceptoOld"+id+"'id='conceptoOld"+id+"' value='Personal' readonly='readonly' /><input type='hidden' name='concepto"+id+"'id='concepto"+id+"' value='Personal' readonly='readonly' />"+"Personal"+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='conceptoAMEX"+id+"'id='conceptoAMEX"+id+"' value='" + conceptoAMEXOriginal + "' readonly='readonly' />" + conceptoAMEXOriginal + "</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='text' name='comentario"+id+"' id='comentario"+id+"' style='border-color:#FFFFFF; text-align:right' value='' onmouseover='changedFields(this.id);' onblur='changedFieldsOutText(this.id);' /></td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='asistentes"+id+"' id='asistentes"+id+"' value='N/A' readonly='readonly' />"+"N/A"+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='proveedor"+id+"' id='proveedor"+id+"' value='N/A' readonly='readonly' />"+"N/A"+"</td>";
+				nuevaFila+="<td align='center'><input type='hidden' name='rfc"+id+"' id='rfc"+id+"' value='N/A' readonly='readonly' />"+"N/A"+"</td>";
+				nuevaFila+="<td align='center'><input type='hidden' name='factura"+id+"' id='factura"+id+"' value='N/A' readonly='readonly' />"+"N/A"+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='idOrig"+id+"' id='idOrig"+id+"' value='"+idOriginal+"' readonly='readonly' /><input type='hidden' name='montoR"+id+"' id='montoR"+id+"' value='"+monto_old+"' readonly='readonly' /><input type='hidden' name='dc_monto_aux"+id+"' id='dc_monto_aux"+id+"' value='"+number_format(diferencia,2,".",",")+"' readonly='readonly' />"+number_format(diferencia,2,".",",")+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='ivaR"+id+"' id='ivaR"+id+"' value='"+iva_old+"' readonly='readonly' /><input type='hidden' name='dc_iva_aux"+id+"' id='dc_iva_aux"+id+"' value='"+number_format(diferencia_iva,2,".",",")+"' readonly='readonly' />"+number_format(diferencia_iva,2,".",",")+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='propinaR"+id+"' id='propinaR"+id+"' value='"+propina_old+"' readonly='readonly' /><input type='hidden' name='dc_propinas_aux"+id+"' id='dc_propinas_aux"+id+"' value='"+number_format(diferencia_propina,2,".",",")+"' readonly='readonly' />"+number_format(diferencia_propina,2,".",",")+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='impuhospedajeR"+id+"' id='impuhospedajeR"+id+"' value='"+imphosp_old+"' readonly='readonly' /><input type='hidden' name='dc_hospedajeImpuesto_aux"+id+"' id='dc_hospedajeImpuesto_aux"+id+"' value='"+number_format(diferencia_imphosp,2,".",",")+"' readonly='readonly' />"+number_format(diferencia_imphosp,2,".",",")+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='total"+id+"' id='total"+id+"' value='"+sumaCalculada+"' readonly='readonly' />"+number_format(sumaCalculada,2,".",",")+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='divisa"+id+"' id='divisa"+id+"' value='"+dc_divisa+"' readonly='readonly' /><input type='hidden' name='dc_divisa"+id+"' id='dc_divisa"+id+"' value='"+dc_divisa+"' readonly='readonly' />"+dc_divisa+"</td>";
+				nuevaFila+="<td align='justify'><input type='hidden' name='excepcion"+id+"' id='excepcion"+id+"' value='Sin excepcion' readonly='readonly' />"+"Sin excepcion"+"</td>";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='select_concepto"+id+"' id='select_concepto"+id+"' value='"+conceptoTxt+"' readonly='readonly' />"+conceptoTxt+"</td>";
+				nuevaFila+="<input type='hidden' name='concepto_original"+id+"' id='concepto_original"+id+"' value='"+conceptoOriginal+"' readonly='readonly' /> <input type='hidden' name='dc_monto"+id+"' id='dc_monto"+id+"' value='"+number_format(diferencia,2,".",",")+"' readonly='readonly' /><input type='hidden' name='dc_iva"+id+"' id='dc_iva"+id+"' value='"+number_format(diferencia_iva,2,".",",")+"' readonly='readonly' /><input type='hidden' name='dc_propinas"+id+"' id='dc_propinas"+id+"' value='"+number_format(diferencia_propina,2,".",",")+"' readonly='readonly' /><input type='hidden' name='dc_imphospedaje"+id+"' id='dc_imphospedaje"+id+"' value='"+number_format(diferencia_imphosp,2,".",",")+"' readonly='readonly' />";
+				nuevaFila+="<td align='center' valign='middle'><input type='hidden' name='cinsertado"+id+"' id='cinsertado"+id+"' value='0' readonly='readonly' /><input type='hidden' name='detalleOrigen"+id+"' id='detalleOrigen"+id+"' value='"+detalleComprobacion+"' readonly='readonly' /><input type='hidden' value='N/A' name='"+id+"edit' id='"+id+"edit'  size=10  disabled='disabled' style='text-align:center; border-color:#FFFFFF; '/>N/A</td>"
+				nuevaFila+="<td align='center' valign='middle'><input type='button' name='"+id+"del' id='"+id+"del' style='width: 30px; height:30px;  background:url(../../images/action_cancel.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;'  onClick='eliminaConcepto(this.id, "+dc_id+");'/>";
+				nuevaFila+="<input type='hidden' name='idNext"+id+"' id='idNext"+id+"' value='"+id+"' readonly='readonly' />";
+				nuevaFila+="<input type='hidden' name='idCargoAMEX"+id+"' id='idCargoAMEX"+id+"' value='"+idAmexCargo+"' readonly='readonly' />";
+				nuevaFila+="<input type='hidden' name='tramite"+id+"' id='tramite"+id+"' value='"+tramite+"' readonly='readonly' /></td>";
+				nuevaFila+="</tr>";
+
+				if(dc_total == sumaCalculada2){
+					alert("Los montos no han sido modificados, para recalcular un concepto personal modifique un monto.");
+					ocultaRecalculo(idOriginal);
+					return false;
+					
+				}else{
+					$("#descrip_comprobacion_table").append(nuevaFila);			
+					recalculaCF();
+					// Guardamos el total de filas generadas
+					$("#total_rows").val(id);
+
+					// Asignamos los valores introducidos por el usuario para evitar que se guarden montos sin recalculo
+					limpiaComas(idOriginal);
+					
+					// Apagamos la bandera del bot�n del recalculo
+					$('#recalculo_aux'+idOriginal).val(0);
+					
+					//desactivamos los boteones correspondientes
+					$("#recalculo"+idOriginal).attr("disabled", "disabled");
+					$("#recalculo"+idOriginal).attr("style", "width: 30px; height:30px; background:url(../../images/fwk/action_reorder.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:default;");
+
+					// Congelamos los campos para evitar que el usuario modifique los campos y estos sean guardados
+					$("#monto"+idOriginal).attr('disabled', 'disabled');
+					$("#iva"+idOriginal).attr('disabled', 'disabled');
+					$("#propina"+idOriginal).attr('disabled', 'disabled');
+					$("#imphospedaje"+idOriginal).attr('disabled', 'disabled');
+				}
+				//insertaTTemp(idOriginal,monto_old,diferenciaVirtual,iva_old,propina_old,imphospedajeOriginal,id,tramite);
+		}
+ 	 }
+	// Funci�n que nos permitira validar un monto ingresado
+	function validarMontoFCV(id, detalleComprobacion, cargo){
+		if(verificarTipoYConceptos("descrip_comprobacion_table", "Personal", 0, 1, detalleComprobacion)){
+			alert("Para ingresar un nuevo concepto personal, favor de eliminar el concepto existente.");
+			recalculaCF();
+			return false;
+		}else if(cargo == "Reembolso"){
+			id = parseInt(id);
+			if(verificaMontosIngresados("descrip_comprobacion_table", 1, id)){ // Parametros ( tabla , TipoComprobacion[1:Viaje, 0:Invitaci�n])
+				if(confirm("Las cantidades de este concepto han sido modificadas, no podr�n volver a su valor original.\n �Esta seguro que desea guardar los cambios?")){
+					actializacionMontos("descrip_comprobacion_table", 1, id);
+					recalculoReembolso(id, 1, id);
+					// Asignamos los valores de los campos para ser guardados en la BD
+					limpiaComas(id);
+					// Apagamos la bandera del bot�n del recalculo
+					$('#recalculo_aux'+id).val(0);
+				}else{
+					restaurarMontosOriginales(id);
+					ocultaRecalculo(id);
+					recalculaCF();
+					return false;
+				}
+			}else{
+				restaurarMontosOriginales(id);
+				ocultaRecalculo(id);
+				recalculaCF();
+				return false;
+			}				
+		}else{
+			id = parseInt(id);
+			var conceptoOriginal = $("#concepto_old"+id).val();
+			
+			if($("#concepto_new"+id+" option:selected").val() == 31){
+				// Si es un concepto Personal, no se debe permitir un recalculo 
+				alert("No puede recalcular un concepto Personal.");
+				// Seleccionar el concepto anterior
+				actualizarConcepto(conceptoOriginal, id, 1);
+				$("#concepto_new"+id+" option[value="+conceptoOriginal+"]").attr("selected", true);
+				restaurarMontosOriginales(id);
+				ocultaRecalculo(id);
+				recalculaCF();
+				return false;
+			}else{
+				// Elinimar el concepto de Personal
+				$("#concepto_new"+id+" option[value=31]").remove();
+				agregaRegistro(id, detalleComprobacion);
+			}
+		}
+	}//END  validar un monto ingresado para Comprobacion de viaje.	
+
+//=================================== END Funciones principales de la pantalla Finanzas (Comprobacion de viaje)	==========================
+	
+	
+//============================================================ Funcion principal para el Calculo de Resumen ==========================	
+	function recalculaCF(){
+		var no_partidas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		var anticipo_solicitado = parseFloat($("#anticipo_solicitado2").val().replace(/,/g,""));
+		var anticipo_comprobado = 0;
+		var personal_anticipo = 0;
+		var personal_amex = 0;
+		var personal_amex_externo = 0;
+		var comprobado_amex = 0;
+		var personal_efectivo = 0;		
+		var efectivo_comprobado = 0;		
+		var amex_externo = 0;		
+		var div = "";
+		var tasaUSD = 0;
+		var tasaEUR = 0;
+		var totalComprobacion = 0;
+
+		//Toma los valores de las divisas correspondientes.
+		tasaUSD = parseFloat($("#valorDivisaUSD").val());		
+		tasaEUR = parseFloat($("#valorDivisaEUR").val());
+		
+		for(var i = 1; i <= no_partidas; i++){
+			// suma el personal y el total por anticipo			
+			div = $("#dc_divisa"+i).val();
+			
+			if ($("#tipo"+i).val() == "Anticipo"){											
+				switch (div){
+					case "MXN":
+						anticipo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,""));
+						break;
+					case "USD":						
+						anticipo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+						break;
+					case "EUR":						
+						anticipo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+						break;
+				}
+				    
+				if($("#concepto"+i).val() == "Personal"){
+					
+					switch (div){
+					case "MXN":
+						personal_anticipo += parseFloat($("#total"+i).val().replace(/,/g,""));
+						break;
+					case "USD":						
+						personal_anticipo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+						break;
+					case "EUR":						
+						personal_anticipo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+						break;
+					}
+					
+				}
+			}			
+			// suma el personal y el total por amex
+			if($("#tipo"+i).val() == "AMEX"  || $("#tipo"+i).val() == "Amex"){
+				
+				switch (div){
+					case "MXN":
+						comprobado_amex += parseFloat($("#total"+i).val().replace(/,/g,""));
+						break;
+					case "USD":						
+						comprobado_amex += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+						break;
+					case "EUR":						
+						comprobado_amex += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+						break;
+				}
+				   
+				if($("#concepto"+i).val() == "Personal"){
+					
+					switch (div){
+						case "MXN":
+							personal_amex += parseFloat($("#total"+i).val().replace(/,/g,""));
+							break;
+						case "USD":						
+							personal_amex += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+							break;
+						case "EUR":						
+							personal_amex += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+							break;
+					}					
+				}
+			}			
+			// suma el personal y el total por efectivo Reembolo para empleado
+			if($("#tipo"+i).val() == "Reembolso" || $("#tipo"+i).val() == "Reembolso"){
+				
+				switch (div){
+					case "MXN":
+						efectivo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,""));
+						break;
+					case "USD":						
+						efectivo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;						
+						break;
+					case "EUR":						
+						efectivo_comprobado += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+						break;
+				} 				
+			}
+			// suma el personal y el total por efectivo Reembolo para empleado
+			if($("#tipo"+i).val() == "Amex externo"){								
+				switch (div){
+				case "MXN":
+					amex_externo += parseFloat($("#total"+i).val().replace(/,/g,""));
+					break;
+				case "USD":						
+					amex_externo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;					
+					break;
+				case "EUR":						
+					amex_externo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+					break;
+				}
+				
+				if($("#concepto"+i).val() == "Personal"){					
+					switch (div){
+						case "MXN":
+							personal_amex_externo += parseFloat($("#total"+i).val().replace(/,/g,""));
+							break;
+						case "USD":						
+							personal_amex_externo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+							break;
+						case "EUR":						
+							personal_amex_externo += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+							break;
+					}
+				}    			
+			}
+			
+			// Sumaremos el total en pesos de cada concepto comprobado seg�n la Divisa del concepto
+			switch (div){
+			case "MXN":
+				totalComprobacion += parseFloat($("#total"+i).val().replace(/,/g,""));
+				break;
+			case "USD":						
+				totalComprobacion += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaUSD;
+				break;
+			case "EUR":						
+				totalComprobacion += parseFloat($("#total"+i).val().replace(/,/g,"")) * tasaEUR;
+				break;
+			}
+		}
+
+
+		//alert("amex externo"+amex_externo);
+		//alert("amex  "+personal_amex_externo);
+		
+		var tipoEmpleado = compruebaTipoUsuario(no_partidas);
+		//var amexExterno = $("#amex_externo2").val().replace(/,/g,"");
+		//amex_externo = parseFloat(amexExterno) - personal_amex_externo;
+
+					
+		$("#anticipo_comprobado_autorizado_BMW2").val(anticipo_comprobado);
+		$("#anticipo_comprobado_autorizado_BMW1").html(number_format(anticipo_comprobado,2,".",",") + " MXN");		
+		//console.log(anticipo_comprobado +'-'+ personal_anticipo);		
+				
+		/*alert("anticipo solicit"+anticipo_solicitado);
+		alert("anticipo comp"+anticipo_comprobado);
+		alert("personales"+(personal_anticipo + personal_amex + personal_amex_externo));*/
+		
+		if(tipoEmpleado == 1){
+			$("#personal_descontar2").val(personal_amex_externo);		
+			$("#personal_descontar1").html(number_format(personal_amex_externo,2,".",",")+ " MXN");
+		}else{
+			$("#personal_descontar2").val(anticipo_solicitado - anticipo_comprobado + (personal_anticipo + personal_amex + personal_amex_externo));		
+			$("#personal_descontar1").html(number_format(anticipo_solicitado - anticipo_comprobado + (personal_anticipo + personal_amex + personal_amex_externo),2,".",",")+ " MXN");
+			//console.log(anticipo_solicitado +'-'+ anticipo_comprobado+'+'+ personal_anticipo+'+'+personal_amex);
+		}
+				
+				
+		$("#amex_comprobado_autorizado_BMW2").val(comprobado_amex);
+		$("#amex_comprobado_autorizado_BMW1").html(number_format(comprobado_amex,2,".",",") + " MXN");
+		//console.log(comprobado_amex +'-'+ personal_amex);
+		$("#efectivo_comprobado_autorizado_BMW2").val(efectivo_comprobado);
+		$("#efectivo_comprobado_autorizado_BMW1").html(number_format(efectivo_comprobado,2,".",",") + " MXN");
+		//console.log(efectivo_comprobado);			
+		
+		if(tipoEmpleado == 1){
+			$("#monto_a_descontar2").val(personal_amex_externo);
+			$("#monto_a_descontar1").html(number_format(personal_amex_externo,2,".",",") + " MXN");
+		}else{
+			$("#monto_a_descontar2").val(anticipo_solicitado - anticipo_comprobado + (personal_anticipo + personal_amex + personal_amex_externo));
+			$("#monto_a_descontar1").html(number_format(anticipo_solicitado - anticipo_comprobado + (personal_anticipo + personal_amex + personal_amex_externo),2,".",",") + " MXN");
+			//console.log(anticipo_solicitado+'-'+anticipo_comprobado+'+'+personal_anticipo+'+'+personal_amex);
+		}
+		
+		$("#monto_a_reembolsar2").val(efectivo_comprobado);
+		$("#monto_a_reembolsar1").html(number_format(efectivo_comprobado,2,".",",") + " MXN");
+		//console.log(efectivo_comprobado+'-'+personal_efectivo);
+		$("#amex_externo2").val(amex_externo);
+		$("#amex_externo1").html(number_format(amex_externo,2,".",",") + " MXN");
+
+		// Actualizar el monto de la comprobaci�n
+		$("#total_pesosDiv").html(number_format(totalComprobacion,2,".",","));
+		$("#total_pesos").val(totalComprobacion);
+		
+		/*
+		ALTER TABLE `expbmwdv1`.`comprobaciones` ADD COLUMN `co_amex_externo` DECIMAL(20,2) NOT NULL DEFAULT 0  AFTER `co_efectivo_comprobado` ;
+		*/
+	}
+//============================================================ END Funcion principal para el Calculo de Resumen ==========================
+	function verificarBotones(){
+		var partidasRecalculadas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+		var botonesEnccendidos = verificaBotonesEncendidos(partidasRecalculadas);
+		
+		if(botonesEnccendidos == 0){
+			return true;
+		}else{
+			if(confirm("Tiene rec�lculos pendientes, d� click en 'Ok' para regresar a la pantalla y concluirlos o 'Cancel' para enviar la comprobaci�n sin aplicarlos.")){
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+	
+	function validarSupervisor(total){
+		var idT=$("#idT").val();
+		var dueno;
+		var monto_comprobado = 0;
+		
+		// Total de la solicitud
+		monto_comprobado = $("#total_pesos").val().replace(/,/g,"");
+		
+		// Realizamos el registro
+		registrosPersonales(idT);	
+		if(monto_comprobado <= <?php echo ULT_APROBACION; ?>){			
+			$("#supervisorFinanzas").val(1);
+			$("#gerenteFinanzas").val(0);
+			var usuarioFinanzas="Supervisor de finanzas";
+		}else{
+			$("#gerenteFinanzas").val(1);
+			$("#supervisorFinanzas").val(0);		
+			var usuarioFinanzas="Gerente de finanzas";		
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "services/Ajax_comprobacion.php",
+			data: "usuarioFinanzas="+usuarioFinanzas+"&idtramite="+idT+"&dueno="+idT+"&mntComprobacion="+monto_comprobado,
+			success: function(json){
+				if(json == "realizado"){
+					if(confirm("�Desea imprimir la comprobaci�n actual?")){
+						imprimir_pdf(idT);
+						location.href='./index.php?docs=docs&type=1&action=envia';
+					}else{
+						location.href='./index.php?docs=docs&type=1&action=envia';
+					}
+				}else{
+					location.href='./index.php?&errsave';
+				}						
+			}
+		});				
+	}
+
+	function validarObservaciones(tramite,usuario){
+		//alert("tramite"+tramite);
+		//alert("usuario"+usuario);
+		
+		if($("#campo_observaciones").val() == ""){
+			alert("Para devolver al empleado, ingrese sus observaciones.");
+			$("#campo_observaciones").focus();
+			return false;
+		}else{
+			$.ajax({
+				type: "POST",
+				url: "services/Ajax_comprobacion.php",
+				data: "devolverObservaciones="+$("#campo_observaciones").val()+"&idtramite="+tramite+"&idUsuario="+usuario,
+				success: function(json){
+					//registrosPersonales(<?PHP //echo $_GET['id'];?>);
+					$("#devolverObservaciones").fadeOut("slow");
+					$("#autorizar").fadeOut("slow");
+					$("#enviarSupervisor").fadeOut("slow");
+					$("#Volver").fadeOut("slow");
+					$("#rechazar").fadeOut("slow");
+					location.href='./index.php';			
+				}
+			});
+		}
+	}
+
+	//funcion que validara el boton volver
+	function validarVolver(){
+		
+		if(confirm("Se perder�n todos los cambios.�Desea salir de la p�gina?.")){			
+			var txtVolver="volver";
+			$.ajax({
+				type: "POST",
+				url: "services/Ajax_comprobacion.php",
+				data: "limpiarRegistros="+txtVolver,
+				success: function(json){								
+				}
+			});
+			Location();		
+		}else{
+			return false;
+		}
+		
+	}
+
+	//funcion para validar si el co_total es mayor que el presupuesto
+	function validarPresupuesto(co_total,idcentrocostos,tramitePresupuesto){
+		var monto_comprobado = 0;		
+		// Total de la solicitud
+		monto_comprobado = $("#total_pesos").val().replace(/,/g,"");
+		var presupuestoDisponible=0;
+		var cecosPresupuesto=0;
+		var mensajePresupuesto="El monto de la comprobaci�n excede el presupuesto disponible.";
+		
+		var totalComprobacion = number_format(monto_comprobado,2,".",",").replace(/,/g,"");
+		// Se comprueba si el ceco fue cambiado		
+		if($("#centro_de_costos_new").val() == $("#centro_de_costos_old").val()){
+			//cecosPresupuesto=idcentrocostos;
+			cecosPresupuesto=$("#centro_de_costos_old").val();
+		}else{
+			cecosPresupuesto=$("#centro_de_costos_new").val();
+		}
+				
+		  $.ajax({
+              type: "POST",
+              url: "services/Ajax_comprobacion.php",
+              data: "cecoPresupuesto="+idcentrocostos,
+              dataType: "json",
+              success: function(json){  
+            	  presupuestoDisponible=json;
+            	  if(totalComprobacion > presupuestoDisponible ){
+                	  var excedente= 1;
+          			alert("El monto de la comprobaci�n excede el presupuesto disponible.");
+          			 $.ajax({
+          	              type: "POST",
+          	              url: "services/Ajax_comprobacion.php",
+          	              data: "tramitePresupuesto="+tramitePresupuesto+"&co_totalP="+totalComprobacion+"&presupuestoDisponible="+presupuestoDisponible+"&mensajePresupuesto="+mensajePresupuesto+"&excedente="+excedente+"&cecoExcedente="+cecosPresupuesto,
+          	              dataType: "json",
+          	              success: function(json){  
+          	              }
+          			 });     	                        			
+          		  }
+				  
+          			var partidasRecalculadas = parseInt($("#descrip_comprobacion_table>tbody >tr").length);
+          			for(var i=1;i<=partidasRecalculadas;i++){
+              			if($("#conceptoOld"+i).val() != "Personal"){
+              				if(($("#conceptoOld"+i).val() == "Hotel")||($("#conceptoOld"+i).val() == "Alimentos")||($("#conceptoOld"+i).val() == "Gasolina")){
+							$.ajax({
+                  					type: "POST",
+                  					url: "services/Ajax_comprobacion.php",
+                  					data: "tramitePresupuestoFinanzas="+$("#conceptoOld"+i).val()+"&cecoPresupuestoFinanzas="+cecosPresupuesto+"&totalPresupuestoFinanzas="+parseFloat($("#total"+i).val().replace(/,/g,"")),
+                  					success: function(json){								
+                  					}
+                  				});                  				
+              				}
+              			}
+          			}          		  		        	 								                             
+               }
+          });	
+	}
+
+	// Habilitar bot�n de Autorizar y ocultar bot�n de Enviar al Supervisor de Finanzas
+	function activaAutorizar(){
+		$("#enviarSupervisor").css("display", "none");
+		$("#devolverObservaciones").css("display", "none");
+		// Cambiamos el tipo de input de hidden a submit
+		$("#sAutorizar").html("<input type='submit' value='     Autorizar'  name='autorizar' id='autorizar' style='background:url(../../images/ok.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;' onclick= $('#aux').val(1); />");
+	}
+	
+	function imprimir_pdf(id_tramite){
+		window.open("generador_pdf.php?id="+id_tramite,"imprimir")
+	}
+</script>
+	<div align="center">
+		<form name="comp_inv" id="comp_inv" action="" method="post">
+		<table id="comprobacion_table" border="0" cellspacing="3" width="75%" style="border:1px #CCCCCC solid;margin:auto;margin-top:5px;text-align:left; background-color:#F8F8F8">
+			<tr><td colspan="5"><div align="center" style="color:#003366"><strong>Informaci&oacute;n general</strong></div></td></tr>
+			<tr><td colspan="5"></td></tr>
+			<?PHP if($tipoUsuario == 5 || $tipoUsuario == 6){?>
+			 <tr><td width="6%"><div align="right">No. de Folio:</div></td>
+				<td width="18%"><strong><?PHP echo $t_id ?></strong></td>
+				<td width="2%"></td>
+				<td width="12%"><div align="right">Fecha de creaci&oacute;n:</div></td>
+				<td width="14%"><div align="left"><strong><?PHP echo $t_fechaRegistro ?></strong></div></td>
+			</tr>		   
+			<tr><td ><div align="right">Solicitante:</div></td>
+				<td ><div align="left"><strong><?PHP echo $nombreEmpleado;?></strong></div></td>
+				<td >&nbsp;</td>
+				<?PHP if($sv_viaje == "Redondo"){?>
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else if($sv_viaje == "Multidestinos"){?> 
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else if($sv_viaje == "Sencillo"){?>
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else{?>
+				<td colspan="2"></td>
+				<?PHP }?>
+			</tr>			
+			<tr><td ><div align="right">Motivo:</div></td>
+				<td ><div align="left"><strong><?PHP echo $t_etiqueta;?></strong></div></td>
+				<td ></td>
+				<?PHP if($sv_viaje == "Redondo"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo $svi_origen ."|". $svi_destino;?></strong></div></td>			
+				<?PHP }else if($sv_viaje == "Multidestinos"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo "Multidestinos";?></strong></div></td>	
+				<?PHP }else if($sv_viaje == "Sencillo"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo $svi_origen;?></strong></div></td>
+				<?PHP }elseif($sv_id == 0){ ?>
+					<td><div align="right">Periodo:</div></td>
+					<td><div align="left"><strong><?PHP echo $fecha_inicial." a ".$fecha_final;?></strong></div></td>			
+				<?PHP }else{?>
+				<td ></td>
+				<td ></td>
+				<?PHP }?>		
+			</tr><td width="12%"><div align="right">Etapa:</div></td>
+				<td width="14%"><div align="left"><strong><?PHP echo $et_etapa_nombre ?></strong></div></td>
+			<tr><td ><div align="right">Autorizador(es):</div></td>
+			    <td colspan="5"><div align="left"><strong><?PHP echo $autorizadores; ?></strong></div></td>          
+			</tr>		
+			  
+			<?PHP }else{?>
+			<tr><td width="6%"><div align="right">No. de Folio:</div></td>
+				<td width="18%"><strong><?PHP echo $t_id ?></strong></td>
+				<td width="2%">&nbsp;</td>
+				<td width="12%"><div align="right">Fecha de creaci&oacute;n:</div></td>
+				<td width="14%"><div align="left"><strong><?PHP echo $t_fechaRegistro ?></strong></div></td>
+			</tr>			
+			<tr><td ><div align="right">Solicitante:</div></td>
+				<td ><div align="left"><strong><?PHP echo $nombreEmpleado;?></strong></div></td>
+				<td ></td>
+				<?PHP if($tipoUsuario == 5 || $tipoUsuario == 6){?>
+					<td ><div align="right">Etapa de la comprobaci&oacute;n:</div></td>
+					<td ><div align="left"><strong><?PHP echo $comprobacion_etapa_nombre;?></strong></div></td>
+				<?PHP }else{?>
+				<td ><div align="right">Centro de costos:</div></td>
+				<td ><div align="left"><strong><?PHP echo $cc_centrocostos.' - '.$cc_nombre ?></strong></div>
+				<?PHP }?>
+				</td>
+			</tr>		
+			<tr><td ><div align="right">Motivo:</div></td>
+				<td ><div align="left"><strong><?PHP echo $t_etiqueta;?></strong></div></td>
+				<td ></td>
+				<?PHP if($sv_viaje == "Redondo"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo $svi_origen ."|". $svi_destino;?></strong></div></td>			
+				<?PHP }else if($sv_viaje == "Multidestinos"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo "Multidestinos";?></strong></div></td>	
+				<?PHP }else if($sv_viaje == "Sencillo"){?>
+					<td ><div align="right">Destino:</div></td>
+					<td ><div align="left"><strong><?PHP echo $svi_origen;?></strong></div></td>
+				<?PHP }elseif($sv_id == 0){ ?>
+					<td><div align="right">Periodo:</div></td>
+					<td><div align="left"><strong><?PHP echo $fecha_inicial." a ".$fecha_final;?></strong></div></td>			
+				<?PHP }else{?>
+				<td ></td>
+				<td ></td>
+				<?PHP }?>		
+			</tr>
+			<tr>
+				<?PHP if($sv_viaje == "Redondo"){?>
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else if($sv_viaje == "Multidestinos"){?> 
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else if($sv_viaje == "Sencillo"){?>
+				<td ><div align="right">Fecha de Viaje:</div></td>
+				<td ><div align="left"><strong><?PHP  echo $fecha_total?></strong></div></td>
+				<?PHP }else{?>           
+				<td colspan="2"/>
+				<?PHP }?>           
+				<td width="2%"></td>
+				<td width="12%"><div align="right">Etapa:</div></td>
+				<td width="14%"><div align="left"><strong><?PHP echo $et_etapa_nombre ?></strong></div></td>
+			</tr>       
+			<tr><td ><div align="right">Autorizador(es):</div></td>
+				<td colspan="5"><div align="left"><strong><?PHP echo STRTOUPPER($autorizadores); ?></strong></div></td>
+			</tr>
+			<tr><td colspan="5"></td></tr>
+			<?PHP }?>                
+		</table>
+		<?PHP if($tipoUsuario == 5 && $comprobacion_etapa != 7){?>
+		<table  id="" border="0" cellspacing="3" width="40%" align="right" style="border:0px #CCCCCC solid;margin:auto;margin-top:5px;text-align:left;">
+		    <tr><td colspan="5" align="right">Centro de costos:</td>
+			    <td colspan="9">
+				<div align="left">
+					<select name='centro_de_costos_new' id="centro_de_costos_new" onchange="activaAutorizar();">
+						<?PHP 
+						$query = sprintf("SELECT cc_id,cc_centrocostos,cc_nombre FROM cat_cecos WHERE cc_estatus = '1' AND cc_empresa_id = '" . $_SESSION["empresa"] . "' order by cc_centrocostos");
+						$var = mysql_query($query);
+						while ($arr = mysql_fetch_assoc($var)) {
+// 							if($co_ceco == $arr['cc_id']) {
+// 								echo sprintf("<option selected value='%s'>%s - %s</option>", $arr['cc_id'], $arr['cc_centrocostos'], $arr['cc_nombre']);
+// 							}
+							echo sprintf("<option value='%s'>%s - %s</option>", $arr['cc_id'], $arr['cc_centrocostos'], $arr['cc_nombre']);
+						}
+						?>                    
+					</select>
+					<input type="hidden" id="centro_de_costosSel" name="centro_de_costosSel" value="<?PHP echo $co_ceco; ?>" />
+					<input type="hidden" id="centro_de_costos_old" name="centro_de_costos_old" value="<?PHP echo $co_ceco; ?>"/>
+				</div>    
+				</td>
+			</tr>
+		</table>
+		<?PHP }else if($tipoUsuario == 6 && $comprobacion_etapa != 7){?>
+		<br />
+		<table cellspacing="3" width="65%" align="right" style="border:0px #CCCCCC solid;margin:auto;margin-top:5px;text-align:left;">
+		    <tr>
+		    	<td  align="right"><div align="right"><strong>Tasa USD:</strong></div></td>
+		    	<td align="right"><div id="tasaDollar" align="left"><strong>$ </strong></div></td>
+		    	<td align="right">&nbsp;</td>
+		    	<td align="right"><div align="right"><strong>Tasa EUR:</strong></div></td>
+		    	<td align="right"><div id="tasaEuro" align="left"><strong>$</strong></div></td>
+		    	<td align="right">&nbsp;</td>
+		    	<td colspan="5" align="right">Centro de costos:</td>
+				<td colspan="9">
+				<div align="left">
+					<select name='centro_de_costos_new' id="centro_de_costos_new" onchange="activaAutorizar();">
+						<?PHP 
+						$query = sprintf("SELECT cc_id,cc_centrocostos,cc_nombre FROM cat_cecos WHERE cc_estatus = '1' AND cc_empresa_id = '" . $_SESSION["empresa"] . "' order by cc_centrocostos");
+						$var = mysql_query($query);
+						while ($arr = mysql_fetch_assoc($var)) {
+// 							if($co_ceco == $arr['cc_id']) {
+// 								echo sprintf("<option selected value='%s'>%s - %s</option>", $arr['cc_id'], $arr['cc_centrocostos'], $arr['cc_nombre']);
+// 							}
+							echo sprintf("<option value='%s'>%s - %s</option>", $arr['cc_id'], $arr['cc_centrocostos'], $arr['cc_nombre']);
+						}
+						?>                    
+					</select>
+					<input type="hidden" id="centro_de_costos_old" name="centro_de_costos_old" value="<?PHP echo $co_ceco; ?>"/>
+				</div>    
+				</td>
+			</tr>
+		</table>
+		<br />
+	<?PHP }?>
+	<br />
+	<br />
+	<br />
+	<div align="center" style="color:#003366"><strong>Gastos comprobados</strong></div>
+	<table id="descrip_comprobacion_table" class="tablesorter" cellspacing="1">
+	  <thead>
+		<tr>
+			<th>No.</th>
+			<th>Tipo</th>
+			<th>No. Transacci&oacute;n</th>
+			<th>Fecha</th>
+			<th>Concepto</th>
+			<?PHP if($tipoUsuario == 6){ ?>
+			<th>Concepto AMEX</th>
+			<?PHP }?>
+			<th>Comentario</th>
+			<th>No. Asistentes</th>
+			<th>RFC</th>
+			<?PHP if($tipoUsuario ==  5 || $tipoUsuario ==  6){ ?>
+			<th>Proveedor</th>
+			<th>Factura</th>
+			<th>Monto</th> 
+			<th>IVA</th>
+			<th>Propina</th>
+			<th>Impuesto <br/>Hospedaje</th>			
+			<?PHP }?>
+			<th>Total</th>
+			<th>Divisa</th>
+			<?PHP if($tipoUsuario == 1 || $tipoUsuario == 5){ ?>
+			<th>Total MXN</th>
+			<?PHP }?>			  
+			<th>Excepci�n</th>		  
+			<?PHP if($tipoUsuario == 6 && $comprobacion_etapa != COMPROBACION_ETAPA_APROBADA_POR_SF){?>
+			<th>Reasignaci�n de concepto</th>
+			<th>Recalcular</th>
+			<th>Eliminar</th>
+			<?PHP }?>          		 
+		</tr>
+	  </thead>
+	  <tbody>
+		<?PHP // query para la tabla de gastos comprobados --- pendiente inner join
+		$total_gastos = '';
+		$query = "SELECT CASE dc_tipo	WHEN 1 THEN 'Anticipo'	WHEN 2 THEN 'Amex'	WHEN 3 THEN 'Reembolso' WHEN 4 THEN 'Amex externo' END AS 'dc_tipo',DATE_FORMAT(dc_fecha,'%d/%m/%Y') AS dc_fecha,
+					DATE_FORMAT(dc_factura,'%d/%m/%Y') as dc_factura,cp_concepto, IF(dc_descripcion ='(NULL)' OR dc_descripcion ='','Sin comentarios',dc_descripcion) AS 'dc_descripcion',dc_comensales, 
+					IF(dc_proveedor = 0,'N/A',pro_proveedor) AS 'dc_proveedor', IF(pro_rfc IS NULL,'',pro_rfc) AS 'pro_rfc', FORMAT(dc_monto,2) AS dc_monto,
+					IF(dc_divisa = 1 OR dc_divisa = 'MXN','MXN',IF(dc_divisa =2 OR dc_divisa = 'USD','USD',IF(dc_divisa = 3 OR dc_divisa = 'EUR','EUR','')))
+					AS 'dc_divisa',	FORMAT(dc_total,2) AS dc_total,
+					IF(co_gasolina=1,(SELECT ex_mensaje FROM excepciones WHERE ex_comprobacion = co_mi_tramite limit 1),IF(ex_mensaje IS NULL,'Sin excepci�n',ex_mensaje)) AS 'ex_mensaje',
+					IF(dc_notransaccion IS NULL,'N/A',dc_notransaccion) AS 'notransaccion',  dc_folio_factura, FORMAT(dc_iva,2) as dc_iva, FORMAT(dc_propinas,2) as dc_propinas,
+					FORMAT(dc_imp_hospedaje,2) as dc_imp_hospedaje,  
+					FORMAT(co_total,2) as co_total, dc_total_pesos AS montoPesos, detalle_comprobacion.dc_id AS dc_id, 
+					dc_origen_personal, dc_concepto, dc_total_aprobado, 
+					(SELECT	FORMAT((div_tasa * (dc_monto + dc_iva + dc_propinas + dc_imp_hospedaje)),2) FROM divisa WHERE div_id = dc_divisa) AS 'dc_total_pesos', 
+					(CASE dc_tipo WHEN 2 THEN concepto ELSE 'N/A' END) AS concepto,
+					dc_idamex_comprobado  
+					FROM detalle_comprobacion
+					INNER JOIN comprobaciones ON dc_comprobacion = co_id
+					INNER JOIN cat_conceptosbmw ON dc_concepto = cat_conceptosbmw.dc_id
+					LEFT JOIN proveedores ON proveedores.pro_rfc = detalle_comprobacion.dc_rfc 
+					LEFT JOIN excepciones ON detalle_comprobacion.dc_id = ex_comprobacion_detalle
+					LEFT JOIN amex ON idamex=dc_idamex_comprobado
+					INNER JOIN tramites ON co_mi_tramite = t_id 
+					WHERE co_mi_tramite = '{$_GET['id']}' ORDER BY dc_id";
+		//error_log($query);
+		$rst = $cnn->consultar($query);
+		$i = 1;
+		$total = 0;
+		while($row = mysql_fetch_assoc($rst)){ 
+		?>			
+			<tr>
+			<td align="center"><div id="renglonS<?PHP echo $i ?>"><?PHP echo $i ?></div></td>
+    		<?PHP if($tipoUsuario == 1){ ?>
+    		<td align="center"><input type='hidden' name='dc_tipo' id='dc_tipo' value='<?PHP echo $row["dc_tipo"] ?>' /><?PHP echo $row["dc_tipo"] ?></td>
+            <?PHP if($row["dc_tipo"] != "Amex"){?>
+            <td align="center"><input type='hidden' name='notransaccion' id='notransaccion' value='N/A'/><?PHP echo"N/A"?></td>
+            <?PHP }else{?>
+            <td align="center"><input type='hidden' name='notransaccion' id='notransaccion' value='<?PHP echo $row["notransaccion"] ?>' /><?PHP echo $row["notransaccion"] ?></td>
+            <?PHP }?>
+            <td align="center"><input type='hidden' name='dc_factura' id='dc_factura' value='<?PHP echo $row["dc_factura"] ?>' /><?PHP echo $row["dc_factura"] ?></td>			
+			<td align="center"><input type='hidden' name='cp_concepto' id='cp_concepto' value='<?PHP echo $row["cp_concepto"]  ?>' /><?PHP echo $row["cp_concepto"] ?></td>
+			<td align="center"><textarea name="dc_descripcionT" id="dc_descripcionT" readonly="readonly" onkeypress="confirmaRegreso('dc_descripcionT');" onkeydown="confirmaRegreso('dc_descripcionT');"><?php echo $row["dc_descripcion"];?></textarea>
+			<input type='hidden' name='dc_descripcion' id='dc_descripcion' value='<?PHP echo $row["dc_descripcion"];?>' /></td>
+			<?PHP if($row["cp_concepto"] != "Alimentos"){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_comensales' id='dc_comensales' value='<?PHP echo $row["dc_comensales"]  ?>' /><?PHP echo $row["dc_comensales"] ?></td>
+			<?PHP }?>
+			
+			<?PHP if($row["pro_rfc"] == ""){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_rfc' id='dc_rfc' value='<?PHP echo $row["pro_rfc"]  ?>' /><?PHP echo $row["pro_rfc"] ?></td>
+			<?PHP }?>
+			<td align="center"><input type='hidden' name='total' id='total' value='<?PHP echo $row["dc_total"] ?>' /><?PHP echo $row["dc_total"] ?></td>
+			<td align="center"><input type='hidden' name='dc_divisa' id='dc_divisa' value='<?PHP echo $row["dc_divisa"] ?>' /><?PHP echo $row["dc_divisa"] ?></td>
+			<td align="center"><?PHP echo $row["dc_total_pesos"] ?></td>
+    		<td align="justify"><textarea name="ex_mensajeT" id="ex_mensajeT" readonly="readonly" onkeypress="confirmaRegreso('ex_mensajeT');" onkeydown="confirmaRegreso('ex_mensajeT');"><?php echo $row["ex_mensaje"];?></textarea>
+    		<input type='hidden' name='ex_mensaje' id='ex_mensaje' value='<?PHP echo $row["ex_mensaje"] ?>' />
+    		<input type='hidden' name='idCargoAMEX<?php echo $i;?>' id='idCargoAMEX<?php echo $i;?>' value='<?PHP echo $row["dc_idamex_comprobado"];?>' /></td>
+    		
+			<?PHP } ?>
+						
+    		<?PHP if($tipoUsuario == 5){?>
+    		<td align="center"><input type='hidden' name='dc_tipo' id='dc_tipo' value='<?PHP echo $row["dc_tipo"] ?>' /><?PHP echo $row["dc_tipo"] ?></td>
+            <?PHP if($row["dc_tipo"] != "Amex"){?>
+            <td align="center"><input type='hidden' name='notransaccion' id='notransaccion' value='N/A'/><?PHP echo"N/A"?></td>
+            <?PHP }else{?>
+            <td align="center"><input type='hidden' name='notransaccion' id='notransaccion' value='<?PHP echo $row["notransaccion"] ?>' /><?PHP echo $row["notransaccion"] ?></td>
+            <?PHP }?>
+            <td align="center"><input type='hidden' name='dc_factura' id='dc_factura' value='<?PHP echo $row["dc_factura"] ?>' /><?PHP echo $row["dc_factura"] ?></td>			
+			<td align="center"><input type='hidden' name='cp_concepto' id='cp_concepto' value='<?PHP echo $row["cp_concepto"]  ?>' /><?PHP echo $row["cp_concepto"] ?></td>
+			<td align="center"><textarea name="dc_descripcionT" id="dc_descripcionT" readonly="readonly" onkeypress="confirmaRegreso('dc_descripcionT');" onkeydown="confirmaRegreso('dc_descripcionT');"><?php echo $row["dc_descripcion"];?></textarea>
+			<input type='hidden' name='dc_descripcion' id='dc_descripcion' value='<?PHP echo $row["dc_descripcion"];?>' /></td>
+			<?PHP if($row["cp_concepto"] != "Alimentos"){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_comensales' id='dc_comensales' value='<?PHP echo $row["dc_comensales"]  ?>' /><?PHP echo $row["dc_comensales"] ?></td>
+			<?PHP }?>
+			<?PHP if($row["pro_rfc"] == ""){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_rfc' id='dc_rfc' value='<?PHP echo $row["pro_rfc"]  ?>' /><?PHP echo $row["pro_rfc"] ?></td>
+			<?PHP }?>
+			<?PHP if($row["dc_proveedor"] == ""){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_proveedor' id='dc_proveedor' value='<?PHP echo $row["dc_proveedor"]  ?>' /><?PHP echo $row["dc_proveedor"] ?></td>
+			<?PHP }?>			
+			<?PHP if($row["dc_folio_factura"] == ""){?>
+			<td align="center"><?PHP echo "N/A" ?></td>
+			<?PHP }else{?>
+			<td align="center"><input type='hidden' name='dc_folio_factura' id='dc_folio_factura' value='<?PHP echo $row["dc_folio_factura"]  ?>' /><?PHP echo $row["dc_folio_factura"] ?></td>
+			<?PHP }?>
+			<td align="center"><?PHP echo $row["dc_monto"] ?></td>
+			<td align="center"><?PHP echo $row["dc_iva"] ?></td>
+			<td align="center"><?PHP echo $row["dc_propinas"] ?></td>
+			<td align="center"><?PHP echo $row["dc_imp_hospedaje"] ?></td>
+           <td align="center"><input type='hidden' name='total' id='total' value='<?PHP echo $row["dc_total"] ?>' /><?PHP echo $row["dc_total"] ?></td>
+			
+			<td align="center"><input type='hidden' name='dc_divisa' id='dc_divisa' value='<?PHP echo $row["dc_divisa"] ?>' /><?PHP echo $row["dc_divisa"] ?></td>
+			<td align="center"><?PHP echo $row["dc_total_pesos"] ?></td>			
+			<td align="justify"><textarea name="ex_mensajeT" id="ex_mensajeT" readonly="readonly" onkeypress="confirmaRegreso('ex_mensajeT');" onkeydown="confirmaRegreso('ex_mensajeT');"><?php echo $row["ex_mensaje"];?></textarea>
+			<input type='hidden' name='ex_mensaje' id='ex_mensaje' value='<?PHP echo $row["ex_mensaje"];?>' />
+			<input type='hidden' name='idCargoAMEX<?php echo $i;?>' id='idCargoAMEX<?php echo $i;?>' value='<?PHP echo $row["dc_idamex_comprobado"];?>' /></td>			
+    		
+    		<?PHP }?>
+    		
+    		<?PHP if($tipoUsuario == 6){
+    			$encontrado = $tramite->verificarDetalleRecalculado($row['dc_id']);
+    			?>
+    		        <td align="center"><input type='hidden' name='dc_id<?PHP echo $i; ?>' id='dc_id<?PHP echo $i; ?>' value='<?PHP echo $row['dc_id']; ?>' /><input type='hidden' name='tipo<?PHP echo $i; ?>' id='tipo<?PHP echo $i; ?>' value='<?PHP echo $row["dc_tipo"] ?>' /><?PHP echo $row["dc_tipo"] ?></td>
+		            <?PHP if($row["dc_tipo"] != "Amex"){?>
+		            <td align="center"><input type='hidden' name='notransaccion<?PHP echo $i; ?>' id='notransaccion<?PHP echo $i; ?>' value='N/A'/><?PHP echo"N/A"?></td>
+		            <?PHP }else{?>
+		            <td align="center"><input type='hidden' name='notransaccion<?PHP echo $i; ?>' id='notransaccion<?PHP echo $i; ?>' value='<?PHP echo $row["notransaccion"] ?>' /><?PHP echo $row["notransaccion"] ?></td>
+		            <?PHP }?>
+		           <td align="center"><input type='hidden' name='dc_factura<?PHP echo $i; ?>' id='dc_factura<?PHP echo $i; ?>' value='<?PHP echo $row["dc_factura"] ?>' /><input type='hidden' name='dc_fecha<?PHP echo $i; ?>' id='dc_fecha<?PHP echo $i; ?>' value='<?PHP echo $row["dc_factura"]; ?>' readonly="readonly"/><?PHP echo $row["dc_factura"] ?></td>			
+					<td align="center"><div id="concepto_txt<?php echo $i; ?>" align="center"><?PHP echo $row["cp_concepto"]; ?></div><input type='hidden' name='conceptoOld<?PHP echo $i; ?>' id='conceptoOld<?PHP echo $i; ?>' value='<?PHP echo $row["cp_concepto"];?>' /><input type='hidden' name='concepto<?PHP echo $i; ?>' id='concepto<?PHP echo $i; ?>' value='<?PHP echo $row["cp_concepto"];?>' /></td>
+					<td align="center"><div id="concepto_amex<?php echo $i; ?>" align="center"><?PHP echo $row["concepto"]; ?></div><input type='hidden' name='conceptoAMEX<?PHP echo $i; ?>' id='conceptoAMEX<?PHP echo $i; ?>' value='<?PHP echo $row["concepto"];?>' /></td>
+					<td align="center"><textarea name="comentarioT<?php echo $i;?>" id="comentarioT<?php echo $i;?>" readonly="readonly" onkeypress="confirmaRegreso('comentarioT<?php echo $i;?>');" onkeydown="confirmaRegreso('comentarioT<?php echo $i;?>');"><?php echo $row["dc_descripcion"];?></textarea>
+					<input type="hidden" id="comentario<?PHP echo $i;?>" name="comentario<?PHP echo $i;?>" value="<?PHP echo $row['dc_descripcion'];?>" readonly="readonly" /></td>
+					<?PHP if($row["cp_concepto"] != "Alimentos"){?>
+					<td align="center"><?PHP echo "N/A" ?></td>
+					<?PHP }else{?>
+					<td align="center"><input type='hidden' name='dc_comensales' id='dc_comensales' value='<?PHP echo $row["dc_comensales"]  ?>' /><?PHP echo $row["dc_comensales"] ?></td>
+					<?PHP }?>
+					
+					<?PHP if($row["pro_rfc"]  == ""){?>
+					<td align="center"><?PHP echo "N/A" ?></td>
+					<?PHP }else{?>
+					<td align="center"><input type='hidden' name='dc_rfc' id='dc_rfc' value='<?PHP echo $row["pro_rfc"]  ?>' /><?PHP echo $row["pro_rfc"] ?></td>
+					<?PHP }?>
+					<?PHP if($row["dc_proveedor"] == ""){?>
+					<td align="center"><?PHP echo "N/A" ?></td>
+					<?PHP }else{?>
+					<td align="center"><input type='hidden' name='dc_proveedor' id='dc_proveedor' value='<?PHP echo $row["dc_proveedor"]  ?>' /><?PHP echo $row["dc_proveedor"] ?></td>
+					<?PHP }?>					
+					<?PHP if($row["dc_folio_factura"] == "" || $row["dc_folio_factura"] == 0){?>
+					<td align="center"><?PHP echo "N/A" ?></td>
+					<?PHP }else{?>
+					<td align="center"><input type='hidden' name='dc_folio_factura' id='dc_folio_factura' value='<?PHP echo $row["dc_folio_factura"]  ?>' /><?PHP echo $row["dc_folio_factura"] ?></td>
+					<?PHP }?>
+					<?php if($comprobacion_etapa != COMPROBACION_ETAPA_APROBADA_POR_SF && $row["cp_concepto"] != "Personal"){?>
+					<!-- Campos editables -->
+					<td align="center" valign="middle"><input type="text" name="monto<?PHP echo $i;?>" id="monto<?PHP echo $i; ?>" value="<?PHP echo $row["dc_monto"]; ?>" size="7" onkeypress='activarRecalculo("monto",<?PHP echo $i;?>,1);' style='border-color:#FFFFFF; text-align:right' onkeyup='activarRecalculo("monto",<?PHP echo $i;?>,1);' onchange='activarRecalculo("monto",<?PHP echo $i;?>,1);' onmouseout='mouseOut(this.id);' <?php if($encontrado){ echo "disabled=disabled"; }?> /></td>
+					<input type="hidden" id="dc_monto<?PHP echo $i;?>" name="dc_monto<?PHP echo $i;?>" value="<?PHP echo $row['dc_monto'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><input type='text' name='iva<?PHP echo $i; ?>' id='iva<?PHP echo $i; ?>' value='<?PHP echo $row['dc_iva']; ?>' size='4' onkeypress='activarRecalculo("iva",<?PHP echo $i;?>,1);' style='border-color:#FFFFFF; text-align:right' onkeyup='activarRecalculo("iva",<?PHP echo $i;?>,1);' onchange='activarRecalculo("iva",<?PHP echo $i;?>,1);' onmouseout='mouseOut(this.id);' <?php if($encontrado){ echo "disabled=disabled"; }?> /></td>
+					<input type="hidden" id="dc_iva<?PHP echo $i;?>" name="dc_iva<?PHP echo $i;?>" value="<?PHP echo $row['dc_iva'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><input type='text' name='propina<?PHP echo $i; ?>' id='propina<?PHP echo $i; ?>' value='<?PHP echo $row['dc_propinas']; ?>' size='4' onkeypress='activarRecalculo("propina",<?PHP echo $i;?>,1);' style='border-color:#FFFFFF; text-align:right' onkeyup='activarRecalculo("propina",<?PHP echo $i;?>,1);' onchange='activarRecalculo("propina",<?PHP echo $i;?>,1);' onmouseout='mouseOut(this.id);' <?php if($encontrado){ echo "disabled=disabled"; }?>/></td>
+					<input type="hidden" id="dc_propinas<?PHP echo $i;?>" name="dc_propinas<?PHP echo $i;?>" value="<?PHP echo $row['dc_propinas'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><input type='text' name='imphospedaje<?PHP echo $i; ?>' id='imphospedaje<?PHP echo $i; ?>' value='<?PHP echo $row["dc_imp_hospedaje"]; ?>' size='5' onkeypress='revisaCadena(this); activarRecalculo("imphospedaje",<?PHP echo $i;?>,1);' style='border-color:#FFFFFF; text-align:right' onkeyup='activarRecalculo("imphospedaje",<?PHP echo $i;?>,1);' onchange='activarRecalculo("imphospedaje",<?PHP echo $i;?>,1);' onmouseout='mouseOut(this.id);' <?php if($encontrado){ echo "disabled=disabled"; }?> /></td>
+					<input type="hidden" id="dc_imphospedaje<?PHP echo $i;?>" name="dc_imphospedaje<?PHP echo $i;?>" value="<?PHP echo $row['dc_imp_hospedaje'];?>" readonly="readonly" />
+					
+					<?php }else{?>
+					<td align="center" valign="middle"><?php echo $row['dc_monto'];?><input type="hidden" name="monto<?PHP echo $i;?>" id="monto<?PHP echo $i; ?>" value="<?PHP echo $row["dc_monto"]; ?>" size="7" readonly="readonly" /></td>
+					<input type="hidden" id="dc_monto<?PHP echo $i;?>" name="dc_monto<?PHP echo $i;?>" value="<?PHP echo $row['dc_monto'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><?php echo $row['dc_iva'];?><input type="hidden" name='iva<?PHP echo $i; ?>' id='iva<?PHP echo $i; ?>' value='<?PHP echo $row['dc_iva']; ?>' size="7" readonly="readonly" /></td>
+					<input type="hidden" id="dc_iva<?PHP echo $i;?>" name="dc_iva<?PHP echo $i;?>" value="<?PHP echo $row['dc_iva'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><?php echo $row['dc_propinas'];?><input type="hidden" name='propina<?PHP echo $i; ?>' id='propina<?PHP echo $i; ?>' value='<?PHP echo $row['dc_propinas']; ?>' size="7" readonly="readonly" /></td>
+					<input type="hidden" id="dc_propinas<?PHP echo $i;?>" name="dc_propinas<?PHP echo $i;?>" value="<?PHP echo $row['dc_propinas'];?>" readonly="readonly" />
+					
+					<td align="center" valign="middle"><?php echo $row["dc_imp_hospedaje"]; ?><input type="hidden" name='imphospedaje<?PHP echo $i; ?>' id='imphospedaje<?PHP echo $i; ?>' value='<?PHP echo $row["dc_imp_hospedaje"]; ?>' size="7" readonly="readonly" /></td>
+					<input type="hidden" id="dc_imphospedaje<?PHP echo $i;?>" name="dc_imphospedaje<?PHP echo $i;?>" value="<?PHP echo $row['dc_imp_hospedaje'];?>" readonly="readonly" />
+					<?php }?>
+					
+					<td align="center" valign="middle"><div id="tota<?PHP echo $i; ?>" align="right"><?PHP echo $row['dc_total'];?></div><input type="hidden" id="total<?PHP echo $i;?>" name="total<?PHP echo $i;?>" value="<?PHP echo $row['dc_total'];?>" readonly="readonly" /></td>
+					<td align="center" valign="middle"><input type='hidden' name='dc_divisa<?PHP echo $i; ?>' id='dc_divisa<?PHP echo $i; ?>' value='<?PHP echo $row["dc_divisa"] ?>' /><input type='hidden' name='divisa<?PHP echo $i; ?>' id='divisa<?PHP echo $i; ?>' value='<?PHP echo $row["dc_divisa"]; ?>' readonly="readonly" /><?PHP echo $row["dc_divisa"] ?></td>
+					
+					<td align="justify" valign="middle"><textarea name="exmensajeT<?php echo $i;?>" id="exmensajeT<?php echo $i;?>" readonly="readonly" onkeypress="confirmaRegreso('exmensajeT<?php echo $i;?>');" onkeydown="confirmaRegreso('exmensajeT<?php echo $i;?>');"><?php echo $row["ex_mensaje"];?></textarea>
+					<input type='hidden' name='ex_mensaje<?PHP echo $i; ?>' id='ex_mensaje<?PHP echo $i; ?>' value='<?PHP echo $row["ex_mensaje"] ?>' /></td>
+					
+					<?php if($comprobacion_etapa != COMPROBACION_ETAPA_APROBADA_POR_SF){?>
+					<td align="center" valign="middle">
+					<?php if($row["cp_concepto"] != "Personal"){?>
+					<div id="div_conceptos">
+					<select name="concepto_new<?PHP echo $i;?>" id="concepto_new<?PHP echo $i;?>" width="100" style="width:100px" onchange="actualizarConcepto(this.value,<?PHP echo $i; ?>, 1);">
+					<option value="-1">Sin reasignar</option>  
+						<?PHP 
+						if($row["dc_tipo"] != "Reembolso"){
+							// No se imprimir� el concepto de IVA en ning�n caso
+							$query1 = sprintf("SELECT dc_id,cp_concepto FROM cat_conceptosbmw WHERE dc_id != '33' ORDER BY cp_concepto");
+						}else{
+							// Si el tipo de gasto es Reembolso, no deber� imprimir el concepto de IVA ni Personal
+							$query1 = sprintf("SELECT dc_id,cp_concepto FROM cat_conceptosbmw WHERE dc_id != '33' AND dc_id != '31' ORDER BY cp_concepto");
+						}
+						
+						$var1 = mysql_query($query1);
+
+						while ($arr1 = mysql_fetch_assoc($var1)) {
+						echo sprintf("<option value='%s'>%s</option>",$arr1['dc_id'],$arr1['cp_concepto']);
+
+						}
+						?>  
+					</select>
+					<input type="hidden" id="concepto_new_txt<?PHP echo $i;?>" name="concepto_new_txt<?PHP echo $i;?>" value=" " />
+					</div>
+					<?php }else{?>
+						<input name='reasigna<?PHP echo $i; ?>' id='reasigna<?PHP echo $i; ?>'  value="N/A" size="6"  disabled="disabled" style="text-align:center; border-color:#FFFFFF; "/>
+					<?php }?>
+					<input type="hidden" id="centro_de_costosSel" name="centro_de_costosSel" value="" />                                     
+					<input type="hidden" id="concepto_old<?PHP echo $i;?>" name="concepto_old<?PHP echo $i;?>" value="<?PHP echo $row['dc_concepto']; ?>"/>
+					<input type="hidden" id="co_total_aprob_x_fin_old<?PHP echo $i;?>" name="co_total_aprob_x_fin_old<?PHP echo $i;?>" value="<?PHP echo $row['dc_total_aprobado']; ?>"/>
+					<input type="hidden" name="concepto_original<?PHP echo $i;?>" id="concepto_original<?PHP echo $i;?>" value="<?php echo $row['dc_origen_personal'];?>" readonly="readonly" />
+					<input type="hidden" name="detalleOrigen<?PHP echo $i;?>" id="detalleOrigen<?PHP echo $i;?>" value="<?php echo $row['dc_origen_personal'];?>" readonly="readonly" />
+					<input type="hidden" name='idCargoAMEX<?php echo $i;?>' id='idCargoAMEX<?php echo $i;?>' value='<?PHP echo $row["dc_idamex_comprobado"];?>' />
+					<input type="hidden" name="aux<?php echo $i;?>" id="aux<?php echo $i;?>" readonly="readonly" size="7" />
+					
+					<!-- Valores auxiliares -->
+					<input type="hidden" id="dc_monto_aux<?PHP echo $i;?>" name="dc_monto_aux<?PHP echo $i;?>" value="<?PHP echo $row['dc_monto'];?>" readonly="readonly" />
+					<input type="hidden" id="dc_iva_aux<?PHP echo $i;?>" name="dc_iva_aux<?PHP echo $i;?>" value="<?PHP echo $row['dc_iva'];?>" readonly="readonly" />
+					<input type="hidden" id="dc_propinas_aux<?PHP echo $i;?>" name="dc_propinas_aux<?PHP echo $i;?>" value="<?PHP echo $row['dc_propinas'];?>" readonly="readonly" />
+					<input type="hidden" id="dc_hospedajeImpuesto_aux<?PHP echo $i;?>" name="dc_hospedajeImpuesto_aux<?PHP echo $i;?>" value="<?PHP echo $row['dc_imp_hospedaje'];?>" readonly="readonly" />
+					<input type="hidden" id="recalculo_aux<?PHP echo $i;?>" name="recalculo_aux<?PHP echo $i;?>" value="0" readonly="readonly" />
+					
+					</td>			
+					<!-- botones (Recalcular / Eliminar) -->
+					<td align="center" valign="middle"><input type='hidden' name='cinsertado<?PHP echo $i; ?>' id='cinsertado<?PHP echo $i; ?>' value='1' readonly='readonly' /><input  name='recall<?PHP echo $i; ?>' id='recall<?PHP echo $i; ?>'  value="N/A" size="6"  disabled="disabled" style="text-align:center; border-color:#FFFFFF; "/><input type="button" name='recalculo<?PHP echo $i; ?>' id='recalculo<?PHP echo $i; ?>' style="width: 30px; height:30px; background:url(../../images/fwk/action_reorder.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;" onclick="validarMontoFCV(<?PHP echo $i;?>, <?php echo $row["dc_id"];?>, '<?php echo $row["dc_tipo"];?>');"/></td>
+					<td align="center" valign="middle">
+					<?php if($row["cp_concepto"] != "Personal"){?>
+						<input name='elimin<?PHP echo $i; ?>' id='elimin<?PHP echo $i; ?>'  value="N/A" size="6"  disabled="disabled" style="text-align:center; border-color:#FFFFFF; "/><input type="button" name='eliminar<?PHP echo $i; ?>' id='eliminar<?PHP echo $i; ?>' style="width: 30px; height:30px; background:url(../../images/action_cancel.gif); background-position:center;  background-repeat:no-repeat; border-style:none; cursor:pointer;" onclick="recalculaCF();"/>
+					<?php }else{
+							if($row["dc_origen_personal"] == 0){?>
+								<input name='elimin<?PHP echo $i; ?>' id='elimin<?PHP echo $i; ?>'  value="N/A" size="6"  disabled="disabled" style="text-align:center; border-color:#FFFFFF; "/><input type="button" name='eliminar<?PHP echo $i; ?>' id='eliminar<?PHP echo $i; ?>' style="width: 30px; height:30px; background:url(../../images/action_cancel.gif); background-position:center;  background-repeat:no-repeat; border-style:none; cursor:pointer;" onclick="recalculaCF();"/>
+							<?php }else{?>
+								<input type="button" name="<?php echo $i;?>del" id="<?php echo $i;?>del" style="width:30px; height:30px; background:url(../../images/action_cancel.gif); background-position:center; background-repeat:no-repeat; border-style:none; cursor:pointer;" onClick="eliminaConcepto(this.id, <?php echo $row["dc_origen_personal"];?>);" />
+							<?php }
+						  }?>
+					</td>
+					<?php }?>
+		</tr>
+		<?PHP }
+			$i++;
+			
+			$total_gastos = floatVal($total_gastos)+floatVal($row["dc_total_pesos"]);
+			$limpiaTotal = str_replace(",", "", $row["dc_total_pesos"]);
+			//error_log($limpiaTotal);
+			$total += $limpiaTotal;
+		}?>			
+		</tbody>
+	</table>
+
+	<table id="gasto_comp" border="0" align="right">
+		<tr>
+			<td><input type="hidden" name="total_rows" id="total_rows" value="<?php echo ($i-1);?>" readonly="readonly"/></td>
+			<?PHP if($tipoUsuario == 5 ||$tipoUsuario == 1){?>
+			<td><div>Total de comprobaci�n:</div></td>
+			<?PHP }else if($tipoUsuario == 6){?>
+			<td><div>Total:</div></td>
+			<?PHP }?>
+			<td>
+				<div id="total_pesosDiv"><?PHP  echo number_format((floatVal($co_total)),2,".",","); ?></div>
+				<input type="hidden" name="total_pesos" id="total_pesos" value='<?PHP echo number_format((floatVal($co_total)),2,".",","); ?>' />
+			</td>
+			<td><div>MXN</div></td>
+			<td></td>
+		</tr>
+	</table>		
+	<?php //Consulta para obtener las excepciones a nivel comprobacion para los tres conceptos
+		function obtenValorDeunaCadena($msg){
+			$div = "";
+			$msg = substr($msg,strlen($msg)-35,strlen($msg));
+			$msg = substr($msg,0,strlen($msg)-1);
+			if(strpos($msg,"MXN"))$div ="MXN.";
+			if(strpos($msg,"EUR"))$div ="EUR.";
+			if(strpos($msg,"USD"))$div ="USD.";
+			$msg = preg_replace('/[a-zA-Z:��]/','',$msg);
+			return $msg." ".$div;
+		}
+		$sql = "SELECT IF((ex_mensaje LIKE '%alimento%'),'Alimentos',
+							(IF((ex_mensaje LIKE '%hospedaje%'),'Hospedaje',
+								(IF((ex_mensaje LIKE '%lavander%'),'Lavander�a',
+									(IF((ex_mensaje LIKE '%factor%'),'Gasolina','')) ) ) ) ) )as excedente,
+						IF((ex_mensaje LIKE '%alimento%'),ex_mensaje,
+							(IF((ex_mensaje LIKE '%hospedaje%'),ex_mensaje,
+								(IF((ex_mensaje LIKE '%lavander%'),ex_mensaje,
+									(IF((ex_mensaje LIKE '%factor%'),(SELECT CONCAT(FORMAT(co_monto_gasolina+(SELECT pr_cantidad FROM parametro_regionbmw WHERE pr_id = 41),2),' MXN.') 
+																		FROM comprobaciones
+																		WHERE co_mi_tramite = ".$_GET['id']."),'')) ) ) ) ) )as valor									
+				FROM excepciones, comprobaciones
+				WHERE  ex_comprobacion  = co_id
+				AND ex_comprobacion_detalle = '0' 
+				AND ex_mensaje != ''
+				AND co_mi_tramite = ".$_GET['id'];
+		$res = mysql_query($sql);
+		$tot = mysql_num_rows($res);
+		if($tot > 0){
+	?>		
+		<table style="position:absolute; border:1px #CCCCCC solid;left:6.5%;" align="left" width="780x">				
+			<tr><td colspan="2" style="color:#000000; text-align: center;"><h3>Excedentes</h3></td></tr>			
+	<?PHP
+			while($row = mysql_fetch_assoc($res)){
+				$valor = ($row['excedente'] != "Gasolina") ? obtenValorDeunaCadena($row['valor']) : $row['valor']; 
+				echo "<tr><td>Excedente de ".$row['excedente'].":</td>
+					<td>Se excede del monto m�ximo permitido para el viaje para este concepto que es de: <strong>".$valor."</strong></td></tr>";	
+			}		
+			echo "</table><br /><br /><br /><br /><br /><br /><br />";
+		}		
+	?>
+	
+	<?php if($tipoUsuario == 10){?>
+	<table>
+		<tr>
+			<td align="center" valign="middle" height="90px">
+				<input type="button" name="actualizaResumen" id="actualizaResumen" value="   Actualizar Resumen"  style="background:url(../../images/refresh.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onclick="actualizarResumen();"/>
+			</td>
+		</tr>
+	</table>
+	<?php }
+	//consulta para obtener los datos de la observacion			
+		$query = "SELECT co_observaciones FROM comprobaciones
+				  WHERE co_mi_tramite ={$_GET['id']}";
+		$rst = $cnn->consultar($query);
+		$fila = mysql_fetch_assoc($rst);
+		$observaciones = $fila['co_observaciones'];		
+	?>		
+		<br/><br/><br/><br/>
+		<table>		
+		<tr>
+		
+		<?php if($tipoUsuario == 5 || $tipoUsuario == 1){ ?> <!-- Controlling : Normal -->
+			<td width="200px" ></td>
+		<?php }else if($tipoUsuario == 6){ ?> <!-- Finanzas -->
+			<td width="395px" ></td>
+		<?php }?>
+		<td>	
+		<table>
+			<tr><td width="10px">Historial de observaciones: </td>
+				<td width="10px"><textarea name="campo_historial" id="campo_historial" cols="90" rows="5" readonly="readonly" onkeypress="confirmaRegreso('campo_historial');" onkeydown="confirmaRegreso('campo_historial');"><?PHP echo $observaciones; ?></textarea></td>
+			</tr>
+		</table>   
+		
+		<div align="center">		
+		<?PHP if($tipoUsuario == 5 ||$tipoUsuario == 1 || $tipoUsuario == 6){?>
+		<table>
+			<tr><td>Observaciones: </td>
+				<td><textarea name="campo_observaciones" id="campo_observaciones" rows="5" cols="90"></textarea></td>								
+				</tr>
+		</table>
+		<?PHP }?>
+		</td>
+		<td width="110px" ></td>		
+		<td>
+		<div align="center">
+		<?PHP 
+			$sql = "SELECT FORMAT(IF(sv_total_anticipo IS NULL,0,sv_total_anticipo),2) as sv_total_anticipo, FORMAT(co_anticipo_comprobado,2) as co_anticipo_comprobado, 
+				FORMAT(co_personal_descuento,2) as co_personal_descuento, FORMAT(co_amex_comprobado,2) as co_amex_comprobado, 
+				FORMAT(co_efectivo_comprobado,2) as co_efectivo_comprobado, FORMAT(co_mnt_descuento,2) as co_mnt_descuento,
+				FORMAT(co_mnt_reembolso,2) as co_mnt_reembolso, FORMAT(co_amex_externo,2) as co_amex_externo
+				FROM comprobaciones
+				JOIN tramites ON co_mi_tramite = t_id
+				LEFT JOIN solicitud_viaje ON sv_tramite = co_tramite
+				WHERE t_id=".$_GET['id'];	
+			$res = mysql_query($sql);
+			while($row = mysql_fetch_assoc($res)){
+				$anticipo = $row['sv_total_anticipo'];				
+				$anticipoComprobado = $row['co_anticipo_comprobado'];
+				$personalDescuento = $row['co_personal_descuento'];
+				$amexComprobado = $row['co_amex_comprobado'];
+				$efectivoComprobado = $row['co_efectivo_comprobado'];			
+				$montoDescuento = $row['co_mnt_descuento'];			
+				$montoReembolso = $row['co_mnt_reembolso'];	
+				$amexExterno = $row['co_amex_externo'];
+			}			
+			?>
+		<table style="border:1px #CCCCCC solid;" align="right" width="350px">
+			<tr><td colspan="2" style="color:#000000; text-align: center;"><h3>Resumen</h3></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right">Anticipo solicitado:</td>
+				<td><div id="anticipo_solicitado1" align="right"><?PHP echo $anticipo." MXN";?></div>
+				<input type="hidden" readonly="readonly" name="anticipo_solicitado2" id="anticipo_solicitado2" value="<?PHP echo $anticipo;?>" /></td>
+			</tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right">Anticipo comprobado: </td>
+				<td><div id="anticipo_comprobado_autorizado_BMW1" align="right"><?PHP echo $anticipoComprobado." MXN";?></div>
+				<input type="hidden" readonly="readonly" name="anticipo_comprobado_autorizado_BMW2" id="anticipo_comprobado_autorizado_BMW2" value="<?PHP echo $anticipoComprobado;?>" /></td>
+			</tr>
+			<tr><td width="50%" align="right">Personal a descontar: </td>
+				<td><div id="personal_descontar1" align="right"><?PHP echo $personalDescuento." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="personal_descontar2" id="personal_descontar2" value="<?PHP echo $personalDescuento; ?>" /></td>
+			</tr>
+			<tr><td width="50%" align="right">Amex comprobado:  </td>
+				<td><div id="amex_comprobado_autorizado_BMW1" align="right"><?PHP echo $amexComprobado." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="amex_comprobado_autorizado_BMW2" id="amex_comprobado_autorizado_BMW2" value="<?PHP echo $amexComprobado; ?>" /></td>
+			</tr>
+			<tr><td width="50%" align="right">Efectivo comprobado:  </td>
+				<td><div id="efectivo_comprobado_autorizado_BMW1" align="right"><?PHP echo $efectivoComprobado." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="efectivo_comprobado_autorizado_BMW2" id="efectivo_comprobado_autorizado_BMW2" value="<?PHP echo $efectivoComprobado; ?>" /></td>
+			</tr>
+			<tr><td width="50%" align="right">Amex externo:  </td>
+				<td><div id="amex_externo1" align="right"><?PHP echo $amexExterno." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="amex_externo2" id="amex_externo2" value="<?PHP echo $amexExterno; ?>" /></td>
+			</tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right" style="color:#DF0101">Monto a descontar:  </td>
+				<td style="color:#DF0101"><div id="monto_a_descontar1" align="right"><?PHP echo $montoDescuento." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="monto_a_descontar2" id="monto_a_descontar2" value="<?PHP echo $montoDescuento; ?>" /></td>
+			</tr>
+			<tr><td width="50%" align="right" style="color:#DF0101">Monto a reembolsar:   </td>
+				<td style="color:#DF0101"><div id="monto_a_reembolsar1" align="right"><?PHP echo $montoReembolso." MXN"; ?></div>
+				<input type="hidden" readonly="readonly" name="monto_a_reembolsar2" id="monto_a_reembolsar2" value="<?PHP echo $montoReembolso; ?>" /></td>
+			</tr>
+		</table>
+		<br/>
+		<?PHP //}
+		
+		//muestra el cuadro resumen de la comprobacion cuando el usuario es de tipo 6
+		//if($tipoUsuario == 6){
+			$factor = '';
+			$query = "SELECT co_tipo_auto, ma_nombre, ma_factor, FORMAT(co_kilometraje,0) AS co_kilometraje, FORMAT(co_monto_gasolina,2) AS co_monto_gasolina, co_ruta, co_gasolina, co_gasolina,
+				FORMAT(
+				(SELECT IFNULL(SUM(dc_total), 0)
+				FROM detalle_comprobacion
+				WHERE dc_comprobacion = co_id                                                
+				AND dc_concepto = 12
+				AND (
+				(SELECT idamex FROM amex WHERE idamex = dc_idamex_comprobado AND moneda_local = 'MXN' LIMIT 1) = dc_idamex_comprobado
+					OR (dc_idamex_comprobado = 0  AND dc_divisa = 1))
+				),2) AS totalGasolina
+				FROM comprobaciones
+				JOIN modelo_auto ON co_modelo_auto = ma_id
+				JOIN tramites ON co_mi_tramite = t_id
+				LEFT JOIN excepciones ON ex_comprobacion = co_id
+				WHERE t_id = ".$_GET['id'];
+			$res = $cnn->consultar($query);
+			while($row = mysql_fetch_assoc($res)){
+				$tipoAuto = $row['co_tipo_auto'];
+				$modeloAuto = $row['ma_nombre'];
+				$factor = $row['ma_factor'];
+				$kilometraje = $row['co_kilometraje'];
+				$montoGasolina = $row['co_monto_gasolina'];
+				$rutaDetallada = $row['co_ruta'];
+				$comprobacionGasolina = $row['co_gasolina'];
+				$totalGasolina = $row['totalGasolina'];
+			} 
+			if($factor > 0){ ?>
+			<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<table style="border:1px #CCCCCC solid;" align="right" width="350px" >
+			<tr><td colspan="2" style="color:#000000; text-align: center;"><h3>Detalle de Gasolina en M&eacute;xico</h3></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right">Tipo de Auto:</td>
+				<td><div id="tipoAuto" align="right"><?PHP echo $tipoAuto;?></div></td>
+			</tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right">Modelo Auto: </td>
+				<td><div id="modeloAtuo" align="right"><?PHP echo $modeloAuto;?></div></td>
+			</tr>
+			<tr><td width="50%" align="right">Factor Gasolina: </td>
+				<td><div id="factorGasolina" align="right"><?PHP echo $factor; ?></div></td>
+			</tr>
+			<tr><td width="50%" align="right">Kilometraje:  </td>
+				<td><div id="kilometraje" align="right"><?PHP echo $kilometraje; ?></div></td>
+			</tr>
+			<tr><td width="50%" align="right">Monto por Factor:  </td>
+				<td><div id="montoGasolina" align="right"><?PHP echo $montoGasolina; ?></div></td>
+			</tr>
+			<tr><td width="50%" align="right" style="color:blue">Total Gasolina: </td>
+				<td style="color:blue"><div id="montoGasolina" align="right"><?PHP echo $totalGasolina; ?></div></td>
+			</tr>
+			<tr><td colspan="2"></td></tr>
+			<tr><td width="50%" align="right">Ruta detallada:  </td>
+				<td><div id="rutaDetallada" align="right"><textarea name="rutaDetalladaTextArea" id="rutaDetalladaTextArea" readonly="readonly" onkeypress="confirmaRegreso(this.id);" onkeydown="confirmaRegreso(this.id);" rows="3" ><?PHP echo $rutaDetallada; ?></textarea></div></td>
+			</tr>			
+		</table>
+		<?PHP }
+		//} ?>   
+		</div>	
+		</td>		
+		</tr>
+		</table>		
+		<?PHP 
+			//o aprobada
+			$sql = "SELECT t_dueno, t_etapa_actual FROM tramites WHERE t_id = ".$_GET['id'];
+			$res = $cnn->consultar($sql);
+			$row = mysql_fetch_assoc($res);	
+			$imprimir =($row['t_etapa_actual'] == COMPROBACION_ETAPA_APROBADA_POR_SF) ? "submit" : $imprimir = "hidden";
+		?>
+	<!--<<<<TABLE QUE FUNCIONA COMO FLOTANTE DIVISA NO>>>>>>>>>>-->
+	<div name = "ventanaDivisa" id="ventanaDivisa" style="display:none; visibility:hidden; position:absolute; top:75%; left:38%; width:400px;  border:1px solid #808080; padding:5px; background-color:#F0F0FF">
+		<table bordercolor="#333333" style="font-size:11px" border="0" width="400">
+			<tr bgcolor="#8C8CFF">
+				<td colspan="8" aling="center" valign="middle">
+					<font color="#ffffff"><strong>&nbsp;&nbsp;&nbsp;Captura de tasa</strong></font>
+				</td>
+			</tr>
+		</table>
+		<table width="400" align="center" border="0" cellspacing="1" style="border:1px #CCCCCC solid;margin:auto;margin-top:5px;text-align:left;">
+			<tr >
+				<td>&nbsp;</td>
+				<td><div align="right">Tasa USD:</div></td>
+				<td>&nbsp;</td>
+				<td><div align="left"><input type="text" name="tasaUSDeditable" id="tasaUSDeditable" value="<?PHP echo $divisaUSD;?>" size="10" maxlength="13" /></div></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr >
+				<td>&nbsp;</td>
+				<td><div align="right">Tasa EUR:</div></td>
+				<td>&nbsp;</td>
+				<td><div align="left"><input type="text" name="tasaEUReditable" id="tasaEUReditable" value="<?PHP echo $divisaEUR;?>" size="10" maxlength="13" /></div></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td colspan="6">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td colspan="6" align="center"><strong>Nota: Para desbloquear la pantalla, de click en 'Aceptar'.</strong></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td colspan="6">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<br />
+		<table cellspacing="1" width="100%">
+			<tr>
+				<td colspan="8">
+					<div align="center">
+						<input type="button" name="aceptarDivisa" id="aceptarDivisa" value="     Aceptar" style="background:url(../../images/ok.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onClick="flotanteActive(0);" />
+					</div>
+				</td>
+			</tr>
+        </table>		
+	</div>
+	<center>
+		<table border="0">
+			<tr>
+				<td colspan="10"><br />
+				<div align="center">
+				<?PHP 
+				$idTramite=$_GET['id'];
+				$tramites = new Tramite();
+				$tramites->Load_Tramite($idTramite);
+				$t_iniciador=$tramites->Get_dato("t_iniciador");
+				$t_dueno=$tramites->Get_dato("t_dueno");
+				$t_ruta_autorizacion = $tramites->Get_dato("t_ruta_autorizacion");
+				$iduser = $_SESSION["idusuario"];
+				$encontrado = encuentraAutorizador($t_ruta_autorizacion, $iduser);
+				
+				  $privilegios = 0;
+				  $delegadodeUsuario = 0;
+				  if(isset($_SESSION['iddelegado'])){
+				  	$query = sprintf("SELECT privilegios FROM usuarios_asignados WHERE id_asignador = '%s' AND id_delegado = '%s'", $_SESSION["idusuario"], $_SESSION['iddelegado']);
+				  	$rst = $cnn->consultar($query);
+				  	$fila = mysql_fetch_assoc($rst);
+				  	$privilegios = $fila["privilegios"];
+				  	//error_log($query);
+				  	
+				  	$query = sprintf("SELECT id_asignador FROM usuarios_asignados JOIN tramites ON t_dueno = id_delegado WHERE t_id = '%s'", $idTramite);
+				  	//error_log($query);
+				  	$rst = $cnn->consultar($query);
+				  	
+				  	while($fila = mysql_fetch_assoc($rst)){
+				  		if($fila["id_asignador"] == $_SESSION["idusuario"]){
+				  			$delegadodeUsuario = 1;
+				  			break;
+				  		}
+				  	}
+				  }
+				?>
+					<?PHP if( $tipoUsuario == 5 || $tipoUsuario == 1 ){// usuarios 5,1
+						$funcion="Location();";
+						if((isset($_SESSION['iddelegado']) && $delegadodeUsuario == 1 && $privilegios == 1) || (!isset($_SESSION['iddelegado']))){ // Si la Sesi�n del delegado se ha iniciado, y el asignador tiene privilegios de autorizar, se deber�n mostrar los botones de Autorizar y Rechazar ?>
+							<input type="submit" value="    Autorizar"  name="autorizar" id="autorizar" style="background:url(../../images/Arrow_Right.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onSubmit="autorizacionPresupuesto();" />&nbsp;&nbsp;&nbsp;
+					<?PHP }?>
+					<?PHP }
+					if($tipoUsuario == 6 ){//usuario de finanzas 
+						$funcion="validarVolver();";?>
+					<span id="sAutorizar" ><input type="<?PHP echo $imprimir;?>" value="    Contabilizar"  name="autorizar" id="autorizar" style="background:url(../../images/ok.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onclick="validarPresupuesto(<?PHP echo $co_total;?>,<?PHP echo $idcentrocosto;?>,<?PHP echo $_GET['id'];?>);"/></span>
+					<?PHP if($comprobacion_etapa != COMPROBACION_ETAPA_APROBADA_POR_SF){?>
+					<input type="submit" value="    Enviar a Supervisor" id="enviarSupervisor" name="enviarSupervisor"  style="background:url(../../images/Arrow_Right.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onclick="return verificarBotones();" />
+					<?PHP }?>
+					<input type="hidden" value="0" id="gerenteFinanzas" name="gerenteFinanzas" />
+					<input type="hidden" value="0" id="supervisorFinanzas" name="supervisorFinanzas" />
+					<?PHP }?>
+					<input type="button" value="    Volver"  name="Volver" id="Volver" style="background:url(../../images/back.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onclick="<?php echo $funcion;?>"/>&nbsp;&nbsp;&nbsp;
+					<?PHP if((isset($_SESSION['iddelegado']) && $delegadodeUsuario == 1 && $privilegios == 1) || ((!isset($_SESSION['iddelegado']) && $privilegios == 0))){ // Si la Sesi�n del delegado se ha iniciado, y el asignador tiene privilegios de autorizar, se deber�n mostrar los botones de Autorizar y Rechazar ?>
+						<input type="submit" value="    Rechazar" id="rechazar" name="rechazar" style="background:url(../../images/reject.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC; /*visibility:hidden*/" onclick=""/>&nbsp;&nbsp;&nbsp;
+					<?PHP }
+					if($tipoUsuario == 6 && $comprobacion_etapa != COMPROBACION_ETAPA_APROBADA_POR_SF ){//usuario de finanzas ?>					
+					<input type="button" value="    Devolver con observaciones" id="devolverObservaciones" name="devolverObservaciones" style="background:url(../../images/Arrow_Left.png); background-position:left; background-repeat:no-repeat; background-color:#E1E4EC;" onclick="validarObservaciones(<?PHP echo $_GET['id'];?>,<?PHP echo $idusuario; ?>);"/>
+					<?PHP } ?>
+				</div>
+				</td>
+			</tr>
+		</table>
+		</center>
+		<!-- Divisa MEX -->
+		<input type='hidden' id='valorDivisaMEX' name='valorDivisaMEX' value="1">
+		<!-- Divisa Euro -->
+		<input type='hidden' id='valorDivisaEUR' name='valorDivisaEUR' value="<?PHP echo $divisaEUR; ?>">
+		<!-- Divisa D�lar -->
+		<input type='hidden' id='valorDivisaUSD' name='valorDivisaUSD' value="<?PHP echo $divisaUSD; ?>">
+		<input type="hidden" id="rowDel" name="rowDel" value="0" readonly="readonly"/>
+		<input type="hidden" id="rowCount" name="rowCount" value="0" readonly="readonly"/>
+		<input type="hidden" id="idT" name="idT" value="<?PHP if(isset($_GET['id'])){echo $_GET['id'];}else{echo $_GET['ID'];} ?>" />    
+		<input type="hidden" name="iu" id="iu" readonly="readonly" value="<?PHP echo $_SESSION["idusuario"]; ?>" />
+		<input type="hidden" name="delegado" id="delegado" readonly="readonly" value="<?PHP if(isset($_SESSION['iddelegado'])){ echo $_SESSION['iddelegado']; }else{echo 0;}?>" />
+		<input type="hidden" name="delegadoNombre" id="delegadoNombre" readonly="readonly" value="<?PHP if(isset($_SESSION['iddelegado'])){ echo $_SESSION['delegado']; }else{echo 0;}?>" />
+		<input type="hidden" name="aux" id="aux" readonly="readonly" value="0" />
+		<input type="hidden" id="t_etapa_actual" name="t_etapa_actual" value="<?php echo $comprobacion_etapa;?>" readonly="readonly" />
+	</form>
+	</div>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" serie="FSA" folio="1089706" fecha="2014-07-23T12:48:05" formaDePago="Pago en una sola exhibición" subTotal="11064.66" descuento="1106.48" total="11551.49" metodoDePago="Tarjetas bancarias" tipoDeComprobante="ingreso" LugarExpedicion="MEXICO, DISTRITO FEDERAL" NumCtaPago="0688" noCertificado="00001000000301319724" certificado="MIIExjCCA66gAwIBAgIUMDAwMDEwMDAwMDAzMDEzMTk3MjQwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzExMTQyMzMwNTNaFw0xNzExMTQyMzMwNTNaMIIBETE4MDYGA1UEAxMvVEhFIEFNRVJJQ0FOIEJSSVRJU0ggQ09XRFJBWSBNRURJQ0FMIENFTlRFUiBJQVAxODA2BgNVBCkTL1RIRSBBTUVSSUNBTiBCUklUSVNIIENPV0RSQVkgTUVESUNBTCBDRU5URVIgSUFQMTgwNgYDVQQKEy9USEUgQU1FUklDQU4gQlJJVElTSCBDT1dEUkFZIE1FRElDQUwgQ0VOVEVSIElBUDElMCMGA1UELRMcQUJDNDEwNzA0N0kwIC8gTE9BQTYwMDIxOVAyNzEeMBwGA1UEBRMVIC8gTE9BQTYwMDIxOUhERlBMTDA2MRowGAYDVQQLExFDRU5UUk8gTUVESUNPIEFCQzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAuY3iCIQCYtb8ebsiSmngMlz8Smw1iA1wDZrIWn+Z7YO4xCHzZFsq1wzchAFXHVT23nNv9o5As2Kd/D3UTftWo9UUtkCzGrGIwSZ1Rh6FWwiyHs19viVOySNMX54t6MHiXPo8mkdlE56uMigcjttto4TWxQPhp0eixzhRwuT+rMkCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAB6DRgpSIMxNnuA4fBfWziYJlcJmxnVnBG4wk5VeehF6z3xmyDr9WtRgHuSRAiV383/cdjzWtgK9r9Jbfdvnd4JvLl2l4cndwNNNO4NPN/1yKWhqcNteRm0I0/erXdjLGKN9h4hMJ6OxJNJVsvqGMjI1zh8vQ7t/nu16NgILmRLIiI0gSW4ZfuJq32vRzO7XVlbNiszCvW70sZi9RIL24qV3QccpCD5jqCvAiGilgNnKx0OUp7TgZiflx5KolwpTTevllmuuLDcpuZVzssfbwTYApXcj7PX42wC0/Tm1873+nlpCfETIKktftdSxR7R42mCfDeIgwGulfJ7WpyDLiXk=" sello="pZ3pI4rePnuGx6QhGTcmC5i26B8jTh5X8i1mMcRRck01MtyI5QfcB393z3xwYrVwAGREwYXKkL00EQRgX1C9wCui9U5oxvN7q2Zpwqco6LTaG7Y1RZLC1R331qXedq8iEFjYzZw2mPFrW8kJN2fuDv11kZn/QAc3CLNJz52Spmc=">
+  <cfdi:Emisor rfc="ABC4107047I0" nombre="THE AMERICAN BRITISH COWDRAY MEDICAL CENTER IAP">
+    <cfdi:DomicilioFiscal calle="SUR 136" noExterior="116" colonia="LAS AMERICAS" municipio="ALVARO OBREGON" estado="DISTRITO FEDERAL" pais="MEXICO" codigoPostal="01120" />
+    <cfdi:ExpedidoEn calle="AV. CARLOS GRAEF FERNÁNDEZ" noExterior="154" colonia="SANTA FE CUAJIMALPA" municipio="CUAJIMALPA" estado="DISTRITO FEDERAL" pais="MEXICO" codigoPostal="05300" />
+    <cfdi:RegimenFiscal Regimen="PERSONAS MORALES CON FINES NO LUCRATIVOS" />
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="OAM081208162" nombre="ORGANIZACION DE AGUAS DE MEXICO S.A. DE C.V.">
+    <cfdi:Domicilio calle="MARIO PANI" noExterior="400" noInterior="PISO 9" colonia="LOMAS DE SANTA FE" municipio="CUAJIMALPA DE MORELOS" estado="D.F." pais="México" codigoPostal="05348" />
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="1" unidad="NO APLICA" descripcion="PROG.EVAL.SALUD HOMBRE" valorUnitario="11064.66" importe="11064.66" />
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosTrasladados="1593.31">
+    <cfdi:Traslados>
+      <cfdi:Traslado impuesto="IVA" tasa="16.00" importe="1593.31" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" FechaTimbrado="2014-07-23T12:48:45" UUID="75413d52-54cf-47d3-a3f7-94be8cb2a4d9" noCertificadoSAT="00001000000203430011" selloCFD="pZ3pI4rePnuGx6QhGTcmC5i26B8jTh5X8i1mMcRRck01MtyI5QfcB393z3xwYrVwAGREwYXKkL00EQRgX1C9wCui9U5oxvN7q2Zpwqco6LTaG7Y1RZLC1R331qXedq8iEFjYzZw2mPFrW8kJN2fuDv11kZn/QAc3CLNJz52Spmc=" selloSAT="dLryEMtnU4hMlcBAd+c2AzUcgXXNxAqsZoBmFse/dvaZavWkpLPyE3Uw8xq7LOTjZqovZpVTLxiq3CgmHF196+GTh+nWetiW7XG17VNqYkn5l9YOGQGWPYefNQpadghQnM6YJKsbWQRTdIhjlP8iWqgSg205weqZcTd0dHMrt4c=" version="1.0" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd" />
+  </cfdi:Complemento>
+</cfdi:Comprobante>

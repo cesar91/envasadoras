@@ -1,0 +1,109 @@
+1. Objetivo
+  prueba
+Este documento contiene las notas de instalacion de la aplicacion Expenses
+version 2.5
+
+2. Procedimiento
+
+El procedimiento de instalación contiene 3 pasos (los cuales de detallan
+a continuación), estos son:
+
+    i) Poner en el código del aplicativo en una ruta publicada en Web
+    ii) Crear la base de datos de MySQL y cargar el esquema de la base.
+    iii) Configurar al aplicativo.
+    
+2.1 Poner en el código del aplicativo en una ruta publicada en Web
+
+El aplicativo se encuentra dentro de un archivo comprimido con un nombre
+similar a este: eexpenses_marti_20110418_164653.tgz (el nombre puede variar
+puesto que depende de la fecha y hora a la que se genero el mismo).
+
+Al descomprimir este archivo nos aparecera una estructura de directorios
+como la siguiente:
+
+    eexpenses_marti_20110418_164653 /
+        eexpenses /
+        eexpenses_marti.sql
+
+La carpera "eexpenses" es el raiz de la aplicacion a instalar, esta contiene
+los siguientes archivos:
+
+            eexpenses/
+            |-- admin
+            |-- Connections
+            |-- css
+            |-- datos
+            |-- flujos
+            |-- forget.php
+            |-- functions
+            |-- images
+            |-- imgs
+            |-- index.php
+            |-- inicial.php
+            |-- INSTALAR.txt
+            |-- lib
+            |-- nbproject
+            |-- php
+            |-- procesos
+            |-- reportes
+            |-- sql
+            `-- valida_usuario.php
+
+Esta carpeta se debe de publicar en el servidor web.
+
+2. Crear la base de datos de MySQL y cargar el esquema de la base.
+
+Es necesario crear una base de datos de MySQL y cargar el script: eexpenses_marti.sql,
+este script creara el esquema de la aplicacion asi como una serie de catalogos iniciales.
+
+3. Configurar al aplicativo.
+
+La configuracion del aplicativo se hace en el siguiente archivo:
+
+  eexpenses/lib/php/constantes.php
+  
+En este archivo es necesario configurar las siguientes secciones: (las
+opciones marcadas con una flecha son las que se tienen que ajustar)
+
+/*
+ *  Configuracion global del sistema 
+ */
+$SERVER = "http://localhost";        <-------- IP o nombre de dominio del servidor
+$RUTA_R = "/eexpenses_marti/";       <-------- Ruta web donde esta publicado el aplicativo
+$RUTA_A = "/home/andres/code/metis/metis_code/MartiExpenses/code/eexpenses"; <--- Directorio donde esta el aplicativo
+$APP_TITULO = "Sistema Electrónico de Comandas";
+
+/*
+ *  Acceso a MySQL  <---------- Informacion de acceso a MySQL (BD de Expenses)
+ */
+$MYSQL_HOST="localhost";
+$MYSQL_PORT="3306";
+$MYSQL_USER="root";
+$MYSQL_PASSWORD="pass";
+$MYSQL_DATABASE="eexpenses_marti";
+
+/*
+ *  Acceso a Oracle   <----------- Información de acceso a Oracle
+ *                               (Este es el servidor donde esta la interface de Expenses 
+ *                                   con el ambiente productivo de PeopleSoft para Marti
+ /
+$DISABLE_ORACLE=False;
+
+// Informacion de conexion a Oracle (Para PeopleSoft)
+$ORACLE_USER='masngexpenses';
+$ORACLE_PASSWORD='expenses01';  
+#$ORACLE_HOST_SID='172.20.36.172/F88MARTI';       
+$ORACLE_HOST_SID='192.168.2.102:1522/F88MARTI';       
+
+/*
+ *  Configuracion de Correo  <---------- Servidor de SMTP de envio de correo
+ */
+$SMTP_HOST="localhost"; // "mail.masnegocio.com;"; 
+$SMTP_PORT="2025";
+$SMTP_AUTH=true;
+$SMTP_USERNAME="portales@masnegocio.com";
+$SMTP_PASSWORD="Ht8Pv12S";
+$SMTP_FROM="portales@masnegocio.com";
+$SMTP_FROMNAME="Sistema Electrónico de Comandas";
+
+

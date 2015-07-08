@@ -1,0 +1,49 @@
+
+tr.lista:hover{
+	background-color: #d5e1f4;
+}
+
+tr.sublista:hover{
+	background-color: #DBE773;
+}
+
+.lista_cabecera{
+  	/*padding-top:1px; padding-left:2px; padding-bottom:1px; padding-right:2px; background-color:#233d79; color:#FFFFFF;*/
+    padding-top:1px; padding-left:2px; padding-bottom:1px; padding-right:2px; background-color:#1b5698; color:#FFFFFF;
+}
+.lista_cabecera2{
+  	/*padding-top:1px; padding-left:0px; padding-bottom:1px; padding-right:2px; background-color:#233d79; color:#ffffff;*/
+    padding-top:1px; padding-left:0px; padding-bottom:1px; padding-right:2px; background-color:#1b5698; color:#ffffff;
+  	width: 100px;
+}
+.numeracion{
+	font-size:8px;
+	background-color: #f9f9f9;
+}
+
+.lista_marco{
+	border: solid 0px #c0c0c0; 
+}
+.pagnormal a{
+	background-color:#e8e8e8;
+	padding: 2px;	
+	font-weight: bold;
+	color: #000;
+}
+td .pagactual, .pagnormal {
+
+	background-color:#c0c0c0;
+	padding: 3px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+.pagactual a{
+	background-color:#233d79;
+	padding: 2px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+.td{
+padding-top:1px; padding-left:5px; padding-bottom:1px; padding-right:15px;
+
+}

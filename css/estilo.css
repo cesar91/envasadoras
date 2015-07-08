@@ -1,0 +1,593 @@
+
+body {
+	background: #C0C0C0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0px;
+}
+
+input,select,textarea{
+
+ border:solid 1px #c0c0c0;
+ font-size:12px;
+font-family:Geneva, Arial, Helvetica, sans-serif;
+}
+
+
+A:link { 
+text-decoration: none;
+ }
+A:active { text-decoration: none; 
+}
+A:visited { text-decoration: none; 
+}
+A:hover {
+	text-decoration: none;
+	color: #1c3748;
+	font-weight: bold;
+}
+
+
+.SrcInput {
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	font-weight: normal;
+	width: auto;
+}
+
+.Input1 {
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	font-weight: normal;
+}
+
+.SelInput {
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	font-family: Arial, Helvetica, sans-serif, Verdana;
+	font-size: 11px;
+	color: #000000;
+	font-weight: normal;
+	width: 150;
+}
+
+.LoginInput {
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	font-weight: normal;
+	width: 95;
+}
+
+
+
+.LoginInput2 {
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	font-weight: normal;
+	width: 170;
+}
+
+
+.LoginInput3 {
+	background: #CC6600;
+	border: 1px solid #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #FFFFFF;
+	font-weight: normal;
+	width: 60;
+}
+
+.txtLink {
+	font-family: Arial, Helvetica, Sans-serif;
+	font-size: 10px;
+	color: #3D586D;
+	font-weight: bold;
+}
+.txtLink2 {
+	font-family: Arial, Helvetica, Sans-serif;
+	font-size: 9px;
+	color: #121E25;
+}
+
+.txtUser {
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 11px;
+	color: #121E25;
+	font-weight: bold;
+}
+
+
+
+
+
+.txtHeader {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #1C3748;
+}
+
+.txtDate {
+	font-family: Arial, Helvetica, Sans-serif;
+	font-size: 10px;
+	color: #333333;
+}
+
+.txtGreyAr10 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #666666;
+}
+
+.txtGreyAr11 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 11px;
+	color: #666666;
+}
+
+.txtGreyVer11 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #666666;
+}
+
+.txtGreyBAr10 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #666666;
+	font-weight: bold;
+}
+
+.txtGreyVer9 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 9px;
+	color: #666666;
+}
+
+.txtGreyVer10 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 10px;
+	color: #666666;
+}
+
+.txtGreyVer11 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #666666;
+}
+
+.txtlink {
+	color: #336699;
+}
+a.txtlink:link { text-decoration: none; color: #6699CC; }
+a.txtlink:active { text-decoration: none; color: #336699; }
+a.txtlink:visited { text-decoration: none; color: #336699; }
+a.txtlink:hover { text-decoration: underline; color: #6699CC; }
+
+.txtGrey2Ver10 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 10px;
+	color: #999999;
+}
+
+.txtDGreyAr9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #676767;
+}
+
+.txtDGreyAr9B {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 9px;
+	color: #676767;
+	font-weight: bold;
+}
+
+
+.txtDBlackAr9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #676767;
+        font-weight: bold;
+}
+
+
+.txtDGreyVer9 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 9px;
+	color: #676767;
+}
+
+.txtGreyAr9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 9px;
+	color: #9C9C9C;
+}
+
+.txtOranVer9 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 9px;
+	color: #FF6600;
+}
+
+.txtOranAr10 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #FF6600;
+        font-weight: bold;
+}
+
+.txtBlkAr9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 9px;
+	color: #000000;
+}
+
+.txtBluAr9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #336699;
+}
+
+.txtBluVer12 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 12px;
+	color: #336699;
+}
+
+.txtBluAr10 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 10px;
+	color: #666666;
+}
+
+.txtMenu {
+	background:  url("../images/bullet_int_secc.gif") no-repeat;
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	line-height:15px;
+	color: #666666;
+	padding-left: 18px;
+	
+}
+
+.txtWhiAr10 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 10px;
+	color: #FFFFFF;
+}
+
+.txtBluVer13B {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 14px;
+	color: #3D586D;
+	font-weight: bold;
+}
+
+.titulo1 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 13px;
+	color: #3D586D;
+	font-weight: bold;
+}
+
+.txtBluVer10 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 10px;
+	color: #336699;
+}
+
+.subtitulo1 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 10px;
+	color: #336699;
+}
+
+.txtBluVer9 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 9px;
+	color: #5F6A6B;
+}
+
+.txtBlueAr11 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 11px;
+	color: #6F98C4;
+}
+
+.txtBlueBVer11 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #3D586D;
+	font-weight: bold;
+}
+
+.txtGreenBVer11 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color:#33CC33;
+	font-weight: bold;
+}
+
+.txtBlueVer11 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #6F98C4;
+}
+
+.formlabel {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #666666;
+	font-weight: bold;
+}
+
+.txtAzulBAr10 {
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 9px;
+	color: #CC6600;
+	font-weight: bold;
+}
+
+H1 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 13px;
+	color: #3D586D;
+	font-weight: bold;
+}
+
+H2 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #3E9ECE;
+	font-weight: bold;
+}
+
+H3 {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	color: #3D586D;
+	font-weight: bold;
+}
+.backsubmenu {
+	background-color: #dbe3e5;
+}
+.backmenu {
+	background-color: #f9faf1;
+}
+table {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #333333;
+}
+.trtitle {
+	border: 1px solid #666666;
+	font-weight: bold;
+	color: #333333;
+	background-color: #CCCCCC;
+}
+
+.txtMenuActive {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #FF6600;
+}
+
+.mastertable {
+	background-color: #FFFFFF;
+}
+.topbg {
+	background-image:  url("../images/fwk/bg_header_blue.gif");
+	height: 60px;
+	margin: 2px;
+	padding: 0px;
+}
+.tituloapp {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	color: #FFFFFF;
+}
+.version {
+	font-size: 10px;
+	color: #000000;
+}
+
+.navegacion {
+	background-color: #EFEFEF;
+	font-weight: bold;
+	color: #666666;
+}
+
+
+.button:hover {
+  color: #000000; text-decoration: none;
+  float: left;
+  text-align: center;
+  font-size: 11px;
+  border: 1px double #cccccc;
+  width: auto;
+  background:  url("../images/fwk/menu_bgr.png") repeat-x;
+  padding: 0px 15px;
+  line-height: 20px;
+  margin: 1px;
+}
+
+.contentheading {
+
+	height: 30px;
+
+	background:  url("../images/fwk/contenthead.png") top left no-repeat;
+
+	color: #666666;
+
+	text-indent: 20px;
+
+	font-weight: bold;
+
+	font-size: 12px;
+
+	white-space: nowrap;
+
+}
+.ligaitem:link, .ligaitem:visited{
+	color: #0066CC; text-decoration: none;
+	font-weight: bold;
+}
+
+.ligaitem:hover{
+
+	color: #FF0000; text-decoration: none;
+	font-weight: bold;
+
+}
+
+#dhtmltooltip{
+	position: absolute;
+	width: 150px;
+	border: 2px solid black;
+	padding: 2px;
+	background-color: lightyellow;
+	visibility: hidden;
+	z-index: 100;
+}
+
+.requerido {
+	font-size: 16px;
+	color: #990000;
+}
+
+input:focus,  textarea:focus, select:focus, file:focus {
+    background: #F4F5D6;
+}
+
+tr.backLight {
+    background: #ffffff;
+    border-bottom: 1px solid #9EDDFF;
+}
+tr.backDark {
+    background: #f7f7f7;
+    border-bottom: 1px solid #9EDDFF;
+}
+tr.backHighlight {
+    background: #CFEEFF;
+}.tablehead {
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #336699;
+}
+
+.error {
+	font-weight: normal;
+	color: #CC0000;
+	margin: 0px;
+	width: 600px;
+	border: 1px solid #CCCCCC;
+}
+
+.message {
+    text-align: center;
+    font-size: 0.9em;
+    z-index: 1;
+}
+.message div {
+    width: 60%;
+    margin: 0 auto 15px;
+    padding: 5px 25px;
+    background-color: #ffffff;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    border-width: 2px;
+    border-style: solid;
+    -moz-border-radius: 0.4em;
+}
+.infoMessage {
+    background-image: url('..images/dialog_info.gif');
+    border-color: #00ba44;
+}
+.errorMessage {
+    background-image:  url("../images/fwk/dialog_error.gif");
+    border-color: #ff2200;
+}
+.warningMessage {
+    background-image:  url("../images/fwk/dialog_warning.gif");
+    border-color: #ffa900;
+}
+.okMessage {
+    background-image:  url("../images/fwk/action_validate.gif");
+    border-color: #ffa900;
+}
+.instruccion {
+	color: #336699;
+}
+.positivo {
+	font-size: 14px;
+	color: #0066FF;
+}
+.negativo {
+	font-size: 14px;
+	color: #FF0000;
+}
+
+
+
+/* -------------------- menu -------------------- */
+#menu {
+	background:#e8e8e8 url(../imgs/back-menu.jpg) repeat-x;
+	clear:both;
+	height:25px;
+	overflow:hidden;
+	margin:0 0px 23px;
+	padding:0 30px 0 22px;
+	
+	font-weight: bold;
+	
+}
+#menu ul li {
+	display:inline;
+}
+#menu a:link, 
+#menu a:visited {
+	color:#000;
+	display:block;
+	float:left;
+	height:19px;
+	
+	margin:3px 8px 0;
+	padding:0 6px 0 7px;
+	text-decoration:none;
+}
+#menu a:hover {
+	background:#fff url(../imgs/back-menuover_l.gif) no-repeat left;
+}
+#menu a:hover span {
+	background:	url(../imgs/back-menuover_r.gif) no-repeat right;
+	display:block;
+	margin:0 -6px 0 -7px;
+	padding:0 6px 0 7px;
+}
+#menu #lang {
+	float:right;
+}
+#menu #lang a {
+	background:none;
+	height:25px;
+	margin:0;
+	padding:0 0 0 10px;
+}
+#menu #lang a img {
+	padding-top:3px;
+}
+

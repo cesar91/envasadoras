@@ -1,0 +1,14 @@
+#tdEdit {
+	background-color:#FFFFFF;
+}
+
+.divProceso{
+	font-size:34px;
+	display:none;
+	position:absolute;
+	top:250;
+	left:600;
+	color:#FF0000;
+	font-weight:bold;
+	font-family:Calibri, "Californian FB";
+}

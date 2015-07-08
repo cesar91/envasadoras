@@ -1,0 +1,95 @@
+
+.ajax-file-upload-statusbar {
+    border: 1px solid #0BA1B5;
+    border-radius: 4px;
+    margin: 5px;
+    padding: 5px;
+}
+.ajax-file-upload-filename {
+    color: #807579;
+    height: auto;
+    margin: 0 5px 5px 10px;
+    width: 100%;
+}
+.ajax-file-upload-progress {
+    border: 1px solid #DDDDDD;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0 10px 5px;
+    padding: 1px;
+    position: relative;
+    width: 250px;
+}
+.ajax-file-upload-bar {
+    background-color: #0BA1B5;
+    border-radius: 3px;
+    color: #FFFFFF;
+    height: 20px;
+    width: 0;
+}
+.ajax-file-upload-percent {
+    display: inline-block;
+    left: 48%;
+    position: absolute;
+    top: 3px;
+}
+.ajax-file-upload-red {
+    background-color: #E4685D;
+    border-radius: 4px;
+    box-shadow: 0 39px 0 -24px #E67A73 inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-size: 13px;
+    font-weight: normal;
+    margin-right: 5px;
+    padding: 4px 15px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #B23E35;
+    vertical-align: top;
+}
+.ajax-file-upload-green {
+    background-color: #77B55A;
+    border-radius: 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0 5px 0 0;
+    padding: 4px 15px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #5B8A3C;
+    vertical-align: top;
+}
+.ajax-file-upload {
+    background: none repeat scroll 0 0 #2F8AB9;
+    border: medium none;
+    border-radius: 3px;
+    box-shadow: 0 2px 0 0 #13648D;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 20px;
+    margin: 0 10px 10px 0;
+    padding: 6px 10px 4px;
+    text-decoration: none;
+    vertical-align: middle;
+}
+.ajax-file-upload:hover {
+    background: none repeat scroll 0 0 #3396C9;
+    box-shadow: 0 2px 0 0 #15719F;
+}
+.ajax-upload-dragdrop {
+    border: 2px dotted #A5A5C7;
+    color: #DADCE3;
+    padding: 10px 10px 0;
+    text-align: left;
+    vertical-align: middle;
+}

@@ -1,0 +1,44 @@
+11748-16:15:12 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11748-16:15:12 Elapsed time: 0.0004 sec.
+11748-16:15:12 
+CONSULTAR> select * from usuario where u_id=145
+11748-16:15:12 Elapsed time: 0.0002 sec.
+11748-16:15:16 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11748-16:15:16 Elapsed time: 0.0004 sec.
+11748-16:15:16 
+CONSULTAR> SELECT * FROM empresas
+11748-16:15:16 Elapsed time: 0.0002 sec.
+11731-16:16:10 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11731-16:16:10 Elapsed time: 0.0004 sec.
+11731-16:16:10 
+CONSULTAR> SELECT * FROM empresas
+11731-16:16:10 Elapsed time: 0.0001 sec.
+11731-16:16:10 
+CONSULTAR> CREATE TABLE rutatransformacion(
+		rut_id VARCHAR(45),		
+		rut_ruta VARCHAR(256)
+		)
+11731-16:16:10 Elapsed time: 0.0012 sec.
+11731-16:16:10 
+CONSULTAR> SELECT t_id,t_dueno FROM VistaAnticiposRuta1   AND fecha_solicitud >= '2013-01-01 00:00:00' AND fecha_solicitud <= '2013-01-16 23:59:59'
+	 	UNION
+	 	SELECT t_id,t_dueno FROM VistaAnticiposRuta2   AND fecha_solicitud >= '2013-01-01 00:00:00' AND fecha_solicitud <= '2013-01-16 23:59:59'
+11759-16:28:32 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '2' ORDER BY m_orden 
+11759-16:28:32 Elapsed time: 0.0004 sec.
+11759-16:28:32 
+CONSULTAR> SELECT * FROM empresas
+11759-16:28:32 Elapsed time: 0.0001 sec.
+11759-16:28:32 
+CONSULTAR> CREATE TABLE rutatransformacion(
+		rut_id VARCHAR(45),		
+		rut_ruta VARCHAR(256)
+		)
+11759-16:28:32 Elapsed time: 0.0025 sec.
+11759-16:28:32 
+CONSULTAR> SELECT t_id,t_dueno FROM VistaAnticiposRuta1   AND fecha_solicitud >= '2013-01-01 00:00:00' AND fecha_solicitud <= '2013-01-16 23:59:59'
+	 	UNION
+	 	SELECT t_id,t_dueno FROM VistaAnticiposRuta2   AND fecha_solicitud >= '2013-01-01 00:00:00' AND fecha_solicitud <= '2013-01-16 23:59:59'

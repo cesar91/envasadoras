@@ -1,0 +1,61 @@
+====TRAVEL EXPENSES BMW ==========
+E-EXPENSES: Es un portal que permite controlar los gastos generados por concepto de viáticos.  En esta versión del producto se manejan Solicitudes de viaje, Comprobaciones de Viaje, Solicitudes de Invitación, Comprobaciones de Invitación, Cotización de Agencia de Viajes, Compra por parte de Agencia de Viajes, catálogos, notificaciones y autorizaciones.
+
+====NOTAS DE INSTALACION=======
+
+Se asume que la ruta de instalación será dentro del htdocs del servidor web.
+Por ejemplo
+%ROOTEXPENSESBMW% => htdocs/expensesBMW
+Se asume que la versión de la base de datos es MySQL 5.1.3 y la versión de PHP es 5.2.9
+
+Instrucciones
+1.-Tomar de la ruta:/usr/local/zend/apache2/htdocs/paseaqa/eexpensesv2bmw01022012.tar' el proyecto de Expenses para BMW
+
+2.-Crear una base de datos mysql con el nombre que ASIST considere de acuerdo a su nomenclatura.
+
+3.-Ejecutar el siguiente script el cual sólo incluye la creación de las tablas.
+%ROOTEXPENSESBMW%/sql/eexpensesv2QA_02022012.sql
+
+4.-Ajustar las conexiones de la base de datos según nomenclatura ASIST en el archivo %ROOTEXPENSESBMW%/lib/php/constantes.php
+
+/*
+ *  Acceso a MySQL
+ */
+$MYSQL_HOST=""; 		-> a determinar  por ASIST
+$MYSQL_PORT=""; 		-> a determinar  por ASIST
+$MYSQL_USER=""; 		-> a determinar  por ASIST
+$MYSQL_PASSWORD=""; 	-> a determinar  por ASIST
+$MYSQL_DATABASE=""; 	-> a determinar  por ASIST
+
+5.- Ajustar a configuración global del sistema en
+%ROOTEXPENSESBMW%/lib/php/constantes.php
+
+/* 
+ *  Configuracion global del sistema 
+ */
+$SERVER = "";	-> a determinar  por ASIST
+$RUTA_R = "/expensesBMW/";
+$RUTA_A = "";     -> a determinar  por ASIST ejemplo: /usr/local/zend/apache2/htdocs/expensesBMW
+$APP_TITULO = "Sistema Electrónico de Gastos";
+$RUTA_SAP = ""; -> %ROOTEXPENSESBMW%/datos/interfazsap
+
+6.- Activar los permisos de escritura de las siguientes carpetas en el sistema de archivos:
+
+	%ROOTEXPENSESBMW%/datos       
+
+7.- No realizar ajustes a los parámetros de correo electrónico por el momento.
+
+8.- Favor de modificar la configuracion del servidor para que la zona horaria sea América Latina.
+
+9.- Favor de validar la existencia de la carpeta amex como sigue (no importa que este vacía) y darle permisos de escritura y lectura para todos los usuarios:
+%ROOTEXPENSESBMW%/amex
+
+10.- La configuración para PIX deberá realizarse del mismo modo que se realizó para el servidor de Desarrollo
+
+11.- Configurar para lectura y escritura al montar la carpeta de red de PIX, apuntando a la siguiente dirección,
+%ROOTEXPENSESBMW%/datos/interfazsap, para ello agregar la siguiente linea al archivo /etc/fstab:
+//172.20.42.386/PIXDEV  %ROOTEXPENSESBMW%/datos/interfazsap cifs rw,iocharset=iso8859-1,dir_mode=0777,file_mode=0777,noperm  0    0
+y posteriormente ejecutar en %ROOTEXPENSESBMW%/eexpensesv2/datos el comando:
+"mount interfazsap"
+ambas acciones requieren privilegios de root.
+

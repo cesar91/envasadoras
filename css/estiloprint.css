@@ -1,0 +1,101 @@
+body {
+	background-color: #ffffff;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0px;
+}
+
+.mastertable {
+	background-color: #ffffff;
+}
+.topbg {
+	height: 60px;
+	margin: 2px;
+	padding: 0px;
+}
+.tituloapp {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #333333;
+}
+.version {
+	font-size: 10px;
+	color: #999999;
+}
+
+.contentheading {
+
+	color: #666666;
+
+	font-weight: bold;
+
+	font-size: 12px;
+
+}
+.backDark {
+	margin: 0px;
+	padding: 0px;
+	border-top: 1px none #CCCCCC;
+	border-right: 1px none #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;
+}
+.tablehead {
+	font-weight: bold;
+	color: #333333;
+	background-color: #efefef;
+}
+h3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #4C4C4C;
+}
+.error {
+	font-weight: normal;
+	color: #CC0000;
+	margin: 0px;
+	width: 600px;
+	border: 1px solid #CCCCCC;
+}
+
+.message {
+    text-align: center;
+    font-size: 0.9em;
+    z-index: 1;
+}
+.message div {
+    width: 60%;
+    margin: 0 auto 15px;
+    padding: 5px 25px;
+    background-color: #ffffff;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    border-width: 2px;
+    border-style: solid;
+    -moz-border-radius: 0.4em;
+}
+.infoMessage {
+    background-image: url('..images/dialog_info.gif');
+    border-color: #00ba44;
+}
+.errorMessage {
+    background-image:  url("../images/fwk/dialog_error.gif");
+    border-color: #ff2200;
+}
+.warningMessage {
+    background-image:  url("../images/fwk/dialog_warning.gif");
+    border-color: #ffa900;
+}
+.okMessage {
+    background-image:  url("../images/fwk/action_validate.gif");
+    border-color: #ffa900;
+}
+.instruccion {
+	color: #336699;
+}
+.printtable {
+	border: 1px solid #CCCCCC;
+	margin: 0px;
+	padding: 0px;
+}

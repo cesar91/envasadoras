@@ -1,0 +1,6 @@
+11748-16:15:21 
+CONSULTAR> SELECT cc_id,cc_centrocostos,cc_nombre FROM cat_cecos WHERE cc_empresa_id ='1' ORDER BY cc_centrocostos
+11748-16:15:21 Elapsed time: 0.0003 sec.
+11761-16:28:20 
+CONSULTAR> SELECT cc_id,cc_centrocostos,cc_nombre FROM cat_cecos WHERE cc_empresa_id ='1' ORDER BY cc_centrocostos
+11761-16:28:20 Elapsed time: 0.0003 sec.

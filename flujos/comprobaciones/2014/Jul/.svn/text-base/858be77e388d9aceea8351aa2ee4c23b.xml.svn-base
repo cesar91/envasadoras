@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" serie="A" folio="5643" fecha="2014-06-09T09:21:26" sello="DnUTPjDFSZVqQxzdHaWS9fFwnM2ETHdzT9PjIfxV5/4FuJElNUSaiRYjZ0GBkU6vUoPb/nc/SgXrIIZ6QpJJ3E1+EbJBVtVdeK/YoU0WCfjP009UjowimuDVrFlYUU5rKBCmfDp3WoAY1pwpTZIjgrZue03MVlMorf8NDwaaOm8=" formaDePago="Pago en una sola exhibición" noCertificado="00001000000202298303" certificado="MIIEmzCCA4OgAwIBAgIUMDAwMDEwMDAwMDAyMDIyOTgzMDMwDQYJKoZIhvcNAQEFBQAwggGVMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSEwHwYJKoZIhvcNAQkBFhJhc2lzbmV0QHNhdC5nb2IubXgxJjAkBgNVBAkMHUF2LiBIaWRhbGdvIDc3LCBDb2wuIEd1ZXJyZXJvMQ4wDAYDVQQRDAUwNjMwMDELMAkGA1UEBhMCTVgxGTAXBgNVBAgMEERpc3RyaXRvIEZlZGVyYWwxFDASBgNVBAcMC0N1YXVodMOpbW9jMRUwEwYDVQQtEwxTQVQ5NzA3MDFOTjMxPjA8BgkqhkiG9w0BCQIML1Jlc3BvbnNhYmxlOiBDZWNpbGlhIEd1aWxsZXJtaW5hIEdhcmPDrWEgR3VlcnJhMB4XDTEyMTEwODAyNDcxNloXDTE2MTEwODAyNDcxNlowgdwxJzAlBgNVBAMTHkRJTkFNSVNNTyBFTiBQTEFTVElDTyBTQSBERSBDVjEnMCUGA1UEKRMeRElOQU1JU01PIEVOIFBMQVNUSUNPIFNBIERFIENWMScwJQYDVQQKEx5ESU5BTUlTTU8gRU4gUExBU1RJQ08gU0EgREUgQ1YxJTAjBgNVBC0THERQTDA2MDEzMFJFNiAvIEJPUEU2NjA0MDUyRTcxHjAcBgNVBAUTFSAvIEJPUEU2NjA0MDVIREZMUk4wMDEYMBYGA1UECxMPTU9OVEUgREUgUElFREFEMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDoFd1KypMTPdlB+h4NflrqsJpam3Wob+JkZ6HJ3IJiAxvwpscxkEy5jjoUpqBkf3bwnV9brxr5TljgqHlczOCKYj+CjOHZspkPbSCzWiL6NYyclczjzchmuIwQPefbbfrSM6d+nQF2sqsdldLn1M/xu1a6g8JrJq4DX8sYYH+k3wIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQUFAAOCAQEACeK0qTY4cxW6CDohxuO3IANji8MjHIXK3Ug4gBT96FdgHQUMLGugket9fCpywcS0udC02/oZn4lrhcvLhpvYp/iYL5RhsLTbbSyN15t6LDhSpjYH/o4sU05NziApVJ2LgqxD3zLu+Kk5pfTwdaUty1TPSm0d3eEnaUbpMEbPIqizsB5TNvlJfPjIfuG69PbGNaB693HsT7zblA+/UPuRXv0wRnKN38bHTGSBYpRfY43prli8G98x/ndx3sbgEBCTnR/HGuYqnYDSjcgNWZD7+ztltjVGBFOt1l8Kn1JPmY+tT0OydnWA6CfTQkVM4OMN/gjTRazDPExnIBLulrG8aA==" subTotal="56404.00" TipoCambio="1.000000" Moneda="Pesos" total="65428.64" tipoDeComprobante="ingreso" metodoDePago="Transferencia" LugarExpedicion="MÉXICO, D. F.">
+   <cfdi:Emisor rfc="DPL060130RE6" nombre="DINAMISMO EN PLASTICO SA DE CV">
+      <cfdi:DomicilioFiscal calle="CESAR ELPIDIO CANALES" noExterior="MZ.102 LTE.843" noInterior="SIN NUMERO" colonia="SANTA MARTHA ACATITLA SUR" localidad="MÉXICO, D.F." municipio="IZTAPALAPA" estado="D.F." pais="MEXICO" codigoPostal="09530" ></cfdi:DomicilioFiscal>
+      <cfdi:ExpedidoEn calle="CESAR ELPIDIO CANALES" noExterior="MZ.102 LTE.843" noInterior="SIN NUMERO" colonia="SANTA MARTHA ACATITLA SUR" localidad="MÉXICO, D.F." municipio="IZTAPALAPA" estado="D.F." pais="MEXICO" codigoPostal="09530" ></cfdi:ExpedidoEn>
+      <cfdi:RegimenFiscal Regimen="Persona Moral Régimen General de Ley" ></cfdi:RegimenFiscal>
+   </cfdi:Emisor>
+   <cfdi:Receptor rfc="CPL7509051LA" nombre="CAJAPLAX SA DE CV.">
+      <cfdi:Domicilio calle="BAJIO" noExterior="319" colonia="ROMA SUR" municipio="MEXICO D.F." pais="MEXICO" codigoPostal="06760" ></cfdi:Domicilio>
+   </cfdi:Receptor>
+   <cfdi:Conceptos>
+      <cfdi:Concepto cantidad="1912.000000" unidad="kg" descripcion="KG. BOLSA POL. NAT.48.5+6.5+6.5X133#250" valorUnitario="29.5000" importe="56404.00" ></cfdi:Concepto>
+   </cfdi:Conceptos>
+   <cfdi:Impuestos totalImpuestosTrasladados="9024.64">
+      <cfdi:Traslados>
+         <cfdi:Traslado impuesto="IEPS" tasa="0.00" importe="0.00" ></cfdi:Traslado>
+         <cfdi:Traslado impuesto="IVA" tasa="16.00" importe="9024.64" ></cfdi:Traslado>
+      </cfdi:Traslados>
+   </cfdi:Impuestos>
+   <cfdi:Complemento>
+      <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" selloCFD="DnUTPjDFSZVqQxzdHaWS9fFwnM2ETHdzT9PjIfxV5/4FuJElNUSaiRYjZ0GBkU6vUoPb/nc/SgXrIIZ6QpJJ3E1+EbJBVtVdeK/YoU0WCfjP009UjowimuDVrFlYUU5rKBCmfDp3WoAY1pwpTZIjgrZue03MVlMorf8NDwaaOm8=" FechaTimbrado="2014-06-09T09:21:38" UUID="56B0A87B-CAE8-46E4-BB09-979557BAB524" noCertificadoSAT="00001000000202864530" version="1.0" selloSAT="KQBFeYSuPWxFM1gA0s2hTzgr5fj+7mW9cXc0RPiLpGhKe6Sfv8BQM/RK1miQv0SUzMnT6KngSWurUC42YbD6SEvvw0OtaalvkjzDmwOlMO46WliOphj20mDjsWFC+sz5zcpvNfgCKXYfSP8ARSdk37lH2bcpqMmkkItgoqSwWVE=" ></tfd:TimbreFiscalDigital>
+   </cfdi:Complemento>
+</cfdi:Comprobante>
+

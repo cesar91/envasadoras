@@ -1,0 +1,168 @@
+/* Estilos para la Pantalla de Registro de una Comprobacion */
+.style1{
+	color: #FF0000;
+}
+
+.button_agregar{
+	background:url(../../../images/add.png); 
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+.button_cancelar{
+	background:url(../../../images/reject.png);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+#div_gasolina{
+	top:115%; 
+	left:35%; 
+	rigth:35%; 
+	width:450px; 		
+}
+
+#div_nuevoProveedor{
+	top:50%;
+	left:25%; 
+	rigth:25%; 
+	width:650px; 
+}
+
+.button_enviar{
+	background:url(../../../images/save.gif);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+/* Estilos compartidos Pantallas Registro de Comprobacion y Consulta de Comprobacion */
+span{			
+	font-weight: bold;
+}
+
+.div_flotante{
+	background-color: #FAFAFA;
+	position:absolute; 
+	margin-left:0%; 
+	margin-right:0%; 
+	margin-top:0%; 
+	border:1px solid #808080; 
+	padding: 5px; 			
+}		
+
+.tablaDibujada{			
+	border: 1px #CCCCCC solid;
+	margin: auto;
+	margin-top: 5px;
+	text-align:left;
+	width: 785px;
+}	
+
+.button_refresh{
+	background:url(../../../images/fwk/action_reorder.gif);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}		
+
+.button_autorizar{
+	background:url(../../../images/Arrow_Right.png);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+.button_ok{
+	background:url(../../../images/ok.png);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+.button_rechazar{
+	background:url(../../../images/reject.png);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}		
+
+.button_volver{
+	background:url(../../../images/back.png);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}
+
+.button_imprimir{
+	background:url(../../../images/icon_Imprimir.gif);
+	background-position:left; 
+	background-repeat:no-repeat; 
+	background-color:#E1E4EC;
+}		
+
+.div_close{
+	font-size:11px; 
+	bordercolor:#333333:
+	border: px1;
+	background-color: #A9A9F5;
+	color: #FFFFFF;
+	width: 100%;
+	font-weight: bold;
+}
+
+.montos_rojos{
+	color: #DF0101;
+}
+
+.input_editable, .input_total{
+	border-color: #FFFFFF; 
+	text-align: right;
+}
+
+.button_eliminar{
+	width: 27px; 
+	height:27px; 
+	background:url(../../../images/action_cancel.gif); 
+	background-position: center;  
+	background-repeat: no-repeat;
+	border-style: none; 
+	cursor: pointer;	
+	filter: url(filters.svg#grayscale); /* Firefox 3.5+ */
+	filter: gray; /* IE6-9 */
+	-webkit-filter: grayscale(1); /* Google Chrome & Safari 6+ */	
+	opacity: 0.5;
+	filter: alpha(opacity=50); /* For IE8 and earlier */				
+}
+
+.button_recalcular{
+	width: 27px; 
+	height: 27px; 
+	background: url(../../../images/fwk/action_reorder.gif); 
+	background-position: center; 
+	background-repeat: no-repeat; 
+	border-style: none; 
+	cursor:pointer;
+	filter: url(filters.svg#grayscale); /* Firefox 3.5+ */
+	filter: gray; /* IE6-9 */
+	-webkit-filter: grayscale(1); /* Google Chrome & Safari 6+ */			
+	opacity: 0.5;
+	filter: alpha(opacity=50); /* For IE8 and earlier */	
+}
+
+.button_recalcular:hover , .button_eliminar:hover {			
+	filter: none;
+	-webkit-filter: grayscale(0);
+	opacity: 1;
+	filter: alpha(opacity=100); /* For IE8 and earlier */	
+}	
+
+#comprobacion_table{
+	text-align: center;
+}
+
+#autorizar, #rechazar, #enviarSupervisor, #ventanaDivisa, #ventanaCeco, #table_divisas{
+	display: none;
+}

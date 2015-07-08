@@ -1,0 +1,519 @@
+14144-15:08:21 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='99' GROUP BY u_id ORDER BY u_nombre
+14144-15:08:21 Elapsed time: 0.0003 sec.
+28921-15:08:47 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+28921-15:08:47 Elapsed time: 0.0004 sec.
+24896-15:09:31 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+24896-15:09:31 Elapsed time: 0.0003 sec.
+24896-15:09:37 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+24896-15:09:37 Elapsed time: 0.0004 sec.
+24896-15:14:47 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+24896-15:14:47 Elapsed time: 0.0003 sec.
+24896-15:14:50 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+24896-15:14:50 Elapsed time: 0.0004 sec.
+25188-15:27:51 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='45' GROUP BY u_id ORDER BY u_nombre
+25188-15:27:51 Elapsed time: 0.0003 sec.
+25188-15:27:56 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='7'
+25188-15:27:56 Elapsed time: 0.0004 sec.
+24775-15:29:11 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+24775-15:29:11 Elapsed time: 0.0004 sec.
+24775-15:29:13 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+24775-15:29:13 Elapsed time: 0.0004 sec.
+25188-15:36:50 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+25188-15:36:50 Elapsed time: 0.0003 sec.
+25188-15:36:53 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+25188-15:36:53 Elapsed time: 0.0004 sec.
+25096-16:24:01 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='45' GROUP BY u_id ORDER BY u_nombre
+25096-16:24:01 Elapsed time: 0.0003 sec.
+25096-16:24:06 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='7'
+25096-16:24:06 Elapsed time: 0.0004 sec.
+29010-16:25:46 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='45' GROUP BY u_id ORDER BY u_nombre
+29010-16:25:46 Elapsed time: 0.0003 sec.
+29010-16:25:49 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='7'
+29010-16:25:49 Elapsed time: 0.0004 sec.
+29287-16:27:07 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+29287-16:27:07 Elapsed time: 0.0004 sec.
+24896-16:32:16 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+24896-16:32:16 Elapsed time: 0.0005 sec.
+25096-16:45:36 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+25096-16:45:36 Elapsed time: 0.0003 sec.
+29607-16:47:38 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+29607-16:47:38 Elapsed time: 0.0004 sec.
+30279-16:48:07 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+30279-16:48:07 Elapsed time: 0.0004 sec.
+30279-16:48:09 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+30279-16:48:09 Elapsed time: 0.0004 sec.
+30279-16:52:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='45' GROUP BY u_id ORDER BY u_nombre
+30279-16:52:48 Elapsed time: 0.0004 sec.
+30279-16:52:52 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='7'
+30279-16:52:52 Elapsed time: 0.0004 sec.
+14144-16:53:56 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+14144-16:53:56 Elapsed time: 0.0003 sec.
+14144-16:53:59 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+14144-16:53:59 Elapsed time: 0.0004 sec.
+28922-16:55:31 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+28922-16:55:31 Elapsed time: 0.0003 sec.
+28922-16:55:37 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+28922-16:55:37 Elapsed time: 0.0004 sec.
+25052-16:55:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+25052-16:55:48 Elapsed time: 0.0003 sec.
+25052-16:55:50 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+25052-16:55:50 Elapsed time: 0.0004 sec.
+30280-17:08:56 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+30280-17:08:56 Elapsed time: 0.0004 sec.
+30280-17:08:58 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+30280-17:08:58 Elapsed time: 0.0004 sec.
+25052-17:09:44 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+25052-17:09:44 Elapsed time: 0.0003 sec.
+25052-17:09:47 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+25052-17:09:47 Elapsed time: 0.0004 sec.
+30280-17:17:19 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+30280-17:17:19 Elapsed time: 0.0003 sec.
+25732-18:00:34 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+25732-18:00:34 Elapsed time: 0.0004 sec.
+29607-18:00:42 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+29607-18:00:42 Elapsed time: 0.0004 sec.
+14144-18:01:29 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+14144-18:01:29 Elapsed time: 0.0003 sec.
+14144-18:01:32 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+14144-18:01:32 Elapsed time: 0.0004 sec.
+28922-18:03:42 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+28922-18:03:42 Elapsed time: 0.0003 sec.
+30280-18:04:36 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+30280-18:04:36 Elapsed time: 0.0004 sec.
+30280-18:04:39 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+30280-18:04:39 Elapsed time: 0.0004 sec.
+29010-18:07:46 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+29010-18:07:46 Elapsed time: 0.0003 sec.
+29607-18:08:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+29607-18:08:48 Elapsed time: 0.0004 sec.
+25096-18:11:13 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='148' GROUP BY u_id ORDER BY u_nombre
+25096-18:11:13 Elapsed time: 0.0003 sec.
+29010-18:13:18 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='17'
+29010-18:13:18 Elapsed time: 0.0005 sec.
+29010-18:18:18 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+29010-18:18:18 Elapsed time: 0.0004 sec.
+29287-18:35:46 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+29287-18:35:46 Elapsed time: 0.0003 sec.
+30280-18:37:33 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+30280-18:37:33 Elapsed time: 0.0004 sec.
+8362-09:30:07 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='' GROUP BY u_id ORDER BY u_nombre
+8362-09:30:07 Elapsed time: 0.0005 sec.
+8361-09:30:07 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8361-09:30:07 Elapsed time: 0.0004 sec.
+25052-09:31:34 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+25052-09:31:34 Elapsed time: 0.0003 sec.
+30280-09:31:56 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+30280-09:31:56 Elapsed time: 0.0004 sec.
+29010-09:32:12 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+29010-09:32:12 Elapsed time: 0.0003 sec.
+28922-09:33:29 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+28922-09:33:29 Elapsed time: 0.0004 sec.
+29607-09:35:59 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+29607-09:35:59 Elapsed time: 0.0004 sec.
+29287-09:39:25 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+29287-09:39:25 Elapsed time: 0.0005 sec.
+8362-09:40:24 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8362-09:40:24 Elapsed time: 0.0003 sec.
+28922-09:40:27 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+28922-09:40:27 Elapsed time: 0.0003 sec.
+8504-09:40:31 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+8504-09:40:31 Elapsed time: 0.0006 sec.
+8504-09:40:33 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8504-09:40:33 Elapsed time: 0.0004 sec.
+8504-09:40:39 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='' GROUP BY u_id ORDER BY u_nombre
+8504-09:40:39 Elapsed time: 0.0004 sec.
+8502-09:41:02 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8502-09:41:02 Elapsed time: 0.0004 sec.
+8502-09:41:07 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+8502-09:41:07 Elapsed time: 0.0004 sec.
+8480-09:41:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8480-09:41:48 Elapsed time: 0.0003 sec.
+29287-09:42:04 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='99' GROUP BY u_id ORDER BY u_nombre
+29287-09:42:04 Elapsed time: 0.0003 sec.
+8361-09:42:13 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8361-09:42:13 Elapsed time: 0.0004 sec.
+8502-09:43:26 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+8502-09:43:26 Elapsed time: 0.0006 sec.
+8597-09:44:01 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8597-09:44:01 Elapsed time: 0.0003 sec.
+8502-09:47:41 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='99' GROUP BY u_id ORDER BY u_nombre
+8502-09:47:41 Elapsed time: 0.0004 sec.
+8363-09:50:21 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='99' GROUP BY u_id ORDER BY u_nombre
+8363-09:50:21 Elapsed time: 0.0003 sec.
+8363-09:50:25 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8363-09:50:25 Elapsed time: 0.0004 sec.
+8361-09:54:11 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='99' GROUP BY u_id ORDER BY u_nombre
+8361-09:54:11 Elapsed time: 0.0003 sec.
+30280-09:59:02 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+30280-09:59:02 Elapsed time: 0.0007 sec.
+29287-09:59:21 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+29287-09:59:21 Elapsed time: 0.0003 sec.
+8480-09:59:45 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8480-09:59:45 Elapsed time: 0.0003 sec.
+8363-10:00:11 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8363-10:00:11 Elapsed time: 0.0003 sec.
+8504-10:00:28 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8504-10:00:28 Elapsed time: 0.0003 sec.
+8361-10:01:00 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8361-10:01:00 Elapsed time: 0.0004 sec.
+8361-10:01:05 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8361-10:01:05 Elapsed time: 0.0004 sec.
+8361-10:01:16 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8361-10:01:16 Elapsed time: 0.0003 sec.
+8361-10:01:20 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8361-10:01:20 Elapsed time: 0.0004 sec.
+8480-10:01:44 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8480-10:01:44 Elapsed time: 0.0003 sec.
+8504-10:02:18 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8504-10:02:18 Elapsed time: 0.0004 sec.
+25052-10:02:47 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+25052-10:02:47 Elapsed time: 0.0003 sec.
+25052-10:02:50 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+25052-10:02:50 Elapsed time: 0.0004 sec.
+8361-10:03:12 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8361-10:03:12 Elapsed time: 0.0003 sec.
+29287-10:04:25 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+29287-10:04:25 Elapsed time: 0.0004 sec.
+8480-10:04:44 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8480-10:04:44 Elapsed time: 0.0003 sec.
+8363-10:04:54 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8363-10:04:54 Elapsed time: 0.0004 sec.
+8362-10:06:56 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8362-10:06:56 Elapsed time: 0.0002 sec.
+25052-10:07:20 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+25052-10:07:20 Elapsed time: 0.0003 sec.
+30280-10:07:54 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+30280-10:07:54 Elapsed time: 0.0003 sec.
+25052-10:38:06 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+25052-10:38:06 Elapsed time: 0.0003 sec.
+9109-10:47:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+9109-10:47:48 Elapsed time: 0.0003 sec.
+9109-10:47:53 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+9109-10:47:53 Elapsed time: 0.0004 sec.
+25052-10:49:07 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+25052-10:49:07 Elapsed time: 0.0003 sec.
+8361-10:50:30 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+8361-10:50:30 Elapsed time: 0.0005 sec.
+8504-10:50:46 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8504-10:50:46 Elapsed time: 0.0004 sec.
+30280-10:51:59 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+30280-10:51:59 Elapsed time: 0.0003 sec.
+8504-10:54:24 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8504-10:54:24 Elapsed time: 0.0003 sec.
+8504-10:59:13 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8504-10:59:13 Elapsed time: 0.0004 sec.
+25052-11:00:31 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+25052-11:00:31 Elapsed time: 0.0003 sec.
+8597-11:17:31 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8597-11:17:31 Elapsed time: 0.0004 sec.
+8363-11:18:58 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8363-11:18:58 Elapsed time: 0.0004 sec.
+9446-11:20:41 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+9446-11:20:41 Elapsed time: 0.0002 sec.
+8361-11:26:36 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8361-11:26:36 Elapsed time: 0.0003 sec.
+8502-11:38:30 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+8502-11:38:30 Elapsed time: 0.0004 sec.
+8361-11:59:34 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8361-11:59:34 Elapsed time: 0.0004 sec.
+30280-12:16:14 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+30280-12:16:14 Elapsed time: 0.0003 sec.
+10370-12:39:19 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10370-12:39:19 Elapsed time: 0.0003 sec.
+10354-12:46:53 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10354-12:46:53 Elapsed time: 0.0003 sec.
+10393-12:47:47 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10393-12:47:47 Elapsed time: 0.0004 sec.
+10393-12:47:50 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+10393-12:47:50 Elapsed time: 0.0004 sec.
+10702-12:48:16 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+10702-12:48:16 Elapsed time: 0.0004 sec.
+10370-12:49:29 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10370-12:49:29 Elapsed time: 0.0003 sec.
+10393-12:50:32 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10393-12:50:32 Elapsed time: 0.0003 sec.
+10702-12:50:50 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+10702-12:50:50 Elapsed time: 0.0003 sec.
+10702-12:52:45 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10702-12:52:45 Elapsed time: 0.0004 sec.
+10370-12:56:31 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+10370-12:56:31 Elapsed time: 0.0004 sec.
+10354-13:01:45 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10354-13:01:45 Elapsed time: 0.0003 sec.
+10342-13:08:44 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+10342-13:08:44 Elapsed time: 0.0004 sec.
+8502-13:13:43 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+8502-13:13:43 Elapsed time: 0.0004 sec.
+10088-13:13:43 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+10088-13:13:43 Elapsed time: 0.0004 sec.
+10354-14:51:48 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+10354-14:51:48 Elapsed time: 0.0004 sec.
+10370-14:51:59 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+10370-14:51:59 Elapsed time: 0.0004 sec.
+12537-14:56:54 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+12537-14:56:54 Elapsed time: 0.0004 sec.
+12537-14:57:00 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+12537-14:57:00 Elapsed time: 0.0004 sec.
+10342-14:58:53 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+10342-14:58:53 Elapsed time: 0.0004 sec.
+10342-14:58:57 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+10342-14:58:57 Elapsed time: 0.0004 sec.
+10370-15:01:36 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+10370-15:01:36 Elapsed time: 0.0003 sec.
+10370-15:01:39 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+10370-15:01:39 Elapsed time: 0.0004 sec.
+8361-15:02:36 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+8361-15:02:36 Elapsed time: 0.0004 sec.
+8361-15:02:40 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+8361-15:02:40 Elapsed time: 0.0004 sec.
+12553-15:06:17 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='' GROUP BY u_id ORDER BY u_nombre
+12553-15:06:17 Elapsed time: 0.0003 sec.
+12554-15:06:17 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+12554-15:06:17 Elapsed time: 0.0003 sec.
+8502-15:07:45 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+8502-15:07:45 Elapsed time: 0.0003 sec.
+8502-15:07:49 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+8502-15:07:49 Elapsed time: 0.0004 sec.
+12554-15:10:10 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+12554-15:10:10 Elapsed time: 0.0004 sec.
+12554-15:10:13 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+12554-15:10:13 Elapsed time: 0.0004 sec.
+10342-15:11:01 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+10342-15:11:01 Elapsed time: 0.0004 sec.
+10342-15:11:04 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+10342-15:11:04 Elapsed time: 0.0004 sec.
+10354-15:14:04 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+10354-15:14:04 Elapsed time: 0.0004 sec.
+8502-15:16:06 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+8502-15:16:06 Elapsed time: 0.0004 sec.
+12554-15:16:20 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+12554-15:16:20 Elapsed time: 0.0004 sec.
+12554-15:16:25 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+12554-15:16:25 Elapsed time: 0.0004 sec.
+12537-15:19:26 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+12537-15:19:26 Elapsed time: 0.0004 sec.
+12537-15:21:25 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+12537-15:21:25 Elapsed time: 0.0004 sec.
+12537-15:21:28 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+12537-15:21:28 Elapsed time: 0.0004 sec.
+8361-15:23:30 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+8361-15:23:30 Elapsed time: 0.0003 sec.
+12572-15:23:38 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+12572-15:23:38 Elapsed time: 0.0004 sec.
+12537-15:26:34 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='64' GROUP BY u_id ORDER BY u_nombre
+12537-15:26:34 Elapsed time: 0.0003 sec.
+12537-15:26:36 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='10'
+12537-15:26:36 Elapsed time: 0.0004 sec.
+12554-15:28:52 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='10' GROUP BY u_id ORDER BY u_nombre
+12554-15:28:52 Elapsed time: 0.0003 sec.
+12554-15:28:58 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='64'
+12554-15:28:58 Elapsed time: 0.0004 sec.
+10354-15:50:20 
+CONSULTAR> SELECT u_id,u_nombre,u_paterno, u_materno FROM usuario AS u JOIN usuarios_asignados AS ua ON u.u_id=ua.id_delegado WHERE ua.id_asignador='140' GROUP BY u_id ORDER BY u_nombre
+10354-15:50:20 Elapsed time: 0.0004 sec.
+10354-15:50:24 
+CONSULTAR> SELECT * FROM empleado INNER JOIN usuario ON idfwk_usuario = u_id inner join usuario_tipo on u_id = ut_usuario
+                              WHERE u_id='70'
+10354-15:50:24 Elapsed time: 0.0004 sec.

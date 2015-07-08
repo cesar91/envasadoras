@@ -1,0 +1,1599 @@
+23903-09:47:00 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+23903-09:47:00 Elapsed time: 0.0003 sec.
+23903-09:47:00 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+23903-09:47:00 Elapsed time: 0.0003 sec.
+23903-09:47:00 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+23903-09:47:00 Elapsed time: 0.0007 sec.
+23903-09:47:00 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+23903-09:47:00 Elapsed time: 0.0006 sec.
+23903-09:47:00 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+23903-09:47:00 Elapsed time: 0.0006 sec.
+23903-09:47:00 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+23903-09:47:00 Elapsed time: 0.0005 sec.
+23903-09:47:00 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+23903-09:47:00 Elapsed time: 0.0030 sec.
+23903-09:47:00 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+23903-09:47:00 Elapsed time: 0.0029 sec.
+24489-09:47:59 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+24489-09:47:59 Elapsed time: 0.0002 sec.
+24489-09:47:59 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+24489-09:47:59 Elapsed time: 0.0002 sec.
+24489-09:47:59 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24489-09:47:59 Elapsed time: 0.0008 sec.
+24489-09:47:59 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24489-09:47:59 Elapsed time: 0.0005 sec.
+24489-09:47:59 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24489-09:47:59 Elapsed time: 0.0006 sec.
+24489-09:47:59 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24489-09:47:59 Elapsed time: 0.0005 sec.
+24489-09:47:59 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+24489-09:47:59 Elapsed time: 0.0023 sec.
+24489-09:47:59 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24489-09:47:59 Elapsed time: 0.0022 sec.
+15453-09:51:03 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+15453-09:51:03 Elapsed time: 0.0003 sec.
+15453-09:51:03 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+15453-09:51:03 Elapsed time: 0.0003 sec.
+15453-09:51:03 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:51:03 Elapsed time: 0.0020 sec.
+15453-09:51:03 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:51:03 Elapsed time: 0.0015 sec.
+15453-09:51:03 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:51:03 Elapsed time: 0.0006 sec.
+15453-09:51:03 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:51:03 Elapsed time: 0.0005 sec.
+15453-09:51:03 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:51:03 Elapsed time: 0.0022 sec.
+15453-09:51:03 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:51:03 Elapsed time: 0.0021 sec.
+15453-09:52:02 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+15453-09:52:02 Elapsed time: 0.0002 sec.
+15453-09:52:02 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+15453-09:52:02 Elapsed time: 0.0003 sec.
+15453-09:52:02 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:52:02 Elapsed time: 0.0007 sec.
+15453-09:52:02 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:52:02 Elapsed time: 0.0005 sec.
+15453-09:52:02 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:52:02 Elapsed time: 0.0006 sec.
+15453-09:52:02 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:52:02 Elapsed time: 0.0005 sec.
+15453-09:52:02 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+15453-09:52:02 Elapsed time: 0.0022 sec.
+15453-09:52:02 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15453-09:52:02 Elapsed time: 0.0021 sec.
+24775-10:01:44 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+24775-10:01:44 Elapsed time: 0.0003 sec.
+24775-10:01:44 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+24775-10:01:44 Elapsed time: 0.0003 sec.
+24775-10:01:44 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24775-10:01:44 Elapsed time: 0.0008 sec.
+24775-10:01:44 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24775-10:01:44 Elapsed time: 0.0006 sec.
+24775-10:01:44 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24775-10:01:44 Elapsed time: 0.0006 sec.
+24775-10:01:44 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24775-10:01:44 Elapsed time: 0.0005 sec.
+24775-10:01:44 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+24775-10:01:44 Elapsed time: 0.0030 sec.
+24775-10:01:44 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24775-10:01:44 Elapsed time: 0.0029 sec.
+24461-10:03:26 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+24461-10:03:26 Elapsed time: 0.0002 sec.
+24461-10:03:26 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+24461-10:03:26 Elapsed time: 0.0002 sec.
+24461-10:03:26 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24461-10:03:26 Elapsed time: 0.0007 sec.
+24461-10:03:26 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24461-10:03:26 Elapsed time: 0.0005 sec.
+24461-10:03:26 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24461-10:03:26 Elapsed time: 0.0005 sec.
+24461-10:03:26 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24461-10:03:26 Elapsed time: 0.0005 sec.
+24461-10:03:26 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+24461-10:03:26 Elapsed time: 0.0022 sec.
+24461-10:03:26 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24461-10:03:26 Elapsed time: 0.0021 sec.
+14144-10:05:43 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+14144-10:05:43 Elapsed time: 0.0002 sec.
+14144-10:05:43 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+14144-10:05:43 Elapsed time: 0.0003 sec.
+14144-10:05:43 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:05:43 Elapsed time: 0.0007 sec.
+14144-10:05:43 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:05:43 Elapsed time: 0.0006 sec.
+14144-10:05:43 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:05:43 Elapsed time: 0.0005 sec.
+14144-10:05:43 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:05:43 Elapsed time: 0.0005 sec.
+14144-10:05:43 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:05:43 Elapsed time: 0.0030 sec.
+14144-10:05:43 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:05:43 Elapsed time: 0.0029 sec.
+15344-10:06:50 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+15344-10:06:50 Elapsed time: 0.0002 sec.
+15344-10:06:50 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+15344-10:06:50 Elapsed time: 0.0003 sec.
+15344-10:06:50 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15344-10:06:50 Elapsed time: 0.0007 sec.
+15344-10:06:50 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15344-10:06:50 Elapsed time: 0.0005 sec.
+15344-10:06:50 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+15344-10:06:50 Elapsed time: 0.0006 sec.
+15344-10:06:50 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15344-10:06:50 Elapsed time: 0.0005 sec.
+15344-10:06:50 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+15344-10:06:50 Elapsed time: 0.0023 sec.
+15344-10:06:50 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+15344-10:06:50 Elapsed time: 0.0022 sec.
+14144-10:11:17 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+14144-10:11:17 Elapsed time: 0.0003 sec.
+14144-10:11:17 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+14144-10:11:17 Elapsed time: 0.0003 sec.
+14144-10:11:17 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:11:17 Elapsed time: 0.0010 sec.
+14144-10:11:17 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:11:17 Elapsed time: 0.0005 sec.
+14144-10:11:17 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:11:17 Elapsed time: 0.0005 sec.
+14144-10:11:17 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:11:17 Elapsed time: 0.0005 sec.
+14144-10:11:17 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+14144-10:11:17 Elapsed time: 0.0030 sec.
+14144-10:11:17 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+14144-10:11:17 Elapsed time: 0.0030 sec.
+24896-10:12:10 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+24896-10:12:10 Elapsed time: 0.0002 sec.
+24896-10:12:10 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+24896-10:12:10 Elapsed time: 0.0003 sec.
+24896-10:12:10 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24896-10:12:10 Elapsed time: 0.0007 sec.
+24896-10:12:10 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24896-10:12:10 Elapsed time: 0.0005 sec.
+24896-10:12:10 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+24896-10:12:10 Elapsed time: 0.0006 sec.
+24896-10:12:10 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24896-10:12:10 Elapsed time: 0.0005 sec.
+24896-10:12:10 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+24896-10:12:10 Elapsed time: 0.0022 sec.
+24896-10:12:10 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+24896-10:12:10 Elapsed time: 0.0021 sec.
+8597-09:46:33 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+8597-09:46:33 Elapsed time: 0.0003 sec.
+8502-09:46:33 
+CONSULTAR> SELECT * FROM agrupacion_usuarios 
+                              WHERE au_nombre='Agencia'
+8502-09:46:33 Elapsed time: 0.0003 sec.
+8502-09:46:33 
+CONSULTAR> SELECT * FROM menu m INNER JOIN usuario_menu u ON m.m_id = u.um_menu WHERE um_tipo = '4' ORDER BY m_orden 
+8502-09:46:33 Elapsed time: 0.0002 sec.
+8502-09:46:33 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+8502-09:46:33 Elapsed time: 0.0018 sec.
+8502-09:46:33 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+ 		(CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'
+ 		FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id=solicitud_viaje.sv_tramite
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+		ON tramites.t_dueno=3000
+		INNER JOIN usuario 
+		ON tramites.t_iniciador=usuario.u_id		
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		 
+		WHERE tramites.t_etapa_actual=1
+		AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+8502-09:46:33 Elapsed time: 0.0014 sec.
+8502-09:46:33 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id) as la1;
+8502-09:46:33 Elapsed time: 0.0005 sec.
+8502-09:46:33 
+CONSULTAR> SELECT tramites.t_id,
+       DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+       tramites.t_etiqueta,
+       (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+       MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+       (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar'  
+       FROM tramites
+	   INNER JOIN solicitud_viaje 
+	   ON tramites.t_id=solicitud_viaje.sv_tramite
+	   INNER JOIN sv_itinerario 
+	   ON solicitud_viaje.sv_id=sv_itinerario.svi_solicitud	   
+	   INNER JOIN empleado 
+	   ON tramites.t_dueno=3000 
+	   INNER JOIN usuario 
+	   ON tramites.t_iniciador=usuario.u_id
+	   INNER JOIN etapas 
+	   ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id
+	   WHERE ((tramites.t_etapa_actual=3) OR (tramites.t_etapa_actual=2))
+	  	AND ((sv_itinerario.svi_tipo_transporte='Terrestre')OR(sv_itinerario.svi_tipo_transporte='Aéreo'))
+		AND (((sv_itinerario.svi_renta_auto_agencia = 1)OR(sv_itinerario.svi_hotel_agencia = 1))OR((sv_itinerario.svi_renta_auto_agencia = 0)AND(sv_itinerario.svi_hotel_agencia = 0))) 		
+		GROUP BY tramites.t_id limit 10 offset 0
+8502-09:46:33 Elapsed time: 0.0005 sec.
+8502-09:46:33 
+CONSULTAR> select count(*) as total from (SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id) as la1;
+8502-09:46:33 Elapsed time: 0.0005 sec.
+8502-09:46:33 
+CONSULTAR> SELECT tramites.t_id,
+        DATE_FORMAT(t_fecha_registro,'%d/%m/%Y'),
+        tramites.t_etiqueta,
+        (IF(t_delegado = 0, (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id=t_iniciador), (CONCAT((SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_delegado), ' EN NOMBRE DE: ', (SELECT CONCAT(u_nombre,' ',u_paterno,' ',u_materno) FROM usuario WHERE u_id = t_iniciador))))) AS usuario,
+        MIN(DATE_FORMAT(sv_itinerario.svi_fecha_salida,'%d/%m/%Y')),
+        (CONCAT('<p align=center><a href=../solicitudes/index.php?edit_view=edit_view&noti=noti&id=',t_id,'&etapa=',t_etapa_actual,'><img border=0 title=Consultar src=/eexpensesv2_bmw/images/btn-search.gif></a></p>')) AS 'Consultar' 
+        FROM tramites
+		INNER JOIN solicitud_viaje 
+		ON tramites.t_id = solicitud_viaje.sv_tramite 
+		INNER JOIN sv_itinerario 
+		ON solicitud_viaje.sv_id = sv_itinerario.svi_solicitud
+		INNER JOIN empleado 
+	    ON tramites.t_dueno=3000 
+	    INNER JOIN usuario 
+	    ON tramites.t_iniciador=usuario.u_id 	
+		INNER JOIN etapas 
+		ON tramites.t_flujo = etapas.et_flujo_id AND tramites.t_etapa_actual= etapas.et_etapa_id		
+		WHERE tramites.t_flujo = '1'
+		AND ((tramites.t_etapa_actual ='7')  OR (tramites.t_etapa_actual = '10'))
+		AND sv_itinerario.svi_tipo_transporte='Aéreo'		 		
+		GROUP BY tramites.t_id limit 10 offset 0
+8502-09:46:33 Elapsed time: 0.0005 sec.

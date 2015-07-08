@@ -1,0 +1,150 @@
+10
+
+dir
+1256
+svn+ssh://roman-jimenez@olimpo.masnegocio.com/home/masnegocio/repo/REPOSITORIOMN/travelexpenses/branches/envasadoras/admin
+svn+ssh://roman-jimenez@olimpo.masnegocio.com/home/masnegocio/repo/REPOSITORIOMN
+
+
+
+2015-01-27T01:38:50.269459Z
+598
+christian-hernandez
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+17122149-8099-42fe-be5b-348ec91c8523
+
+presupuesto
+dir
+
+cuentas
+dir
+
+fn
+dir
+
+menu
+dir
+
+dbo
+dir
+
+usuarios
+dir
+
+catalogos
+dir
+
+centros
+dir
+
+modelos_autos
+dir
+
+parametros
+dir
+
+skill
+dir
+
+empresas
+dir
+
+divisa
+dir
+
+grupos
+dir
+
+peoplesoft
+dir
+
+roles_parametros
+dir
+
+return_presupuesto.php
+file
+
+
+
+
+2015-03-06T19:13:50.630585Z
+20e8396b3b70771717db5e1f7c9f7d81
+2014-09-18T19:56:11.485948Z
+12
+masnegocio
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3574
+
+index.php
+file
+
+
+
+
+2015-03-06T19:13:50.630585Z
+6da9dcda1dd15c13caf377e4139c04ef
+2014-10-30T03:57:52.486122Z
+163
+juan-quintana
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+247
+
+tipos_empresas
+dir
+
+conceptos
+dir
+

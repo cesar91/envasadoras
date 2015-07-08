@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" serie="A" folio="1541" fecha="2014-07-09T18:41:12" sello="gtSjrncbuWe6enJ9AA6ZchsmFw5HwrQLFiq1YJCKhhMcy5GleGiTuJ4rDRQGSHRnoB/HDvgb/XL/oBK0xtZRnZohYX6D+Ib/7H18oZhjLHIm1p1k9owVeQTTM7OKeBmu4gog2JhlqhvCU65+MdtD5hJv76o6G71ZUR0cWF0m2ZU=" formaDePago="Pago en una sola exhibición" noCertificado="00001000000200665662" certificado="MIIEcTCCA1mgAwIBAgIUMDAwMDEwMDAwMDAyMDA2NjU2NjIwDQYJKoZIhvcNAQEF
+BQAwggGVMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJh
+Y2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3Ry
+YWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBT
+ZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSEwHwYJKoZIhvcNAQkBFhJhc2lz
+bmV0QHNhdC5nb2IubXgxJjAkBgNVBAkMHUF2LiBIaWRhbGdvIDc3LCBDb2wuIEd1
+ZXJyZXJvMQ4wDAYDVQQRDAUwNjMwMDELMAkGA1UEBhMCTVgxGTAXBgNVBAgMEERp
+c3RyaXRvIEZlZGVyYWwxFDASBgNVBAcMC0N1YXVodMOpbW9jMRUwEwYDVQQtEwxT
+QVQ5NzA3MDFOTjMxPjA8BgkqhkiG9w0BCQIML1Jlc3BvbnNhYmxlOiBDZWNpbGlh
+IEd1aWxsZXJtaW5hIEdhcmPDrWEgR3VlcnJhMB4XDTEyMDMyODE4NDUzNFoXDTE2
+MDMyODE4NDUzNFowgbIxIjAgBgNVBAMTGU1BIE1BR0RBTEVOQSBST0NIQSBGTE9S
+RVMxIjAgBgNVBCkTGU1BIE1BR0RBTEVOQSBST0NIQSBGTE9SRVMxIjAgBgNVBAoT
+GU1BIE1BR0RBTEVOQSBST0NIQSBGTE9SRVMxFjAUBgNVBC0TDVJPRk03MTA1MzFC
+SzExGzAZBgNVBAUTElJPRk03MTA1MzFNTUNDTEcyODEPMA0GA1UECxMGTUFUUkla
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD/EKlOvq/i7JkXZtdvetPAvVNf
++lFFd4vZ2XSy4/CXNWlqCYu13WpsDT50cOd65YemvmyW0NFn47UkC0U958ndjQ2R
+JMPi/bDhIQs1bKzERCce1orLIML1HEyaWcXZY81hH7w8mlvt5wmBaDTKAE+5Dd2F
+DNktae3l/mFY9W7PNwIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIG
+wDANBgkqhkiG9w0BAQUFAAOCAQEAXGC+sR34MYJtcC6Me2ndC3vLkTqEOZxSUsie
++YelwB+4CJ8CRzq8SaPH2UWfuC+R/O5gx3ORvB++tLK5qzUUpnZZn3BO5jEB+ifv
+gbcsXhR8e2fsoIU/YhrWo9h+bCLsI4ZR5Z/bezRqID2Nr0NsV9Y7yhgTD2zg5jL+
+58pestTWJ8kSKQqNUIZDgWjriAPKORBZo/EnmMlpymdThiOD5+cC1NygR2QKF+EM
+Q6FBjHKAMHuxQ4r2UiZ/uSzLO/sx9CXzXuguE15LsQk4SjqQjeYSwKOmgN+mHHGv
+PMrNl2t5Clxna4hUZYhxWkR9tJ6GTjUfIvptUtfaoruhq8Lxqw==" subTotal="990.00" descuento="0.00" TipoCambio="1.00" Moneda="Pesos" total="1148.40" tipoDeComprobante="ingreso" metodoDePago="EFECTIVO" LugarExpedicion="VILLA CUAUHTEMOC OTZOLOTEPEC,MEXICO" NumCtaPago="No identificado" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor rfc="ROFM710531BK1" nombre="MA. MAGDALENA ROCHA FLORES"><cfdi:DomicilioFiscal calle="BENITO JUAREZ 22-C" localidad="VILLA CUAUHTEMOC OTZOLOTEPEC" municipio="VILLA CUAUHTEMOC OTZOLOTEPEC" estado="MEXICO" pais="MEXICO" codigoPostal="52080" /><cfdi:ExpedidoEn calle="BENITO JUAREZ 22-C" localidad="VILLA CUAUHTEMOC OTZOLOTPEC" municipio="VILLA CUAUHTEMOC OTZOLOTPEC" estado="MEXICO" pais="MEXICO" codigoPostal="0" /><cfdi:RegimenFiscal Regimen="RÉGIMEN DE LAS PERSONAS FÍSICAS CON ACTIVIDADES EMPRESARIALES Y PROFESIONALES" /></cfdi:Emisor><cfdi:Receptor rfc="OAM081208162" nombre="ORGANIZACION DE AGUAS DE MEXICO S.A. DE C.V."><cfdi:Domicilio calle="MARIO PANI 400 SANTA FE CUAJIMALPA DE MORELOS ,D.F.,Mexico" estado="D.F." pais="Mexico" codigoPostal="05348" /></cfdi:Receptor><cfdi:Conceptos><cfdi:Concepto cantidad="1" unidad="NO APLICA" descripcion="CONSUMO DE ALIMENTOS" valorUnitario="990.00" importe="990.00" /></cfdi:Conceptos><cfdi:Impuestos totalImpuestosTrasladados="158.40"><cfdi:Traslados><cfdi:Traslado impuesto="IVA" tasa="16" importe="158.40" /></cfdi:Traslados></cfdi:Impuestos><cfdi:Complemento><tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" selloCFD="gtSjrncbuWe6enJ9AA6ZchsmFw5HwrQLFiq1YJCKhhMcy5GleGiTuJ4rDRQGSHRnoB/HDvgb/XL/oBK0xtZRnZohYX6D+Ib/7H18oZhjLHIm1p1k9owVeQTTM7OKeBmu4gog2JhlqhvCU65+MdtD5hJv76o6G71ZUR0cWF0m2ZU=" FechaTimbrado="2014-07-09T18:41:29" UUID="C8F13B62-EDC7-439B-8F08-BA42125CBC0F" noCertificadoSAT="00001000000202864530" version="1.0" selloSAT="QZXDQ34GDOYG6vN1lfAyY1bKAEKq7KClhhwO/bpfvFg1b3PDs4SzLTA3JxZnMvKlz9qIDIBlYqsf+tW3Li4FLIDGLH3C4NXOPpy9DxHzWw7tPCzQwDlvWwndlqEjlihI2JEHxQ//S1Wj3zArTioFGMn4lpKNyrVws5XwIH0GsnM=" /></cfdi:Complemento></cfdi:Comprobante>
