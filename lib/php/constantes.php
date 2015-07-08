@@ -70,14 +70,14 @@ $SMTP_USERNAME="portales@masnegocio.com";
 $SMTP_USERNAME="masnegocio@inso-mexico.net";
 $SMTP_PASSWORD="masnegocio";
 $SMTP_FROM="masnegocio@inso-mexico.net";
-$SMTP_FROMNAME="Sistema Electr�nico de Gastos";
+$SMTP_FROMNAME="Sistema Electrï¿½nico de Gastos";
 $SMTP_ACTIVAR_CORREO=true;*/
 
-$SMTP_HOST="Envasadoras.com.mx";
+$SMTP_HOST=".com.mx";
 $SMTP_PORT="25";
 $SMTP_AUTH=true;
-$SMTP_USERNAME="t&e-hod@envasadoras.com.mx";
-$SMTP_PASSWORD="tyeh2014"; 
+$SMTP_USERNAME="@.com.mx";
+$SMTP_PASSWORD=""; 
 $SMTP_FROM="Envasadoras.com.mx";
 $SMTP_FROMNAME="Sistema de Gastos de Viaje";
 $SMTP_ACTIVAR_CORREO=true;
@@ -117,7 +117,7 @@ define("EMPLEADO",0);
 define("GERENTE_AREA",1);
 define("DIRECTOR_AREA",2);
 define("DIRECTOR_GENERAL",3);
-define("CONTRALORIA",4); // Pendiente de definici�n
+define("CONTRALORIA",4); // Pendiente de definición
 
 //
 // CONSTANTES TIPOS DE USUARIO SUPERVISOR Y GERENTE DE FINANZAS
@@ -234,7 +234,7 @@ define("COMPROBACION_GASTOS_ETAPA_EN_APROBACION_POR_DIRECTOR", 9);
 define("COMPROBACION_GASTOS_ETAPA_RECHAZADA_POR_DIRECTOR", 10);
 
 
-// Definici�n Monto excedente de Vuelo
+// Definiciï¿½n Monto excedente de Vuelo
 define("MONTO_EXCEDENTE_VUELO", 0);
 define("MONTO_EXCEDENTE_VUELO_DIRECTOR", 1000);
 define("CECO_510", 510);
@@ -248,12 +248,12 @@ define("ULT_APROBACION", 10000);//eamg
 define ("FLUJO_SOL",2);
 define ("SOL_INV_APROB",2);
 
-// Definici�n de correo para recepci�n de reportes de Intefaces AMEX - SAP
+// Definiciï¿½n de correo para recepciï¿½n de reportes de Intefaces AMEX - SAP
 define("EMAIL_RESPONSABLE_SAP_BMW", "notificaciones.mn@gmail.com");
 define("EMAIL_SOPORTE_MN", "notificaciones.mn@gmail.com");
 define("EMAIL_TECNOLOGIA_MN", "notificaciones.mn@gmail.com");
 
-// Definici�n de Interfaces
+// Definiciï¿½n de Interfaces
 define("COMPROBACIONES", 1);
 define("ANTICIPOS", 2);
 define("VUELOS", 3);
@@ -269,7 +269,7 @@ define("CONCEPTO_RENTA_AUTO", 10);
  * Utils Manejador de Errores
  */
 define("ERROR_REPORT",E_ALL); //E_ALL, E_USER_NOTICE, E_USER_WARNIGN, E_USER_ERROR
-define("ERROR_ACTION",3); //0 = predeterminada, 1 = envia correo si hubiera un 4to parametro, 3 = Se a�ade al archivo log
+define("ERROR_ACTION",3); //0 = predeterminada, 1 = envia correo si hubiera un 4to parametro, 3 = Se añade al archivo log
 define("ERROR_LOG_FILE","errorLog.log"); //Agregar correo en PHP.ini al parametro sendmail_from
 define("ERROR_MAIL", "notificaciones.mn@gmail.com");
 set_error_handler("__exeptionHandler");
